@@ -1,0 +1,3 @@
+fonction pour terminal = isatty, ttyname, ttyslot, tcsetattr, tcgetattr, 
+
+garbage_collector !!
