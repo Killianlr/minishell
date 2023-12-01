@@ -1,54 +1,47 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/23 15:01:37 by flavian           #+#    #+#             */
-/*   Updated: 2023/11/24 14:55:38 by flavian          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	free_tab(char **tab)
+int	ft_builting(char *str)
 {
-	int	i;
-
-	i = 0;
-	while (tab[i])
-	{
-		free(tab[i]);
-		i++;
-	}
-	free(tab[i]);
-}
-
-void	free_all(s_cmd *cmd)
-{
-	s_cmd	*tmp;
-
-	tmp = cmd;
-	while (tmp)
-	{
-		free_tab(tmp->line);
-		free(tmp);
-		tmp = cmd->next;
-		cmd = cmd->next;
-	}
-}
-
-int	main(int ac, char **av)
-{
-	s_cmd	*cmd;
-	
-	if (ac <= 1)
+	if (!str)
 		return (0);
-	cmd = NULL;
-	cmd = parsing(av[1]);
-	printf("LA\n");
-	printf("cmd = %s\n", cmd->line[0]);
-	free_all(cmd);
-	return (1);
+	if (!ft_strncmp("clear history", str, 14))
+		rl_clear_history();
+    if (!ft_strncmp("exit", str, 4) && ft_strlen(str) == 4)
+        return (1);
+	else
+		return (0);
+}
+
+void	ft_free(t_gc *garbage)
+{
+	free(garbage->line);
+	printf("FIN DU PROGRAMME\n");
+}
+
+void	in_minishell()
+{
+	t_gc	garbage;
+
+	ctrl_c();
+	while (1)
+	{
+		garbage.line = ft_prompt();
+		printf("%s\n", garbage.line);
+		if (ft_builting(garbage.line))
+			break ;
+		if (signal_ctrl_c == 1)
+			free(garbage.line);
+		signal_ctrl_c = 0;
+		free(garbage.line);
+	}
+	ft_free(&garbage);
+}
+
+int main(void)
+{
+	if (clear_terminal())
+		return (0);
+	in_minishell();
+	return (0);
 }

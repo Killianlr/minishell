@@ -23,24 +23,39 @@
 #include <signal.h>
 #include <string.h>
 #include <errno.h>
+#include <curses.h>
+#include <term.h>
+#include <termios.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 #include "../libft/libft.h"
 
-typedef struct cmd
+int	signal_ctrl_c;
+
+typedef struct s_term
 {
-	char	**line;
-	char	sep;
-	struct cmd	*next;
-}			s_cmd;
+	char *term_type;
+	char *term_args[2];
+}t_term;
 
-int		count_char(char *str, int i);
+typedef struct s_prompt
+{
+	char	*inpt;
+	char	*str;
+}t_prompt;
 
-int		is_sep(char c);
+typedef struct garbage_colector
+{
+	struct s_prompt *prpt;
+	char			*line;
+}t_gc;
 
-int	is_whitespace(char c);
+char	*ft_prompt();
 
-s_cmd	*parsing(char *str);
+int		clear_terminal();
 
-char	*copy_str(char *str, int i);
+int    ctrl_c();
 
+void	in_minishell();
 
 #endif
