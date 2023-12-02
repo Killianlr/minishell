@@ -1,31 +1,47 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   free_parsing.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/23 15:01:37 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/02 18:17:56 by flavian          ###   ########.fr       */
+/*   Created: 2023/11/29 16:17:12 by flavian           #+#    #+#             */
+/*   Updated: 2023/12/02 18:22:22 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	free_tab(char **tab)
+
+void	print_cmd(t_cmd *cmd)
+{
+	while (cmd->next)
+	{
+		for (int i = 0; cmd->line[i]; i++)
+			printf("line = %s\n", cmd->line[i]);
+		printf("sep = %s\n", cmd->sep);
+		
+		cmd = cmd->next;
+	}
+	for (int y = 0; cmd->line[y]; y++)
+		printf("line = %s\n", cmd->line[y]);
+	printf("sep = %s\n", cmd->sep);
+}
+
+void	free_pars_tab(char **arr)
 {
 	int	i;
 
 	i = 0;
-	while (tab[i])
+	while (arr[i])
 	{
-		free(tab[i]);
+		free(arr[i]);
 		i++;
 	}
-	free(tab);
+	free(arr);
 }
 
-void	free_all(t_cmd *cmd)
+void	free_parsing(t_cmd *cmd)
 {
 	t_cmd	*tmp;
 
@@ -35,26 +51,13 @@ void	free_all(t_cmd *cmd)
 	tmp = cmd->next;
 	while (tmp)
 	{
-		free_tab(cmd->line);
+		free_pars_tab(cmd->line);
+		free(cmd->sep);
 		free(cmd);
 		cmd = tmp;
 		tmp = cmd->next;
 	}
-	free_tab(cmd->line);
-		free(cmd);
-}
-
-int	main(int ac, char **av)
-{
-	t_cmd	*cmd;
-	
-	if (ac <= 1)
-		return (0);
-	cmd = NULL;
-	cmd = parsing(av[1]);
-	if (!cmd)
-		printf("Error in parsing\n");
-	print_cmd(cmd);
-	free_parsing(cmd);
-	return (1);
+	free_pars_tab(cmd->line);
+	free(cmd->sep);
+	free(cmd);
 }

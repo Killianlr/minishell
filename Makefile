@@ -7,7 +7,9 @@ LIBFT_DIR = libft
 LIB = $(addprefix $(LIBFT_DIR)/, $(LIBFT))
 
 MY_SOURCES = main.c \
-		parsing.c \
+		parsing_pt0.c \
+		parsing_pt1.c \
+		free_parsing.c \
 		utils.c \
 
 SOURCES_DIR = sources

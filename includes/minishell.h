@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2023/11/24 14:47:11 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/01 21:50:49 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,20 @@
 typedef struct cmd
 {
 	char	**line;
-	char	sep;
+	char	*sep;
 	struct cmd	*next;
-}			s_cmd;
+}			t_cmd;
 
-int		count_char(char *str, int i);
+t_cmd	*parsing(char *str);
 
-int		is_sep(char c);
+void	free_parsing(t_cmd *cmd);
 
-int	is_whitespace(char c);
+void	print_cmd(t_cmd *cmd);
 
-s_cmd	*parsing(char *str);
+char	**strduptab(char *src, int i);
 
-char	*copy_str(char *str, int i);
+int	is_sep(char c);
+
 
 
 #endif
