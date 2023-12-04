@@ -30,25 +30,32 @@
 #include <readline/history.h>
 #include "../libft/libft.h"
 
-int	signal_ctrl_c;
+typedef struct sigaction t_sig;
 
-typedef struct s_term
+typedef struct 	s_term
 {
 	char *term_type;
 	char *term_args[2];
-}t_term;
+}				t_term;
 
-typedef struct s_prompt
+typedef struct 	s_prompt
 {
 	char	*inpt;
 	char	*str;
-}t_prompt;
+}				t_prompt;
 
-typedef struct garbage_colector
+typedef struct 	s_builtins
 {
-	struct s_prompt *prpt;
+	char	**env;
+	char	*pwd;
+}				t_bui;
+
+typedef struct 	garbage_colector
+{
+	t_prompt *prpt;
+	t_bui	*blts;
 	char			*line;
-}t_gc;
+}				t_gc;
 
 char	*ft_prompt();
 
@@ -56,6 +63,12 @@ int		clear_terminal();
 
 int    ctrl_c();
 
-void	in_minishell();
+t_gc	*in_minishell();
+
+t_bui   *set_builtins(void);
+char    *get_pwd(void);
+void	print_env(t_gc *garbage);
+
+
 
 #endif

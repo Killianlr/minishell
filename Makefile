@@ -10,6 +10,7 @@ MY_SOURCES = 	main.c \
 				prompt.c \
 				terminal.c \
 				handler.c \
+				builtins.c \
 
 SOURCES_DIR = sources
 SOURCES = $(addprefix $(SOURCES_DIR)/, $(MY_SOURCES))

@@ -49,25 +49,40 @@ int	clear_string(t_prompt *prpt)
 	return (0);
 }
 
+char	*pre_prompt(void)
+{
+	char		*pre_prompt;
+	char		*user;
+
+	user = NULL;
+	if (!getenv("USER"))
+		pre_prompt = ft_strdup("\033[92mminishell>\033[0m ");
+	else
+	{
+		user = getenv("USER");
+		pre_prompt = ft_strjoin("\033[93m", user);
+		pre_prompt = ft_strjoin_ps(pre_prompt, "\033[92m-minishell>\033[0m ");
+	}
+	return (pre_prompt);
+}
+
 char	*ft_prompt()
 {
 	t_prompt	prpt;
-	char	*user;
 	char	*prompt;
 
 	prpt.inpt = NULL;
-	user = getenv("USER");
-	prompt = ft_strjoin("\033[93m", user);
-	prompt = ft_strjoin_ps(prompt, "\033[92m-minishell>\033[0m ");
+	prompt = pre_prompt();
     prpt.inpt = readline(prompt);
+	free(prompt);
 	if (clear_string(&prpt))
 	{
 		free(prpt.inpt);
-		free(prompt);
 		return (NULL);
 	}
     add_history(prpt.inpt);
 	free(prpt.inpt);
-	free(prompt);
+	if (!ft_strncmp("clear history", prpt.str, 14))
+		rl_clear_history();
 	return (prpt.str);
 }

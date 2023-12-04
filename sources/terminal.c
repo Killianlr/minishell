@@ -26,6 +26,8 @@ int	clear_terminal()
 	pid = fork();
 	if (pid == 0)
 	{
+		if (!__environ[0])
+			return (1);
 		if (access(clear, X_OK) == 0)
 			execve(clear, args, __environ);	
 		return (1);
