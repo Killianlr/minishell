@@ -1,14 +1,6 @@
 
 #include "../includes/minishell.h"
 
-void	ft_free(t_gc *garbage)
-{
-	if (!garbage)
-		return ;
-	free(garbage->line);
-	printf("FIN DU PROGRAMME\n");
-}
-
 int		clear_or_exit(char *str)
 {
 	if (!str)
@@ -23,15 +15,14 @@ int		clear_or_exit(char *str)
 
 int	is_builtins(t_gc *garbage)
 {
-	char **args;
-
-	if (!garbage->line)
-		return (0);
-	args = ft_split(garbage->line, ' ');
-	if (!ft_strncmp(args[0], "env", 4))
-		print_env(garbage);
-	if (!ft_strncmp(args[0], "pwd", 4))
-		printf("%s\n", garbage->blts->pwd);
+	if (ft_env(garbage))
+		return (1);
+	if (ft_pwd(garbage))
+		return (1);
+	if (ft_export(garbage))
+		return (1);
+	// if (ft_unset(garbage))
+	// 	return (1);
 	return (0);
 }
 
@@ -42,7 +33,6 @@ t_gc	*in_minishell()
 	garbage = malloc(sizeof(t_gc));
 	if (!garbage)
 		return (NULL);
-	ctrl_c();
 	garbage->blts = set_builtins();
 	if (!garbage->blts)
 	{
@@ -54,7 +44,8 @@ t_gc	*in_minishell()
 		garbage->line = ft_prompt();
 		if (clear_or_exit(garbage->line))
 			break ;
-		is_builtins(garbage);
+		if (is_builtins(garbage))
+			break ;
 		//printf("%s\n", garbage->line); // check prompt (A RETIRER)
 		free(garbage->line);
 	}
@@ -67,7 +58,9 @@ int main(void)
 
 	if (clear_terminal())
 		return (1);
+	if (signal_init())
+		return (1);
 	garbage = in_minishell();
-	ft_free(garbage);
+	free_all(garbage);
 	return (0);
 }

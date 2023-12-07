@@ -82,7 +82,5 @@ char	*ft_prompt()
 	}
     add_history(prpt.inpt);
 	free(prpt.inpt);
-	if (!ft_strncmp("clear history", prpt.str, 14))
-		rl_clear_history();
 	return (prpt.str);
 }
