@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:04 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/02 18:22:01 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/07 23:32:38 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	count_char(char *str, int i)
 	count = 0;
 	while (str[i] && (is_sep(str[i]) || is_whitespace(str[i])))
 		i++;
-	while (str[i] && ft_isprint(str[i]))
+	while (str[i] && ft_isprint(str[i]) && !is_whitespace(str[i]))
 	{
 		count++;
 		i++;
@@ -172,10 +172,6 @@ char	*copy_str(char *str, int i)
 	if (!buf)
 		return (NULL);
 	y = 0;
-	while (str[i] && is_whitespace(str[i]))
-	{
-		i++;
-	}
 	while (str[i] && !is_sep(str[i]) && !is_whitespace(str[i]))
 	{
 		buf[y] = str[i];
@@ -200,18 +196,18 @@ char	**get_line(char *str, int i)
 		return (NULL);
 	y = 0;
 
-	while (str[i] && !is_sep(str[i]) && word_count > 0)
+	while (str[i] && word_count > 0)
 	{
+		while (str[i] && is_whitespace(str[i]))
+			i++;
 		buf[y] = copy_str(str, i);
 		if (!buf[y])
 			return (NULL);
-		word_count--;
 		y++;
 		i += count_char(str, i);
-		while (str[i] && is_whitespace(str[i]))
-		{
+		while (str[i] && (is_whitespace(str[i]) || is_sep(str[i])))
 			i++;
-		}
+		word_count--;
 	}
 	buf[y] = NULL;
 	return (buf);
