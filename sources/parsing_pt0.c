@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:04 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/07 23:32:38 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/09 00:22:59 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,26 @@ int	is_sep(char c)
 		return (0);
 	if (c == '<' || c == '>' || c == '|' || c == '\n') 
 		return (1);
+	return (0);
+}
+
+int	is_$(char c)
+{
+	if (!c)
+		return (0);
+	if (c == '$') 
+		return (1);
+	return (0);
+}
+
+int	is_quote(char c)
+{
+	if (!c)
+		return (0);
+	else if (c == 39)
+		return (1);
+	else if (c == 34)
+		return (2);
 	return (0);
 }
 
@@ -93,6 +113,50 @@ int	count_char(char *str, int i)
 	return (count);
 }
 
+int	quote_is_closed(char *str, int i)
+{
+	char target;
+
+	target = str[i];
+	if (!str || i < 0 || !is_quote(target))
+		return (0);
+	if (str[i + 1])
+		i++;
+	else
+	{
+		ft_printf("Error 1, quote unclosed\n");
+		return (0);
+	}
+	while (str[i])
+	{
+		if (str[i] == target)
+			return (i);
+		i++;
+	}
+	ft_printf("Error 2, quote unclosed\n");
+	return (0);
+}
+
+char	*handle_quotes(char * str, int i)
+{
+	char	*buf;
+	int		end;
+	int		y;
+
+	end = quote_is_closed(str, i);
+	if (end == 0)
+		return (NULL);
+	buf = malloc(sizeof(char) * (end - i + 1));
+	if (!buf)
+		return (NULL);
+	y = 0;
+	i++;
+	while (str[i] && i < end)
+		buf[y++] = str[i++];
+	buf[y] = 0;
+	return (buf);
+}
+
 void	too_many_sep(char *str, int i)
 {
 	char	*buf;
@@ -110,17 +174,14 @@ void	too_many_sep(char *str, int i)
 		}
 		y++;
 	}
-
 	if (str[y] && y > i && is_print == 1 &&!is_sep(str[y]))
 		return ;
-	
 	buf = malloc(sizeof(char) * 3);
 	if (!buf)
 		return ;
 	y = 0;
 	if (str[i] && is_sep(str[i]))
 		buf[y++] = str[i];
-	
 	if ((str[i] == '<' || str[i] == '>') && (str[i] == str[i + 1]))
 		buf[y++] = str[++i];
 	buf[y] = 0;
@@ -167,13 +228,24 @@ char	*copy_str(char *str, int i)
 {
 	int	y;
 	char	*buf;
+	char	*quote;
 
 	buf = malloc(sizeof(char) * (count_char(str, i) + 1));
 	if (!buf)
 		return (NULL);
 	y = 0;
+	quote = NULL;
 	while (str[i] && !is_sep(str[i]) && !is_whitespace(str[i]))
 	{
+		if (is_quote(str[i]) && quote_is_closed(str, i))
+		{
+			quote = handle_quotes(str, i);
+			if (!quote)
+				return (NULL);
+			buf = ft_strjoin(buf, quote);
+			y = ft_strlen(buf);
+			i = quote_is_closed(str, i);
+		}
 		buf[y] = str[i];
 		y++;
 		i++;
@@ -187,6 +259,7 @@ char	**get_line(char *str, int i)
 	char **buf;
 	int	y;
 	int	word_count;
+	int	status;
 
 	word_count = count_word(str, i);
 	if (!word_count)
@@ -195,7 +268,7 @@ char	**get_line(char *str, int i)
 	if (!buf)
 		return (NULL);
 	y = 0;
-
+	status = is_quote(str[i]);
 	while (str[i] && word_count > 0)
 	{
 		while (str[i] && is_whitespace(str[i]))
@@ -206,7 +279,23 @@ char	**get_line(char *str, int i)
 		y++;
 		i += count_char(str, i);
 		while (str[i] && (is_whitespace(str[i]) || is_sep(str[i])))
+		{
+			if (is_quote(str[i]))
+			{
+				status = is_quote(str[i]);
+				break ;
+			}
 			i++;
+		}
+		while (str[i] && status > 0)
+		{
+			if (is_quote(str[i]) == status)
+			{
+				i++;
+				status = 0;
+			}
+			i++;
+		}
 		word_count--;
 	}
 	buf[y] = NULL;
@@ -246,6 +335,7 @@ t_cmd *parsing(char *str)
 	if (!i)
 		return (NULL);
 	*i = 0;
+	printf("str = %s\n", str);
     sep_count = count_sep(str);
 	cmd = create_cmd(str, i);
 	first = cmd;

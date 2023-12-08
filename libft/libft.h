@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 12:57:35 by fserpe            #+#    #+#             */
-/*   Updated: 2023/11/16 15:34:51 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/08 22:59:45 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ char		*ft_strdup(const char *s);
 
 char		*ft_substr(char const *s, unsigned int start, size_t len);
 
-char		*ft_strjoin(char const *s1, char const *s2);
+char		*ft_strjoin(char *s1, char *s2);
 
 char		*ft_strtrim(char const *s1, char const *set);
 
