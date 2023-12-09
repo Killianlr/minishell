@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:04 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/09 00:22:59 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/09 07:56:38 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,16 +62,23 @@ int	count_sep(char *str)
 {
 	int	i;
 	int	count;
+	int	status;
 
 	i = 0;
 	count = 0;
+	status = is_quote(str[i]);
 	while (str[i])
 	{
-		if (is_sep(str[i]) && !is_sep(str[i + 1]))
+		if (status > 0 && is_quote(str[i]) == status)
+			status = 0;
+		else if (is_quote(str[i]) > 0)
+			status = is_quote(str[i]);
+		if (is_sep(str[i]) && !is_sep(str[i + 1]) && status == 0)
 			count++;
 		i++;
 	}
 	count++;
+	printf("count = %d\n", count);
 	return (count);
 }
 
@@ -129,11 +136,11 @@ int	quote_is_closed(char *str, int i)
 	}
 	while (str[i])
 	{
-		if (str[i] == target)
+		if (is_quote(str[i]) == is_quote(target))
 			return (i);
 		i++;
 	}
-	ft_printf("Error 2, quote unclosed\n");
+	// ft_printf("Error 2, quote unclosed\n");
 	return (0);
 }
 
@@ -194,13 +201,25 @@ void	too_many_sep(char *str, int i)
 char	*get_sep(char *str, int i)
 {
 	char *buf;
+	int	status;
 
 
 	buf = NULL;
 	buf = malloc(sizeof(char) * 3);
+	status = 0;
 	if (!buf)
 		return (NULL);
-	while (str[i] && !is_sep(str[i]))
+	while (str[i])
+	{
+		if (is_quote(str[i]) && quote_is_closed(str, i) && status == 0)
+			status = is_quote(str[i]);
+		else if (status > 0 && is_quote(str[i - 1]) == status)
+			status = 0;
+		if (is_sep(str[i]) && status == 0)
+			break;
+		printf("char = %c ; status = %d\n", str[i], status);
+		i++;
+	}
 		i++;
 	if (!str[i])
 	{
@@ -217,7 +236,7 @@ char	*get_sep(char *str, int i)
 		buf[1] = str[++i];
 		buf[2] = 0;
 	}
-	if(str[i + 1])
+	if (str[i + 1])
 		i++;
 	if (str[i] && (is_sep(str[i]) || is_whitespace(str[i])))
 		too_many_sep(str, i);
