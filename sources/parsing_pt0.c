@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:04 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/09 07:56:38 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/10 11:45:36 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ int	count_sep(char *str)
 		i++;
 	}
 	count++;
-	printf("count = %d\n", count);
 	return (count);
 }
 
@@ -86,16 +85,30 @@ int	count_word(char *str, int i)
 {
 	int	count;
 	int	set;
+	int	quote_s;
 
 	count = 0;
 	set = 0;
-	while (str[i] && !is_sep(str[i]))
+	quote_s = 0;
+	while (str[i] )
 	{
-		if (is_whitespace(str[i]))
+		if (is_sep(str[i]) && quote_s == 0)
+			break;
+		else if (is_quote(str[i]) && quote_s == 0)
+			quote_s = is_quote(str[i]);
+		else if (is_whitespace(str[i]) && quote_s == 0)
+			set = 0;
+		else if (set == 0 && quote_s == 0)
+		{
+			count++;
+			set = 1;
+		}
+		else if (is_quote(str[i]) == quote_s)
 		{
 			set = 0;
+			quote_s = 0;
 		}
-		else if (set == 0)
+		else if (quote_s > 0 && set == 0)
 		{
 			count++;
 			set = 1;
@@ -131,12 +144,12 @@ int	quote_is_closed(char *str, int i)
 		i++;
 	else
 	{
-		ft_printf("Error 1, quote unclosed\n");
+		// ft_printf("Error 1, quote unclosed\n");
 		return (0);
 	}
 	while (str[i])
 	{
-		if (is_quote(str[i]) == is_quote(target))
+		if (str[i] == target)
 			return (i);
 		i++;
 	}
@@ -213,14 +226,12 @@ char	*get_sep(char *str, int i)
 	{
 		if (is_quote(str[i]) && quote_is_closed(str, i) && status == 0)
 			status = is_quote(str[i]);
-		else if (status > 0 && is_quote(str[i - 1]) == status)
+		else if (status > 0 && is_quote(str[i]) == status)
 			status = 0;
 		if (is_sep(str[i]) && status == 0)
 			break;
-		printf("char = %c ; status = %d\n", str[i], status);
 		i++;
 	}
-		i++;
 	if (!str[i])
 	{
 		free(buf);
@@ -265,8 +276,11 @@ char	*copy_str(char *str, int i)
 			y = ft_strlen(buf);
 			i = quote_is_closed(str, i);
 		}
-		buf[y] = str[i];
-		y++;
+		if (!is_quote(str[i]))
+		{		
+			buf[y] = str[i];
+			y++;
+		}
 		i++;
 	}
 	buf[y] = 0;
@@ -324,10 +338,9 @@ char	**get_line(char *str, int i)
 t_cmd	*create_cmd(char *str, int *i)
 {
     t_cmd	*cmd;
+	int		set;
 
 	cmd = malloc(sizeof(t_cmd));
-    // if (!cmd)
-    // 	return NULL;
 
 	cmd->line = get_line(str, *i);
 	if (!cmd->line)
@@ -335,8 +348,17 @@ t_cmd	*create_cmd(char *str, int *i)
 	
     cmd->sep = get_sep(str, *i);
 
-	while (str[*i] && !is_sep(str[*i]))
+	set = 0;
+	while (str[*i])
+	{
+		if (is_sep(str[*i]) && set == 0)
+			break;
+		else if (is_quote(str[*i]) && quote_is_closed(str, *i) && set == 0)
+			set = is_quote(str[*i]);
+		else if (is_quote(str[*i]) == set)
+			set = 0;
     	i[0]++;
+	}
 	while (is_sep(str[*i]))
 		i[0]++;
 
@@ -354,7 +376,6 @@ t_cmd *parsing(char *str)
 	if (!i)
 		return (NULL);
 	*i = 0;
-	printf("str = %s\n", str);
     sep_count = count_sep(str);
 	cmd = create_cmd(str, i);
 	first = cmd;
