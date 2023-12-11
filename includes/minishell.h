@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2023/11/24 14:47:11 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/11 14:46:22 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct 	garbage_colector
 {
 	t_prompt *prpt;
 	t_bui	*blts;
+	char	**args;
 	char			*line;
 }				t_gc;
 
@@ -59,9 +60,9 @@ int		clear_terminal();
 t_gc	*in_minishell();
 
 t_bui   *set_builtins(void);
-int		ft_env(t_gc *garbage);
-int		ft_pwd(t_gc *garbage);
-int		ft_export(t_gc *garbage);
+int		ft_env(t_gc *garbage, char **args);
+int		ft_pwd(t_gc *garbage, char **args);
+int		ft_export(t_gc *garbage, char **args);
 
 
 int		print_env(t_gc *garbage);

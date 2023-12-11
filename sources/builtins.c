@@ -1,14 +1,12 @@
 
 #include "../includes/minishell.h"
 
-int	ft_export(t_gc *garbage)
+int	ft_export(t_gc *garbage, char **args)
 {
-	char **args;
 	int		i;
 
 	if (!garbage->line)
 		return (0);
-	args = ft_split(garbage->line, ' ');
 	i = 0;
 	if (!ft_strncmp(args[0], "export", 7))
 	{
@@ -23,19 +21,13 @@ int	ft_export(t_gc *garbage)
 		else
 			update_export(garbage, args);
 	}
-	// A RETIRER //
-	free(args[0]);
-	free(args);
 	return (0);
 }
 
-int	ft_env(t_gc *garbage)
+int	ft_env(t_gc *garbage, char **args)
 {
-	char **args;
-
 	if (!garbage->line)
 		return (0);
-	args = ft_split(garbage->line, ' ');
 	if (!ft_strncmp(args[0], "env", 4))
 	{
 		if (print_env(garbage))
@@ -46,28 +38,19 @@ int	ft_env(t_gc *garbage)
 			return (1);
 		}
 	}
-	// A RETIRER //
-	free_tab(args);
-	free(args);
 	return (0);
 }
 
-int	ft_pwd(t_gc *garbage)
+int	ft_pwd(t_gc *garbage, char **args)
 {
-	char **args;
-
 	if (!garbage->line)
 		return (0);
-	args = ft_split(garbage->line, ' ');
 	if (!ft_strncmp(args[0], "pwd", 4))
 	{
 		free(garbage->blts->pwd);
 		garbage->blts->pwd = get_pwd();
 		printf("%s\n", garbage->blts->pwd);
 	}
-	// A RETIRER //
-	free_tab(args);
-	free(args);
 	return (0);
 }
 

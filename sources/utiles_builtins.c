@@ -46,8 +46,7 @@ int	update_var(t_bui *blts, char *arg, int j)
 	}
 	if (!e)
 		return (0);
-	else if ((int)ft_strlen(arg) > ft_size_var_env(blts->exp[j]) + 1
-		|| (int)ft_strlen(blts->exp[j]) == ft_size_var_env(blts->exp[j]))
+	else
 	{
 		printf("update var\n");
 		free(blts->exp[j]);

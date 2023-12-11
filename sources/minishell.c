@@ -1,25 +1,27 @@
 
 #include "../includes/minishell.h"
 
-int		clear_or_exit(char *str)
+int		clear_or_exit(char **str)
 {
 	if (!str)
 		return (0);
-	if (!ft_strncmp("clear history", str, 14))
+	if (!ft_strncmp("clear history", str[0], 14))
 		rl_clear_history();
-    if (!ft_strncmp("exit", str, 4) && ft_strlen(str) == 4)
+    if (!ft_strncmp("exit", str[0], 4) && ft_strlen(str[0]) == 4)
         return (1);
 	else
 		return (0);
 }
 
-int	is_builtins(t_gc *garbage)
+int	is_builtins(t_gc *garbage, char **args)
 {
-	if (ft_env(garbage))
+	if (!args)
+		return (0);
+	if (ft_env(garbage, args))
 		return (1);
-	if (ft_pwd(garbage))
+	if (ft_pwd(garbage, args))
 		return (1);
-	if (ft_export(garbage))
+	if (ft_export(garbage, args))
 		return (1);
 	// if (ft_unset(garbage))
 	// 	return (1);
@@ -41,13 +43,17 @@ t_gc	*in_minishell()
 	}
 	while (1)
 	{
+		garbage->args = NULL;
 		garbage->line = ft_prompt();
-		if (clear_or_exit(garbage->line))
-			break ;
-		if (is_builtins(garbage))
-			break ;
-		//printf("%s\n", garbage->line); // check prompt (A RETIRER)
+		if ((int)ft_strlen(garbage->line))
+			garbage->args = ft_split(garbage->line, ' ');
 		free(garbage->line);
+		if (clear_or_exit(garbage->args))
+			break ;
+		if (is_builtins(garbage, garbage->args))
+			break ;
+		free_tab(garbage->args);
+		free(garbage->args);
 	}
 	return (garbage);
 }

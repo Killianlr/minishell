@@ -25,9 +25,13 @@ void	free_all(t_gc *garbage)
 	printf("DEBUT DU FREE\n");
 	if (!garbage)
 		return ;
-	free(garbage->line);
+	// free(garbage->line);
 	free_tab(garbage->blts->env);
+	printf("avant free tab export\n");
 	free_tab(garbage->blts->exp);
+	printf("apres free tab export\n");
+	free_tab(garbage->args);
+	free(garbage->args);
 	free_blts(garbage->blts);
 	free(garbage->blts);
 	free(garbage);
