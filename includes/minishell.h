@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/11 13:51:49 by fserpe           ###   ########.fr       */
+/*   Updated: 2023/12/11 18:08:42 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,5 +104,26 @@ t_arg	*parsing(char *str, t_bui *blts);
 void	free_parsing(t_arg *cmd);
 void	print_cmd(t_arg *cmd);
 t_arg	*main_pars(char *str, t_bui *blts);
+
+int	is_printable(char c);
+int	is_whitespace(char c);
+int	is_sep(char c);
+int	is_$(char c);
+int	is_quote(char c);
+
+char	**strduptab(char *src, int i);;
+
+int	count_char(char *str, int i, t_bui *blts);
+int	count_word(char *str, int i);
+int	count_sep(char *str);
+
+char	*get_in_env(char **env, char *str);
+char	*get_$(char *str, int i, t_bui *blts);
+char	*get_sep(char *str, int i);
+char	**get_line(char *str, int i, t_bui *blts);
+
+int	quote_is_closed(char *str, int i);
+char	*handle_quotes(char * str, int i);
+
 
 #endif
