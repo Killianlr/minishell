@@ -1,16 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing_pt0.c                                      :+:      :+:    :+:   */
+/*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:04 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/10 11:45:36 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/11 11:22:30 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../includes/mspars.h"
+
+char	**strduptab(char *src, int i)
+{
+	char **dup;
+	int	y;
+
+	if (!src || !src[i])
+		return (NULL);
+	dup = malloc(sizeof(char *) * 2);
+	if (!dup)
+		return (NULL);
+	dup[0] = malloc(sizeof(char) * 2);
+	y = 0;
+	if (src[i] && !is_sep(src[i]))
+		dup[0][y++] = src[i];
+	dup[0][y] = 0;
+	dup[1] = NULL;
+
+	return (dup);
+}
 
 int	is_printable(char c)
 {
@@ -256,13 +276,14 @@ char	*get_sep(char *str, int i)
 
 char	*copy_str(char *str, int i)
 {
-	int	y;
+	int		y;
 	char	*buf;
 	char	*quote;
 
 	buf = malloc(sizeof(char) * (count_char(str, i) + 1));
 	if (!buf)
 		return (NULL);
+	buf[0] = 0; 
 	y = 0;
 	quote = NULL;
 	while (str[i] && !is_sep(str[i]) && !is_whitespace(str[i]))
@@ -388,4 +409,19 @@ t_cmd *parsing(char *str)
     cmd->next = NULL;
 	free(i);
     return (first);
+}
+
+int	main(int ac, char **av)
+{
+	t_cmd	*cmd;
+	
+	if (ac <= 1)
+		return (0);
+	cmd = NULL;
+	cmd = parsing(av[1]);
+	if (!cmd)
+		printf("Error in parsing\n");
+	print_cmd(cmd);
+	free_parsing(cmd);
+	return (1);
 }

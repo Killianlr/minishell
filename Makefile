@@ -6,11 +6,8 @@ LIBFT = libft.a
 LIBFT_DIR = libft
 LIB = $(addprefix $(LIBFT_DIR)/, $(LIBFT))
 
-MY_SOURCES = main.c \
-		parsing_pt0.c \
-		parsing_pt1.c \
+MY_SOURCES = parsing.c \
 		free_parsing.c \
-		utils.c \
 
 SOURCES_DIR = sources
 SOURCES = $(addprefix $(SOURCES_DIR)/, $(MY_SOURCES))
