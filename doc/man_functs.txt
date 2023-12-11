@@ -1,0 +1,59 @@
+bash: http://manpagesfr.free.fr/man/man1/bash.1.html
+readline:   https://man7.org/linux/man-pages/man3/readline.3.html
+            https://web.mit.edu/gnu/doc/html/rlman_2.html
+rl_clear_history: 
+rl_on_new_line:
+rl_replace_line: http://manpagez.com/info/rlman/rlman-6.2/rlman_39.php
+rl_redisplay: https://web.mit.edu/gnu/doc/html/rlman_2.html
+add_history: https://linux.die.net/man/3/history
+printf: 
+malloc: 
+free: 
+write: 
+access: http://manpagesfr.free.fr/man/man2/access.2.html
+open: http://manpagesfr.free.fr/man/man2/open.2.html
+read: http://manpagesfr.free.fr/man/man2/read.2.html
+close: http://manpagesfr.free.fr/man/man2/close.2.html
+fork: http://manpagesfr.free.fr/man/man2/fork.2.html
+wait: http://manpagesfr.free.fr/man/man2/wait.2.html
+waitpid: http://www.man-linux-magique.net/man2/waitpid.html
+wait3: http://www.man-linux-magique.net/man2/wait3.html
+wait4: http://www.man-linux-magique.net/man2/wait3.html
+signal: http://manpagesfr.free.fr/man/man2/signal.2.html
+sigaction: http://manpagesfr.free.fr/man/man2/sigaction.2.html
+sigemptyset: https://manpages.debian.org/jessie/manpages-fr-dev/sigemptyset.3.fr.html
+sigaddset: https://manpages.debian.org/testing/manpages-fr-dev/sigaddset.3.fr.html
+kill: http://manpagesfr.free.fr/man/man2/kill.2.html
+exit: http://manpagesfr.free.fr/man/man3/exit.3.html
+getcwd: http://manpagesfr.free.fr/man/man3/getcwd.3.html
+chdir: http://manpagesfr.free.fr/man/man2/chdir.2.html
+stat: http://manpagesfr.free.fr/man/man2/stat.2.html
+lstat: https://manpages.ubuntu.com/manpages/trusty/fr/man2/stat.2.html
+fstat: https://manpages.ubuntu.com/manpages/trusty/fr/man2/stat.2.html
+unlink: http://manpagesfr.free.fr/man/man2/unlink.2.html
+execve: http://manpagesfr.free.fr/man/man2/execve.2.html
+dup: http://manpagesfr.free.fr/man/man2/dup.2.html
+dup2: http://manpagesfr.free.fr/man/man2/dup.2.html
+pipe: http://manpagesfr.free.fr/man/man2/pipe.2.html
+opendir: http://manpagesfr.free.fr/man/man3/opendir.3.html
+readdir: http://manpagesfr.free.fr/man/man3/readdir.3.html
+closedir: http://manpagesfr.free.fr/man/man3/closedir.3.html
+strerror: http://manpagesfr.free.fr/man/man3/strerror.3.html
+perror: http://manpagesfr.free.fr/man/man3/perror.3.html
+isatty: http://manpagesfr.free.fr/man/man3/isatty.3.html
+ttyname: http://manpagesfr.free.fr/man/man3/ttyname.3.html
+ttyslot: http://manpagesfr.free.fr/man/man3/ttyslot.3.html
+ioctl: http://manpagesfr.free.fr/man/man2/ioctl.2.html
+getenv: http://manpagesfr.free.fr/man/man3/getenv.3.html
+tcsetattr: http://manpagesfr.free.fr/man/man3/termios.3.html
+tcgetattr: http://manpagesfr.free.fr/man/man3/termios.3.html
+{
+    https://zestedesavoir.com/tutoriels/1733/termcap-et-terminfo/
+
+    tgetent: 
+    tgetflag:
+    tgetnum: 
+    tgetstr: 
+    tgoto: 
+    tputs:
+}

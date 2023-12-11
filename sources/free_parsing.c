@@ -6,14 +6,15 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 16:17:12 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/11 11:17:25 by fserpe           ###   ########.fr       */
+/*   Updated: 2023/12/11 13:39:59 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/mspars.h"
+#include "../includes/minishell.h"
 
 
-void	print_cmd(t_cmd *cmd)
+
+void	print_cmd(t_arg *cmd)
 {
 	while (cmd->next)
 	{
@@ -41,9 +42,9 @@ void	free_pars_tab(char **arr)
 	free(arr);
 }
 
-void	free_parsing(t_cmd *cmd)
+void	free_parsing(t_arg *cmd)
 {
-	t_cmd	*tmp;
+	t_arg	*tmp;
 
 
 	if (!cmd)

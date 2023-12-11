@@ -6,8 +6,18 @@ LIBFT = libft.a
 LIBFT_DIR = libft
 LIB = $(addprefix $(LIBFT_DIR)/, $(LIBFT))
 
-MY_SOURCES = parsing.c \
-		free_parsing.c \
+MY_SOURCES = 	minishell.c \
+				prompt.c \
+				terminal.c \
+				signal.c \
+				env.c \
+				export.c \
+				free.c \
+				builtins.c \
+				utiles_builtins.c \
+				ft_sort_tab.c \
+				parsing.c \
+				free_parsing.c \
 
 SOURCES_DIR = sources
 SOURCES = $(addprefix $(SOURCES_DIR)/, $(MY_SOURCES))
@@ -20,7 +30,7 @@ all: $(NAME)
 
 $(NAME) : $(OBJECTS)
 	make -C $(LIBFT_DIR)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJECTS) $(LIB)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJECTS) $(LIB) -lreadline
 
 $(OBJECTS_DIR)/%.o: $(SOURCES_DIR)/%.c
 	@mkdir -p $(OBJECTS_DIR)
@@ -33,5 +43,7 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 	rm -f $(LIBFT_DIR)/$(LIBFT)
+
+e: all clean
 
 re : fclean all

@@ -26,6 +26,7 @@ MY_SOURCES = ft_atoi.c \
 	ft_strdup.c \
 	ft_substr.c \
 	ft_strjoin.c \
+	ft_strjoin_ps.c \
 	ft_strtrim.c \
 	ft_split.c \
 	ft_strmapi.c \
