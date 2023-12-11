@@ -77,10 +77,16 @@ int		signal_init(void);
 
 int		ft_strlen_tab(char **env);
 char    *get_pwd(void);
+int		ft_size_var_env(char *str);
+int		check_var_exist(t_gc *garbage, char *arg);
+
+char	*remove_quote(char *str);
+int		add_var_env(t_bui *blts, char *arg);
 
 char	**ft_sort_tab(char **tabl);
 char	*add_db_quote(char *src);
 
 int		set_export(t_bui *blts);
+int		update_export(t_gc *garbage, char **args);
 
 #endif

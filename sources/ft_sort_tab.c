@@ -44,7 +44,7 @@ char	*add_db_quote(char *src)
 		return (0);
 	while (src[i])
 	{
-		if (src[i] == '=' && q == 0)
+		if (src[i] == '=' && q == 0 && src[i + 1] != '"')
 		{
 			dest[i + q] = src[i];
 			i++;
@@ -57,7 +57,7 @@ char	*add_db_quote(char *src)
 			i++;
 		}
 	}
-	if (q)
+	if (src[i - 1] != '"')
 	{
 		dest[i + q] = '"';
 		dest[i + q + 1] = 0;

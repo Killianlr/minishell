@@ -1,6 +1,61 @@
 
 #include "../includes/minishell.h"
 
+char	*remove_quote(char *str)
+{
+	int		i;
+	int		q;
+	char	*dest;
+
+	i = 0;
+	q = 0;
+	while (str[i])
+	{
+		if (str[i] == '"')
+			q++;
+		i++;
+	}
+	dest = malloc(sizeof(char) * (ft_strlen(str) - q + 1));
+	if (!dest)
+		return (NULL);
+	i = 0;
+	q = 0;
+	while (str[i + q])
+	{
+		while (str[i + q] == '"')
+			q++;
+		dest[i] = str[i + q];
+		i++;
+	}
+	dest[i] = 0;
+	return (dest);
+}
+
+int	add_var_env(t_bui *blts, char *arg)
+{
+	int		i;
+	char	**new_env;
+	int		size_tab;
+
+	i = 0;
+	size_tab = ft_strlen_tab(blts->env);
+	new_env = malloc(sizeof(char *) * (size_tab + 2));
+	if (!new_env)
+		return (1);
+	while (blts->env[i])
+	{
+		new_env[i] = blts->env[i];
+		i++;
+	}
+	new_env[i] = remove_quote(arg);
+	if (!new_env[i])
+		return (1);
+	new_env[i + 1] = NULL;
+	free(blts->env);
+	blts->env = new_env;
+	return (0);
+}
+
 int update_env(t_bui *blts)
 {
     int i;
