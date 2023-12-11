@@ -33,51 +33,50 @@ int	ft_size_var_env(char *str)
 
 int	update_var(t_bui *blts, char *arg, int j)
 {
-	int	i;
-	int	e;
-
-	i = 0;
-	e = 0;
-	while (arg[i])
-	{
-		if (arg[i] == '=')
-			e = 1;
-		i++;
-	}
-	if (!e)
+	printf("update var\n");
+	free(blts->exp[j]);
+	blts->exp[j] = add_db_quote(arg);
+	if (!blts->exp[j])
 		return (0);
-	else
-	{
-		printf("update var\n");
-		free(blts->exp[j]);
-		blts->exp[j] = add_db_quote(arg);
-		if (!blts->exp[j])
-			return (1);
-		return (1);
-	}
-	return (0);
+	if (update_var_env(blts, arg))
+		return (0);
+	return (1);
 }
 
-int	check_var_exist(t_gc *garbage, char *arg)
+int	check_var_exist(char **tableau, char *arg)
 {
 	int	i;
 	int	len1;
 	int	len2;
 
 	i = 0;
-	while (garbage->blts->exp[i])
+	while (tableau[i])
 	{
 		len1 = ft_size_var_env(arg);
-		len2 = ft_size_var_env(garbage->blts->exp[i]);
+		len2 = ft_size_var_env(tableau[i]);
 		if ((len1 - len2) == 0)
 		{
-			if (!ft_strncmp(arg, garbage->blts->exp[i], len1))
+			if (!ft_strncmp(arg, tableau[i], len1))
 			{
-				if (update_var(garbage->blts, arg, i))
-					return (0);
-				return (1);
+				if ((int)ft_strlen(arg) > ft_size_var_env(tableau[i]))
+					return (i);
+				return (0);
 			}
 		}
+		i++;
+	}
+	return (i + 1);
+}
+
+int	it_is_an_equal(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '=')
+			return (1);
 		i++;
 	}
 	return (0);

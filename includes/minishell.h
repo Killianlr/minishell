@@ -79,10 +79,14 @@ int		signal_init(void);
 int		ft_strlen_tab(char **env);
 char    *get_pwd(void);
 int		ft_size_var_env(char *str);
-int		check_var_exist(t_gc *garbage, char *arg);
+int		check_var_exist(char **tableau, char *arg);
+int		it_is_an_equal(char *str);
+int		update_var(t_bui *blts, char *arg, int j);
+
 
 char	*remove_quote(char *str);
 int		add_var_env(t_bui *blts, char *arg);
+int		update_var_env(t_bui *blts, char *str);
 
 char	**ft_sort_tab(char **tabl);
 char	*add_db_quote(char *src);

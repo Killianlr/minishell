@@ -163,3 +163,25 @@ int    set_env(t_bui *blts)
     }
 	return (0);
 }
+
+int	update_var_env(t_bui *blts, char *str)
+{
+	int	i;
+
+	i = check_var_exist(blts->env, str);
+	if (i > ft_strlen_tab(blts->env))
+	{
+		if (add_var_env(blts, str))
+			return (1);
+	}
+	else
+	{
+	printf("ici\n");
+		printf("i = %d\n", i);
+		free(blts->env[i]);
+		blts->env[i] = remove_quote(str);
+		if (!blts->env[i])
+			return (1);
+	}
+	return (0);
+}

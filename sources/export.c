@@ -28,25 +28,34 @@ int	replace_old_exp(t_bui *blts, char *arg_w_db_q)
 
 int	add_var_export(t_gc *garbage, char *arg)
 {
-	int		i;
 	char	*arg_w_db_q;
+	int		val;
 
-	i = 0;
-	if (check_var_exist(garbage, arg))
-		return (0);
-	arg_w_db_q = ft_strdup(arg);
-	while (arg[i])
+	val = check_var_exist(garbage->blts->exp, arg);
+	if (!val)
 	{
-		if (arg[i] == '=')
-		{
-			printf("add var to env\n");
-			if (add_var_env(garbage->blts, arg))
-				return (1);
-			free(arg_w_db_q);
-			arg_w_db_q = add_db_quote(arg);
-		}
-		i++;
+		printf("var deja set sans =\n");
+		return (0);
 	}
+	else if (val <= ft_strlen_tab(garbage->blts->exp))
+	{
+		printf("var exist mais update\n");
+		if (update_var(garbage->blts, arg, val))
+			return (1);
+	}
+	else
+	{
+		if (it_is_an_equal(arg))
+			{
+				printf("add var to env\n");
+				arg_w_db_q = add_db_quote(arg);
+				if (add_var_env(garbage->blts, arg_w_db_q)) // BIG PROBLEME DE FREE !!!!!
+					return (1);
+				free(arg_w_db_q);
+			}
+		printf("new_var\n");
+	}
+	arg_w_db_q = ft_strdup(arg);
 	if (replace_old_exp(garbage->blts, arg_w_db_q))
 		return (1);
 	return (0);
