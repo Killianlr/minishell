@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/11 18:08:42 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/12 11:14:33 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,15 @@ char	*get_sep(char *str, int i);
 char	**get_line(char *str, int i, t_bui *blts);
 
 int	quote_is_closed(char *str, int i);
-char	*handle_quotes(char * str, int i);
+char	*handle_quotes(char * str, int i, t_bui *blts);
+int	after_$(char *str, int i);
+void	too_many_sep(char *str, int i);
+char	*copy_str(char *str, int i, t_bui *blts);
+char	*ms_strjoin(char *s1, char *s2, int status);
+
+
+
+
 
 
 #endif

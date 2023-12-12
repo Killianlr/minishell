@@ -6,11 +6,11 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:04 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/11 18:09:05 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/12 11:14:43 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../includes/minishell.h"
 
 int	after_$(char *str, int i)
 {
@@ -72,22 +72,23 @@ char	*copy_str(char *str, int i, t_bui *blts)
 	{
 		if (is_quote(str[i]) && quote_is_closed(str, i))
 		{
-			quote = handle_quotes(str, i);
+			quote = handle_quotes(str, i, blts);
 			if (!quote)
 				return (NULL);
-			buf = ft_strjoin(buf, quote);
+			buf = ms_strjoin(buf, quote, 3);
 			y = ft_strlen(buf);
 			i = quote_is_closed(str, i);
 		}
-		if (is_$(str[i]) && !is_quote(str[i]))
+		else if (is_$(str[i]) && !is_quote(str[i]))
 		{
-			buf = ft_strjoin(buf, get_$(str, i, blts));
+			buf = ms_strjoin(buf, get_$(str, i, blts), 3);
 			if (!buf)
 				return (NULL);
 			y = ft_strlen(buf);
 			i = after_$(str, i);
+			break ;
 		}
-		if (!is_quote(str[i]) && !is_$(str[i]))
+		else if (!is_quote(str[i]) && !is_$(str[i]) && !is_sep(str[i]) && !is_whitespace(str[i]))
 		{
 			buf[y] = str[i];
 			y++;
@@ -118,7 +119,7 @@ t_arg	*create_arg(char *str, int *i, t_bui *blts)
 			break;
 		else if (is_quote(str[*i]) && quote_is_closed(str, *i) && set == 0)
 			set = is_quote(str[*i]);
-		else if (is_quote(str[*i]) == set)
+		else if (is_quote(str[*i]) == set && set > 0)
 			set = 0;
     	i[0]++;
 	}

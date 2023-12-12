@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get.c                                              :+:      :+:    :+:   */
+/*   p_get.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:05:15 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/11 18:06:28 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/12 12:22:26 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../includes/minishell.h"
 
 char	*get_in_env(char **env, char *str)
 {
@@ -30,20 +30,20 @@ char	*get_in_env(char **env, char *str)
 		if (!ft_strncmp(env[i], str, ft_strlen(str)))
 		{
 			y += ft_strlen(str) + 1;
+			if (env[i][y - 1] != '=')
+				break;
 			buf = malloc(sizeof(char) * (ft_strlen(env[i]) - y + 1));
 			if (!buf)
 				return (NULL);
 			while (env[i][y])
 				buf[j++] = env[i][y++];
 			buf[j] = 0;
-			printf("buf = %s\n", buf);
 			free(str);
 			return (buf);
 		}
 		i++;
 	}
-
-	return (NULL);
+	return (ms_strjoin("$", str, 2));
 }
 
 char	*get_$(char *str, int i, t_bui *blts)
@@ -54,12 +54,16 @@ char	*get_$(char *str, int i, t_bui *blts)
 
 	if (!is_$(str[i]))
 		return (NULL);
+	if (is_quote(str[i]) == 2)
+	{
+		if (str[i + 1])
+			i++;
+	}
 	if (str[i + 1])
 		i++;
-	buf = NULL;
 	y = 0;
 	j = i;
-	while (str[i] && !is_whitespace(str[i]) && !is_sep(str[i]))
+	while (str[i] && !is_whitespace(str[i]) && !is_sep(str[i]) && !is_quote(str[i]))
 	{
 		y++;
 		i++;
@@ -67,10 +71,12 @@ char	*get_$(char *str, int i, t_bui *blts)
 	buf = malloc(sizeof(char) * y + 1);
 	if (!buf)
 		return (NULL);
+	buf[0] = 0;
 	y = 0;
-	while (str[j] && !is_whitespace(str[j]) && !is_sep(str[j]))
+	while (str[j] && !is_whitespace(str[j]) && !is_sep(str[j]) && !is_quote(str[j]))
 		buf[y++] = str[j++];
 	buf[y] = 0;
+	printf("buf in get_$ = %s\n", buf);
 	buf = get_in_env(blts->env, buf);
 	return (buf);
 }
@@ -140,7 +146,9 @@ char	**get_line(char *str, int i, t_bui *blts)
 		if (!buf[y])
 			return (NULL);
 		y++;
-		i += count_char(str, i, blts);
+		// i += count_char(str, i, blts);
+		i = after_$(str, i);
+
 		while (str[i] && (is_whitespace(str[i]) || is_sep(str[i])))
 		{
 			if (is_quote(str[i]))

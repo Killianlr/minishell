@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   count.c                                            :+:      :+:    :+:   */
+/*   p_count.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:03:27 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/11 18:08:34 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/12 10:55:54 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../includes/minishell.h"
 
 
 int	count_sep(char *str)
@@ -58,18 +58,20 @@ int	count_word(char *str, int i)
 			count++;
 			set = 1;
 		}
-		else if (is_quote(str[i]) == quote_s)
+		else if (is_quote(str[i]) == quote_s && quote_s > 0)
 		{
 			set = 0;
 			quote_s = 0;
 		}
 		else if (quote_s > 0 && set == 0)
 		{
+
 			count++;
 			set = 1;
 		}
 		i++;
 	}
+
 	return (count);
 }
 
@@ -95,5 +97,6 @@ int	count_char(char *str, int i, t_bui *blts)
 		count++;
 		i++;
 	}
+
 	return (count);
 }
