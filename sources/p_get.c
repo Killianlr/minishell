@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:05:15 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/12 15:01:29 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/12 16:02:45 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,7 @@ char	**get_line(char *str, int i, t_bui *blts)
 		// i += count_char(str, i, blts);
 		// i = after_$(str, i);
 		i = get_next_word(str, i);
-		printf("str[i] in get_line after_$ = %c[%d]\n", str[i], i);
+		// printf("str[i] in get_line after_$ = %c[%d]\n", str[i], i);
 		while (str[i] && (is_whitespace(str[i]) || is_sep(str[i])))
 		{
 			if (is_quote(str[i]))
@@ -194,5 +194,31 @@ char	**get_line(char *str, int i, t_bui *blts)
 		word_count--;
 	}
 	buf[y] = NULL;
+	return (buf);
+}
+
+char	*get_here_doc(char *av)
+{
+	int		doc;
+	char	*buf;
+
+	doc = open(".heredoc_tmp", O_CREAT | O_WRONLY | O_TRUNC, 0000644);
+	if (doc < 0)
+		return (NULL);
+	while (1)
+	{
+		write(1, "> ", 3);
+		buf = get_next_line(0, 0);
+		if (!buf)
+			return (NULL);
+		if (!ms_strcmp(av, buf, ft_strlen(av)))
+			break ;
+		write(doc, buf, ft_strlen(buf));
+		write(doc, "\n", 1);
+		free(buf);
+	}
+	get_next_line(0, 1);
+	// free(buf);
+	close(doc);
 	return (buf);
 }

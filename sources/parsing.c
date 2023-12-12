@@ -6,11 +6,12 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:04 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/12 14:54:16 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/12 16:59:32 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
 
 int	after_$(char *str, int i)
 {
@@ -29,6 +30,8 @@ void	too_many_sep(char *str, int i)
 
 	y = i;
 	is_print = 0;
+	printf("str[i] = %c[%d]\n", str[i], i);
+
 	while (str[y] && is_whitespace(str[y]) && !is_sep(str[y]))
 	{
 		if (is_printable(str[y]))
@@ -38,18 +41,27 @@ void	too_many_sep(char *str, int i)
 		}
 		y++;
 	}
-	if (str[y] && y > i && is_print == 1 &&!is_sep(str[y]))
+	if (str[y] && y > i && is_print == 1 && !is_sep(str[y]))
 		return ;
 	buf = malloc(sizeof(char) * 3);
 	if (!buf)
 		return ;
 	y = 0;
+	
 	if (str[i] && is_sep(str[i]))
+	{
+		printf("ici\n");
+		
 		buf[y++] = str[i];
+	}
+	printf("str[i] = %c[%d] | buf = %s\n", str[i], i, buf);
 	if ((str[i] == '<' || str[i] == '>') && (str[i] == str[i + 1]))
+	{
+		printf("here\n");
 		buf[y++] = str[++i];
+	}
 	buf[y] = 0;
-	if (buf[0])
+	if (!buf[0])
 		printf("Minishell: syntax error near unexpected token `%s'\n", buf);
 	free(buf);
 	return ;
@@ -68,7 +80,6 @@ char	*copy_str(char *str, int i, t_bui *blts)
 	buf[0] = 0; 
 	y = 0;
 	quote = NULL;
-	printf("str[i] at copy_str = %c[%d]\n", str[i], i);
 	while (str[i] && !is_sep(str[i]) && !is_whitespace(str[i]))
 	{
 		if (is_quote(str[i]) && quote_is_closed(str, i))
@@ -132,6 +143,7 @@ t_arg	*create_arg(char *str, int *i, t_bui *blts)
 
 t_arg *parsing(char *str, t_bui *blts)
 {
+	char 	*hdc;
     int		sep_count;
     t_arg	*arg;
 	t_arg	*first;
@@ -141,6 +153,9 @@ t_arg *parsing(char *str, t_bui *blts)
 	if (!i)
 		return (NULL);
 	*i = 0;
+	hdc = is_here_doc(str);
+	if (hdc[0])
+		str = ms_strjoin(str, get_here_doc(hdc), 2);
     sep_count = count_sep(str);
 	arg = create_arg(str, i, blts);
 	first = arg;

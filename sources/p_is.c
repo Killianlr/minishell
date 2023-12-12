@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:01:34 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/12 09:47:02 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/12 16:23:50 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,36 @@ int	is_quote(char c)
 	else if (c == 34)
 		return (2);
 	return (0);
+}
+
+char	*is_here_doc(char *str)
+{
+	char	*buf;
+	int	i;
+	int y;
+	
+
+	i = 0;
+	y = 0;
+	while (str[i])
+	{
+		if (str[i] == '<' && str[i + 1] == '<')
+		{
+			buf = malloc(sizeof(char) * (ft_strlen(str) - (i + 1) + 2));
+			if (!buf)
+				return (NULL);
+			// buf[0] = 0;
+			i += 2;
+			while (str[i])
+			{
+				if (is_whitespace(str[i]) && str[i + 1])
+					i++;
+				if (is_printable(str[i]))
+					buf[y++] = str[i++];
+			}
+		}
+		i++;
+	}
+	buf[y] = 0;
+	return (buf);
 }
