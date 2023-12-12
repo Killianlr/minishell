@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:03:27 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/12 10:55:54 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/12 14:53:05 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,6 @@ int	count_word(char *str, int i)
 
 	return (count);
 }
-
-
 
 int	count_char(char *str, int i, t_bui *blts)
 {

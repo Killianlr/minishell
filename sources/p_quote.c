@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:06:01 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/12 12:19:59 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/12 15:09:24 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ char	*handle_quotes(char *str, int i, t_bui *blts)
 	int		end;
 	int		y;
 
-	printf("str in handle_quotes = %s\n", str);
 	end = quote_is_closed(str, i);
 	if (end == 0)
 		return (NULL);
@@ -59,18 +58,21 @@ char	*handle_quotes(char *str, int i, t_bui *blts)
 	}
 	else if (is_quote(str[i]) == 2)
 	{
-		printf("here\n");
 		i++;
-		while (str[i] && i < end)
+		while (str[i] && i < end && is_quote(str[i]) != 2)
 		{
 			if (is_$(str[i]))
 			{
 				buf = ms_strjoin(buf, get_$(str, i, blts), 3);
 				if (!buf)
 					return (NULL);
-				printf("buf = %s\n", buf);
 				y = ft_strlen(buf);
-				i = after_$(str, i) ;
+				i = after_$(str, i);
+			}
+			if (is_quote(str[i]) == 2)
+			{
+				buf[y] = 0;
+				return (buf);
 			}
 			buf[y++] = str[i++];
 		}

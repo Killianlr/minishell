@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:04 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/12 11:14:43 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/12 14:54:16 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	after_$(char *str, int i)
 {
 	if (!str || i < 0)
 		return (0);
-	while (str[i] && !is_whitespace(str[i]) && !is_sep(str[i]))
+	while (str[i] && !is_whitespace(str[i]) && !is_sep(str[i]) && !is_quote(str[i]))
 		i++;
 	return (i);
 }
@@ -68,6 +68,7 @@ char	*copy_str(char *str, int i, t_bui *blts)
 	buf[0] = 0; 
 	y = 0;
 	quote = NULL;
+	printf("str[i] at copy_str = %c[%d]\n", str[i], i);
 	while (str[i] && !is_sep(str[i]) && !is_whitespace(str[i]))
 	{
 		if (is_quote(str[i]) && quote_is_closed(str, i))
