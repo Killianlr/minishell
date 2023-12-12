@@ -12,10 +12,11 @@ MY_SOURCES = 	minishell.c \
 				signal.c \
 				env.c \
 				export.c \
+				unset.c \
 				free.c \
 				builtins.c \
 				utiles_builtins.c \
-				ft_sort_tab.c \
+				ft_sort_tab_n_add_dbq.c \
 
 SOURCES_DIR = sources
 SOURCES = $(addprefix $(SOURCES_DIR)/, $(MY_SOURCES))

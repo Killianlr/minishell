@@ -63,6 +63,7 @@ t_bui   *set_builtins(void);
 int		ft_env(t_gc *garbage, char **args);
 int		ft_pwd(t_gc *garbage, char **args);
 int		ft_export(t_gc *garbage, char **args);
+int		ft_unset(t_gc *garbage, char **args);
 
 
 int		print_env(t_gc *garbage);
@@ -73,6 +74,7 @@ int		set_env(t_bui *blts);
 void	free_all(t_gc *garbage);
 void	free_blts(t_bui *blts);
 void    free_tab(char **env);
+void	exit_error(t_gc *garbage);
 
 int		signal_init(void);
 
@@ -82,16 +84,22 @@ int		ft_size_var_env(char *str);
 int		check_var_exist(char **tableau, char *arg);
 int		it_is_an_equal(char *str);
 int		update_var(t_bui *blts, char *arg, int j);
+char	**ft_sort_tab(char **tabl);
 
 
 char	*remove_quote(char *str);
 int		add_var_env(t_bui *blts, char *arg);
 int		update_var_env(t_bui *blts, char *str);
 
-char	**ft_sort_tab(char **tabl);
+char	**ft_sort_tab_n_add_dbq(char **tabl);
 char	*add_db_quote(char *src);
+void    ft_swap(char **a, char **b);
+int		ft_strcmp(char *s1, char *s2);
 
 int		set_export(t_bui *blts);
 int		update_export(t_gc *garbage, char **args);
+
+int 	del_var_unset(t_gc *garbage, char **args);
+
 
 #endif

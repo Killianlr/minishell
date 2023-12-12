@@ -23,8 +23,8 @@ int	is_builtins(t_gc *garbage, char **args)
 		return (1);
 	if (ft_export(garbage, args))
 		return (1);
-	// if (ft_unset(garbage))
-	// 	return (1);
+	if (ft_unset(garbage, args))
+		return (1);
 	return (0);
 }
 
@@ -53,7 +53,6 @@ t_gc	*in_minishell()
 		if (is_builtins(garbage, garbage->args))
 			break ;
 		free_tab(garbage->args);
-		free(garbage->args);
 	}
 	return (garbage);
 }

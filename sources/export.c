@@ -26,38 +26,54 @@ int	replace_old_exp(t_bui *blts, char *arg_w_db_q)
 	return (0);
 }
 
+int	new_var_w_value(t_bui *blts, char *arg)
+{
+	char	*var_w_db_q;
+
+	var_w_db_q = add_db_quote(arg);
+	if (add_var_env(blts, var_w_db_q))
+		return (1);
+	if (replace_old_exp(blts, var_w_db_q))
+		return (1);
+	return (0);
+}
+
+int	new_name_var(t_bui *blts, char *arg)
+{
+	char *var_name;
+
+	var_name = ft_strdup(arg);
+	if (replace_old_exp(blts, var_name))
+		return (1);
+	return (0);
+}
+
 int	add_var_export(t_gc *garbage, char *arg)
 {
-	char	*arg_w_db_q;
 	int		val;
 
 	val = check_var_exist(garbage->blts->exp, arg);
 	if (!val)
-	{
-		printf("var deja set sans =\n");
 		return (0);
-	}
 	else if (val <= ft_strlen_tab(garbage->blts->exp))
 	{
-		printf("var exist mais update\n");
 		if (update_var(garbage->blts, arg, val))
 			return (1);
 	}
 	else
 	{
 		if (it_is_an_equal(arg))
-			{
-				printf("add var to env\n");
-				arg_w_db_q = add_db_quote(arg);
-				if (add_var_env(garbage->blts, arg_w_db_q)) // BIG PROBLEME DE FREE !!!!!
-					return (1);
-				free(arg_w_db_q);
-			}
-		printf("new_var\n");
+		{
+			if (new_var_w_value(garbage->blts, arg))
+				return (1);
+		}
+		else
+		{
+			if (new_name_var(garbage->blts, arg))
+				return (1);
+		}
 	}
-	arg_w_db_q = ft_strdup(arg);
-	if (replace_old_exp(garbage->blts, arg_w_db_q))
-		return (1);
+	garbage->blts->exp = ft_sort_tab(garbage->blts->exp);
 	return (0);
 }
 
@@ -94,7 +110,7 @@ int	update_export(t_gc *garbage, char **args)
 
 int	set_export(t_bui *blts)
 {
-	blts->exp = ft_sort_tab(blts->env);
+	blts->exp = ft_sort_tab_n_add_dbq(blts->env);
 	if (!blts->exp)
 	{
 		free_blts(blts);

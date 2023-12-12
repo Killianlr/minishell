@@ -24,6 +24,8 @@ char	*remove_quote(char *str)
 	{
 		while (str[i + q] == '"')
 			q++;
+		if (!str[i + q])
+			break ;
 		dest[i] = str[i + q];
 		i++;
 	}
@@ -176,8 +178,6 @@ int	update_var_env(t_bui *blts, char *str)
 	}
 	else
 	{
-	printf("ici\n");
-		printf("i = %d\n", i);
 		free(blts->env[i]);
 		blts->env[i] = remove_quote(str);
 		if (!blts->env[i])

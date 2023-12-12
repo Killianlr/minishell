@@ -12,7 +12,7 @@
 
 #include "../includes/minishell.h"
 
-static int	ft_strcmp(char *s1, char *s2)
+int	ft_strcmp(char *s1, char *s2)
 {
 	int	i;
 
@@ -67,7 +67,7 @@ char	*add_db_quote(char *src)
 	return (dest);
 }
 
-char	**ft_sort_tab(char **tabl)
+char	**ft_sort_tab_n_add_dbq(char **tabl)
 {
 	int	i;
 	char	**sorted_tab;

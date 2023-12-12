@@ -33,14 +33,13 @@ int	ft_size_var_env(char *str)
 
 int	update_var(t_bui *blts, char *arg, int j)
 {
-	printf("update var\n");
 	free(blts->exp[j]);
 	blts->exp[j] = add_db_quote(arg);
 	if (!blts->exp[j])
 		return (0);
 	if (update_var_env(blts, arg))
-		return (0);
-	return (1);
+		return (1);
+	return (0);
 }
 
 int	check_var_exist(char **tableau, char *arg)
@@ -80,4 +79,21 @@ int	it_is_an_equal(char *str)
 		i++;
 	}
 	return (0);
+}
+
+char	**ft_sort_tab(char **tabl)
+{
+	int	i;
+
+	i = 0;
+	while (i < ft_strlen_tab(tabl) - 1)
+	{
+		if (ft_strcmp(tabl[i], tabl[i + 1]) > 0)
+		{
+			ft_swap(&tabl[i], &tabl[i + 1]);
+			i = 0;
+		}
+		i++;
+	}
+	return (tabl);
 }

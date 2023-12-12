@@ -1,6 +1,20 @@
 
 #include "../includes/minishell.h"
 
+int	ft_unset(t_gc *garbage, char **args)
+{
+	if (!garbage->line)
+		return (0);
+	if (!ft_strncmp(args[0], "unset", 6))
+	{
+		if (!args[1])
+			return (0);
+		if (del_var_unset(garbage, args))
+			return (1);
+	}
+	return (0);
+}
+
 int	ft_export(t_gc *garbage, char **args)
 {
 	int		i;
@@ -17,9 +31,10 @@ int	ft_export(t_gc *garbage, char **args)
 				printf("declare -x %s\n", garbage->blts->exp[i]);
 				i++;
 			}
+			return (0);
 		}
-		else
-			update_export(garbage, args);
+		if (update_export(garbage, args))
+			return (1);
 	}
 	return (0);
 }

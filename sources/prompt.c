@@ -56,12 +56,23 @@ char	*pre_prompt(void)
 
 	user = NULL;
 	if (!getenv("USER"))
+	{
 		pre_prompt = ft_strdup("\033[92mminishell>\033[0m ");
+		if (!pre_prompt)
+			return ("");
+	}
 	else
 	{
 		user = getenv("USER");
 		pre_prompt = ft_strjoin("\033[93m", user);
+		if (!pre_prompt)
+			return ("");
 		pre_prompt = ft_strjoin_ps(pre_prompt, "\033[92m-minishell>\033[0m ");
+		if (!pre_prompt)
+		{
+			free(pre_prompt);
+			return ("");
+		}
 	}
 	return (pre_prompt);
 }
