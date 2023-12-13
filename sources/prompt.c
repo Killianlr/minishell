@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   prompt.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/13 11:18:46 by kle-rest          #+#    #+#             */
+/*   Updated: 2023/12/13 11:48:12 by kle-rest         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 
 #include "../includes/minishell.h"
 
@@ -67,7 +79,7 @@ char	*pre_prompt(void)
 		pre_prompt = ft_strjoin("\033[93m", user);
 		if (!pre_prompt)
 			return ("");
-		pre_prompt = ft_strjoin_ps(pre_prompt, "\033[92m-minishell>\033[0m ");
+		pre_prompt = ft_strjoin_fs1(pre_prompt, "\033[92m-minishell>\033[0m ");
 		if (!pre_prompt)
 		{
 			free(pre_prompt);

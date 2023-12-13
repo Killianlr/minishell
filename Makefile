@@ -14,6 +14,7 @@ MY_SOURCES = 	minishell.c \
 				export.c \
 				unset.c \
 				free.c \
+				cd.c \
 				builtins.c \
 				utiles_builtins.c \
 				ft_sort_tab_n_add_dbq.c \

@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/11 14:46:22 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/13 15:24:36 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ int		ft_env(t_gc *garbage, char **args);
 int		ft_pwd(t_gc *garbage, char **args);
 int		ft_export(t_gc *garbage, char **args);
 int		ft_unset(t_gc *garbage, char **args);
+int		ft_cd(t_gc *garbage, char **args);
 
 
 int		print_env(t_gc *garbage);
@@ -90,6 +91,8 @@ char	**ft_sort_tab(char **tabl);
 char	*remove_quote(char *str);
 int		add_var_env(t_bui *blts, char *arg);
 int		update_var_env(t_bui *blts, char *str);
+int 	update_env(t_bui *blts);
+
 
 char	**ft_sort_tab_n_add_dbq(char **tabl);
 char	*add_db_quote(char *src);
@@ -100,6 +103,9 @@ int		set_export(t_bui *blts);
 int		update_export(t_gc *garbage, char **args);
 
 int 	del_var_unset(t_gc *garbage, char **args);
+int		go_to_find_var_and_del(t_bui *blts, char *str);
+
+int	cd_set_pwd(t_bui *blts);
 
 
 #endif

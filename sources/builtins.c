@@ -1,5 +1,38 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/13 11:18:06 by kle-rest          #+#    #+#             */
+/*   Updated: 2023/12/13 14:47:44 by kle-rest         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	ft_cd(t_gc *garbage, char **args)
+{
+	if (!garbage->line)
+		return (0);
+	if (!ft_strncmp(args[0], "cd", 3))
+	{
+		if (!args[1])
+			return (0);
+		if (chdir(args[1]))
+		{
+			printf("fail !\n");
+			return (0);
+		}
+		else
+		{
+			if (cd_set_pwd(garbage->blts))
+				return (1);
+		}
+	}
+	return (0);
+}
 
 int	ft_unset(t_gc *garbage, char **args)
 {

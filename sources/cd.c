@@ -1,37 +1,50 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
+/*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/13 11:19:07 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/13 11:19:11 by kle-rest         ###   ########.fr       */
+/*   Created: 2023/12/13 11:18:02 by kle-rest          #+#    #+#             */
+/*   Updated: 2023/12/13 15:42:19 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	signal_handler(int signum)
+int	create_oldpwd(t_bui *blts)
 {
-	if (signum == SIGINT)
-	{
-		printf("\n");
-   		rl_on_new_line();
-    	rl_replace_line("", 0);
-    	rl_redisplay();
-	}
-	else if (signum == SIGQUIT)
-	{
-		write(1, "\b\b  \b\b", 7);
-	}
+	char	*oldpwd;
+
+	oldpwd = "OLDPWD=";
+	if (!oldpwd)
+		return (1);
+	if (add_var_env(blts, oldpwd))
+		return (1);
+	return (0);
 }
 
-int	signal_init(void)
+int	cd_set_pwd(t_bui *blts)
 {
-	if (signal(SIGINT, signal_handler))
-		return (1);
-	if (signal(SIGQUIT, signal_handler))
+	int	i;
+	int	e;
+	int	pwd_exi;
+
+	i = 0;
+	e = 0;
+	pwd_exi = check_var_exist(blts->env, "PWD");
+	while (blts->env[i] && pwd_exi < ft_strlen_tab(blts->env))
+	{
+		if (!ft_strncmp("OLDPWD", blts->env[i], 6))
+			e = 1;
+		i++;
+	}
+	if (!e)
+	{
+		if (create_oldpwd(blts))
+			return (1);
+	}
+	if (update_env(blts))
 		return (1);
 	return (0);
 }
