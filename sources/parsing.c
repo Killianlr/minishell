@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:04 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/12 16:59:32 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/13 13:50:49 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ void	too_many_sep(char *str, int i)
 
 	y = i;
 	is_print = 0;
-	printf("str[i] = %c[%d]\n", str[i], i);
-
 	while (str[y] && is_whitespace(str[y]) && !is_sep(str[y]))
 	{
 		if (is_printable(str[y]))
@@ -49,17 +47,9 @@ void	too_many_sep(char *str, int i)
 	y = 0;
 	
 	if (str[i] && is_sep(str[i]))
-	{
-		printf("ici\n");
-		
 		buf[y++] = str[i];
-	}
-	printf("str[i] = %c[%d] | buf = %s\n", str[i], i, buf);
 	if ((str[i] == '<' || str[i] == '>') && (str[i] == str[i + 1]))
-	{
-		printf("here\n");
 		buf[y++] = str[++i];
-	}
 	buf[y] = 0;
 	if (!buf[0])
 		printf("Minishell: syntax error near unexpected token `%s'\n", buf);
@@ -143,7 +133,7 @@ t_arg	*create_arg(char *str, int *i, t_bui *blts)
 
 t_arg *parsing(char *str, t_bui *blts)
 {
-	char 	*hdc;
+	char 	*hdoc;
     int		sep_count;
     t_arg	*arg;
 	t_arg	*first;
@@ -153,9 +143,10 @@ t_arg *parsing(char *str, t_bui *blts)
 	if (!i)
 		return (NULL);
 	*i = 0;
-	hdc = is_here_doc(str);
-	if (hdc[0])
-		str = ms_strjoin(str, get_here_doc(hdc), 2);
+	hdoc = is_here_doc(str);
+	if (hdoc)
+		get_here_doc(hdoc);
+	free(hdoc);
     sep_count = count_sep(str);
 	arg = create_arg(str, i, blts);
 	first = arg;

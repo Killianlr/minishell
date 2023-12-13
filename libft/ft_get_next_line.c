@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_get_next_line.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 16:45:14 by fserpe            #+#    #+#             */
-/*   Updated: 2023/11/16 15:34:35 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/13 13:40:32 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ char	*get_next_line(int fd, int x)
 		return (NULL);
 	if (x == 1)
 	{
-		free(mem[fd]);
+		// free(mem[fd]);
 		return (NULL);
 	}
 	mem[fd] = gnl_read_file(mem[fd], fd);

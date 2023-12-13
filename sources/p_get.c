@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_get.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:05:15 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/12 16:02:45 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/13 14:28:01 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ char	*get_$(char *str, int i, t_bui *blts)
 	while (str[j] && !is_whitespace(str[j]) && !is_sep(str[j]) && !is_quote(str[j]))
 		buf[y++] = str[j++];
 	buf[y] = 0;
-	printf("buf in get_$ = %s\n", buf);
 	buf = get_in_env(blts->env, buf);
 	return (buf);
 }
@@ -113,11 +112,11 @@ char	*get_sep(char *str, int i)
 	}
 	if ((str[i] == '<' || str[i] == '>') && (str[i] == str[i + 1]))
 	{
-		buf[1] = str[++i];
+		buf[1] = str[i];
 		buf[2] = 0;
 	}
-	if (str[i + 1])
-		i++;
+	// if (str[i + 1])
+	// 	i++;
 	if (str[i] && (is_sep(str[i]) || is_whitespace(str[i])))
 		too_many_sep(str, i);
 	return (buf);
@@ -200,7 +199,8 @@ char	**get_line(char *str, int i, t_bui *blts)
 char	*get_here_doc(char *av)
 {
 	int		doc;
-	char	*buf;
+	char	*buf = NULL;
+	char	*ret = NULL;
 
 	doc = open(".heredoc_tmp", O_CREAT | O_WRONLY | O_TRUNC, 0000644);
 	if (doc < 0)
@@ -208,9 +208,11 @@ char	*get_here_doc(char *av)
 	while (1)
 	{
 		write(1, "> ", 3);
+		// buf = ms_strjoin(buf, get_next_line(0, 0), 2);
 		buf = get_next_line(0, 0);
 		if (!buf)
 			return (NULL);
+		ret = ms_strjoin(ret, buf, 2);
 		if (!ms_strcmp(av, buf, ft_strlen(av)))
 			break ;
 		write(doc, buf, ft_strlen(buf));
@@ -218,7 +220,8 @@ char	*get_here_doc(char *av)
 		free(buf);
 	}
 	get_next_line(0, 1);
-	// free(buf);
+	free(buf);
 	close(doc);
-	return (buf);
+	printf("ret h_doc = %s\n", ret);
+	return (ret);
 }

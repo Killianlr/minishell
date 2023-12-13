@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_utils.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:02:50 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/12 16:21:44 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/13 14:25:06 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,13 @@ char	*ms_strjoin(char *s1, char *s2, int status)
 	while (s1[i])
 	{
 		str[i] = s1[i];
-		++i;
+		i++;
 	}
 	y = 0;
 	while (s2[y])
 	{
 		str[i + y] = s2[y];
-		++y;
+		y++;
 	}
 	str[i + y] = 0;
 	if (status == 1)
