@@ -17,7 +17,7 @@ MY_SOURCES = 	minishell.c \
 				utiles_builtins.c \
 				ft_sort_tab.c \
 				parsing.c \
-				free_parsing.c \
+				p_free.c \
 				p_count.c \
 				p_get.c \
 				p_is.c \

@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/12 15:52:41 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/14 18:45:47 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,16 @@ typedef struct arg
 {
 	char	**line;
 	char	*sep;
+	char	*h_doc;
 	struct arg	*next;
 }			t_arg;
+
+typedef struct pars
+{
+	char	*av;
+	char	**env;
+	int		i;
+}			t_pars;
 
 typedef struct 	garbage_colector
 {
@@ -100,35 +108,30 @@ int		update_export(t_gc *garbage);
 
 
 
-t_arg	*parsing(char *str, t_bui *blts);
+t_arg	*main_pars(char *str, t_bui *blts);
+t_arg	*parsing(t_pars *pars);
 void	free_parsing(t_arg *cmd);
 void	print_cmd(t_arg *cmd);
-t_arg	*main_pars(char *str, t_bui *blts);
-
-int	is_printable(char c);
-int	is_whitespace(char c);
-int	is_sep(char c);
-int	is_$(char c);
-int	is_quote(char c);
-
-char	**strduptab(char *src, int i);;
-
-int	count_char(char *str, int i, t_bui *blts);
-int	count_word(char *str, int i);
-int	count_sep(char *str);
-
+int		is_printable(char c);
+int		is_whitespace(char c);
+int		is_sep(char c);
+int		is_$(char c);
+int		is_quote(char c);
+char	**strduptab(t_pars *pars);;
+int		count_char(t_pars *pars);
+int		count_word(t_pars *pars);
+int		count_sep(char *str);
 char	*get_in_env(char **env, char *str);
-char	*get_$(char *str, int i, t_bui *blts);
-char	*get_sep(char *str, int i);
-char	**get_line(char *str, int i, t_bui *blts);
-
-int		quote_is_closed(char *str, int i);
-char	*handle_quotes(char * str, int i, t_bui *blts);
-int		after_$(char *str, int i);
-void	too_many_sep(char *str, int i);
-char	*copy_str(char *str, int i, t_bui *blts);
+char	*get_$(t_pars *pars);
+char	*get_sep(t_pars *pars);
+char	**get_line(t_pars *pars);
+int		quote_is_closed(t_pars *pars);
+char	*handle_quotes(t_pars *pars);
+int		after_$(t_pars *pars);
+void	too_many_sep(t_pars *pars);
+char	*copy_str(t_pars *pars);
 char	*ms_strjoin(char *s1, char *s2, int status);
-char	*is_here_doc(char *str);
+char	*is_here_doc(t_pars *pars);
 int		ms_strcmp(char *s1, char *s2, int n);
 char	*get_here_doc(char *av);
 

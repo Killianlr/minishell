@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_is.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:01:34 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/13 14:03:33 by fserpe           ###   ########.fr       */
+/*   Updated: 2023/12/14 18:43:30 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,43 +59,66 @@ int	is_quote(char c)
 	return (0);
 }
 
-char	*is_here_doc(char *str)
+int	size_for_malloc_del(t_pars *pars)
+{
+	int	size;
+
+	size = 0;
+	if (pars->av[pars->i] == '<' && pars->av[pars->i + 1] == '<')
+		pars->i += 2;
+	else
+		return (0);
+	while (pars->av[pars->i])
+	{
+		if (is_whitespace(pars->av[pars->i]))
+			pars->i++;
+		if (is_printable(pars->av[pars->i]) && !is_sep(pars->av[pars->i]))
+		{
+			size++;
+			pars->i++;
+		}
+		if (is_sep(pars->av[pars->i]))
+			return (size);
+	}
+	return (size);
+}
+
+char	*is_here_doc(t_pars *pars)
 {
 	char	*buf;
 	int	status;
 	int	set;
-	int	i;
 	int y;
+	int	size;
 	
-
-	i = 0;
 	y = 0;
 	set = 0;
-	status = is_quote(str[i]);
-	while (str[i])
+	status = is_quote(pars->av[pars->i]);
+	while (pars->av[pars->i])
 	{
-			printf("status = %d\n", status);
-		if (is_quote(str[i]) && status == 0)
-			status = is_quote(str[i]);
-		else if (is_quote(str[i]) == status && status > 0)
+		if (is_quote(pars->av[pars->i]) && status == 0)
+			status = is_quote(pars->av[pars->i]);
+		else if (is_quote(pars->av[pars->i]) == status && status > 0)
 			status = 0;
-		else if (str[i] == '<' && str[i + 1] == '<' && status == 0)
+		else if (pars->av[pars->i] == '<' && pars->av[pars->i + 1] == '<' && status == 0)
 		{
 			set = 1;
-			buf = malloc(sizeof(char) * (ft_strlen(str) - (i + 1) + 2));
+			size = size_for_malloc_del(pars);
+			buf = malloc(sizeof(char) * (size + 1));
 			if (!buf)
 				return (NULL);
-			i += 2;
-			if (is_whitespace(str[i]) && str[i + 1])
-				i++;
-			while (is_printable(str[i]))
-				buf[y++] = str[i++];
-			if (!str[i])
+			pars->i += 2;
+			while (is_whitespace(pars->av[pars->i]) && pars->av[pars->i + 1])
+				pars->i++;
+			if (is_quote(pars->av[pars->i]))
+				return (handle_quotes(pars));
+			while (is_printable(pars->av[pars->i]) && !is_sep(pars->av[pars->i]) && y < size)
+				buf[y++] = pars->av[pars->i++];
+			if (!pars->av[pars->i] || is_sep(pars->av[pars->i]) || is_whitespace(pars->av[pars->i]))
 				break ;
 		}
-		i++;
+		pars->i++;
 	}
-	printf("i in  ishdoc = %d\n", i);
 	if (set == 0)
 		return (NULL);
 	buf[y] = 0;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_utils.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:02:50 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/14 12:04:06 by fserpe           ###   ########.fr       */
+/*   Updated: 2023/12/14 18:26:41 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,20 +87,20 @@ char	*ms_strjoin(char *s1, char *s2, int status)
 	return (str);
 }
 
-char	**strduptab(char *src, int i)
+char	**strduptab(t_pars *pars)
 {
 	char **dup;
 	int	y;
 
-	if (!src || !src[i])
+	if (!pars->av || !pars->av[pars->i])
 		return (NULL);
 	dup = malloc(sizeof(char *) * 2);
 	if (!dup)
 		return (NULL);
 	dup[0] = malloc(sizeof(char) * 2);
 	y = 0;
-	if (src[i] && !is_sep(src[i]))
-		dup[0][y++] = src[i];
+	if (pars->av[pars->i] && !is_sep(pars->av[pars->i]))
+		dup[0][y++] = pars->av[pars->i];
 	dup[0][y] = 0;
 	dup[1] = NULL;
 	return (dup);

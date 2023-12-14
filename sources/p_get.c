@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_get.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:05:15 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/14 12:21:39 by fserpe           ###   ########.fr       */
+/*   Updated: 2023/12/14 18:59:35 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,40 +46,40 @@ char	*get_in_env(char **env, char *str)
 	return (ms_strjoin("$", str, 2));
 }
 
-char	*get_$(char *str, int i, t_bui *blts)
+char	*get_$(t_pars *pars)
 {
 	char	*buf;
 	int		y;
 	int		j;
 
-	if (!is_$(str[i]))
+	if (!is_$(pars->av[pars->i]))
 		return (NULL);
-	if (is_quote(str[i]) == 2)
+	if (is_quote(pars->av[pars->i]) == 2)
 	{
-		if (str[i + 1])
-			i++;
+		if (pars->av[pars->i + 1])
+			pars->i++;
 	}
-	if (str[i + 1])
-		i++;
+	if (pars->av[pars->i + 1])
+		pars->i++;
 	y = 0;
-	j = i;
-	while (str[i] && !is_whitespace(str[i]) && !is_sep(str[i]) && !is_quote(str[i]))
+	j = pars->i;
+	while (pars->av[pars->i] && !is_whitespace(pars->av[pars->i]) && !is_sep(pars->av[pars->i]) && !is_quote(pars->av[pars->i]))
 	{
 		y++;
-		i++;
+		pars->i++;
 	}
 	buf = malloc(sizeof(char) * y + 1);
 	if (!buf)
 		return (NULL);
 	buf[0] = 0;
 	y = 0;
-	while (str[j] && !is_whitespace(str[j]) && !is_sep(str[j]) && !is_quote(str[j]))
-		buf[y++] = str[j++];
+	while (pars->av[j] && !is_whitespace(pars->av[j]) && !is_sep(pars->av[j]) && !is_quote(pars->av[j]))
+		buf[y++] = pars->av[j++];
 	buf[y] = 0;
-	buf = get_in_env(blts->env, buf);
+	buf = get_in_env(pars->env, buf);
 	return (buf);
 }
-char	*get_sep(char *str, int i)
+char	*get_sep(t_pars *pars)
 {
 	char *buf;
 	int	status;
@@ -90,109 +90,117 @@ char	*get_sep(char *str, int i)
 	status = 0;
 	if (!buf)
 		return (NULL);
-	while (str[i])
+	while (pars->av[pars->i])
 	{
-		if (is_quote(str[i]) && quote_is_closed(str, i) && status == 0)
-			status = is_quote(str[i]);
-		else if (status > 0 && is_quote(str[i]) == status)
+		if (is_quote(pars->av[pars->i]) && quote_is_closed(pars) && status == 0)
+			status = is_quote(pars->av[pars->i]);
+		else if (status > 0 && is_quote(pars->av[pars->i]) == status)
 			status = 0;
-		if (is_sep(str[i]) && status == 0)
+		if (is_sep(pars->av[pars->i]) && status == 0)
 			break;
-		i++;
+		pars->i++;
 	}
-	if (!str[i])
+	if (!pars->av[pars->i])
 	{
 		free(buf);
 		return (NULL);
 	}
-	if (is_sep(str[i]))
+	if (is_sep(pars->av[pars->i]))
 	{
-		buf[0] = str[i];
+		buf[0] = pars->av[pars->i];
 		buf[1] = 0;
 	}
-	if ((str[i] == '<' || str[i] == '>') && (str[i] == str[i + 1]))
+	if ((pars->av[pars->i] == '<' || pars->av[pars->i] == '>') && (pars->av[pars->i] == pars->av[pars->i + 1]))
 	{
-		buf[1] = str[i];
+		buf[1] = pars->av[pars->i];
 		buf[2] = 0;
 	}
-	// if (str[i + 1])
-	// 	i++;
-	if (str[i] && (is_sep(str[i]) || is_whitespace(str[i])))
-		too_many_sep(str, i);
+	if (pars->av[pars->i] && (is_sep(pars->av[pars->i]) || is_whitespace(pars->av[pars->i])))
+		too_many_sep(pars);
 	return (buf);
 }
 
-int	get_next_word(char *str, int i)
+int	get_next_word(t_pars *pars)
 {
 	int	status;
 
-	if (!str[i])
+	if (!pars->av[pars->i])
 		return (0);
-	status = is_quote(str[i]);
-	i++;
-	while (str[i])
+	status = is_quote(pars->av[pars->i]);
+	pars->i++;
+	while (pars->av[pars->i])
 	{
 		if (status > 0)
 		{
-			while (str[i] && is_quote(str[i]) != status)
-				i++;
-			return (i);
+			while (pars->av[pars->i] && is_quote(pars->av[pars->i]) != status)
+				pars->i++;
+			return (pars->i);
 		}
-		else if (status == 0 && (is_whitespace(str[i]) || is_sep(str[i])))
-			return (i);
-		i++;
+		else if (status == 0 && (is_whitespace(pars->av[pars->i]) || is_sep(pars->av[pars->i])))
+			return (pars->i);
+		pars->i++;
 	}
-	return (i);
+	return (pars->i);
 }
 
-char	**get_line(char *str, int i, t_bui *blts)
+char	**get_line(t_pars *pars)
 {
 	char **buf;
 	int	y;
 	int	word_count;
 	int	status;
 
-	word_count = count_word(str, i);
+	word_count = count_word(pars);
+	printf("A\ni in get_line = %d & av = %s\n", pars->i ,pars->av);
 	if (!word_count)
-		return (strduptab(str, i));
+		return (strduptab(pars));
 	buf = malloc(sizeof(char *) * (word_count + 1));
 	if (!buf)
 		return (NULL);
 	y = 0;
-	status = is_quote(str[i]);
-	while (str[i] && word_count > 0)
+	status = is_quote(pars->av[pars->i]);
+	while (pars->av[pars->i] && word_count > 0)
 	{
-		while (str[i] && is_whitespace(str[i]))
-			i++;
-		buf[y] = copy_str(str, i, blts);
+		printf("B\n");
+
+		while (pars->av[pars->i] && is_whitespace(pars->av[pars->i]))
+			pars->i++;
+		buf[y] = copy_str(pars);
 		if (!buf[y])
 			return (NULL);
 		y++;
-		// i += count_char(str, i, blts);
-		// i = after_$(str, i);
-		i = get_next_word(str, i);
-		// printf("str[i] in get_line after_$ = %c[%d]\n", str[i], i);
-		while (str[i] && (is_whitespace(str[i]) || is_sep(str[i])))
+		pars->i = get_next_word(pars);
+		while (pars->av[pars->i] && (is_whitespace(pars->av[pars->i]) || is_sep(pars->av[pars->i])))
 		{
-			if (is_quote(str[i]))
+			printf("C\n");
+
+			if (is_quote(pars->av[pars->i]))
 			{
-				status = is_quote(str[i]);
+				status = is_quote(pars->av[pars->i]);
 				break ;
 			}
-			i++;
+			pars->i++;
 		}
-		while (str[i] && status > 0)
+		while (pars->av[pars->i] && status > 0)
 		{
-			if (is_quote(str[i]) == status)
+			printf("D\n");
+
+			if (is_quote(pars->av[pars->i]) == status)
 			{
-				i++;
+				pars->i++;
 				status = 0;
 			}
-			i++;
+			pars->i++;
 		}
 		word_count--;
 	}
 	buf[y] = NULL;
+	printf("E\n");
+
+	for (int l = 0; buf[l]; l++)
+		printf("GET LINE buf = %s\n", buf[l]);
+	// printf("GET LINE buf = %s\n", buf[l]);
+	
 	return (buf);
 }
 
@@ -229,7 +237,7 @@ char	*get_here_doc(char *av)
 			ret = ms_strjoin(ret, buf, 3);
 	}
 	get_next_line(0, 1);
-	printf("ret = %s\n", ret);
 	close(doc);
+	unlink(".heredoc_tmp");
 	return (ret);
 }
