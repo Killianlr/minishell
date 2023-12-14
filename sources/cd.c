@@ -33,18 +33,21 @@ int	cd_set_pwd(t_bui *blts)
 	i = 0;
 	e = 0;
 	pwd_exi = check_var_exist(blts->env, "PWD");
-	while (blts->env[i] && pwd_exi < ft_strlen_tab(blts->env))
+	while (blts->env[i] && pwd_exi < ft_strlen_tab(blts->env) && !blts->uoldpwd)
 	{
 		if (!ft_strncmp("OLDPWD", blts->env[i], 6))
 			e = 1;
 		i++;
 	}
-	if (!e)
+	if (!e && !blts->uoldpwd)
 	{
 		if (create_oldpwd(blts))
 			return (1);
 	}
 	if (update_env(blts))
+		return (1);
+	free_tab(blts->exp);
+	if (set_export(blts))
 		return (1);
 	return (0);
 }

@@ -182,7 +182,9 @@ int set_unexist_env(t_bui *blts)
 int    set_env(t_bui *blts)
 {
 	extern char **environ;
+	int			i;
 
+	i = 0;
 	if (!blts->exi_env)
     {
 		if (set_unexist_env(blts))
@@ -200,6 +202,17 @@ int    set_env(t_bui *blts)
 			return (1);
 		}
     }
+	while (blts->env[i])
+	{
+		if (!ft_strncmp("OLDPWD", blts->env[i], 6))
+		{
+			free(blts->env[i]);
+			blts->env[i] = ft_strjoin("OLDPWD=", blts->pwd);
+			if (!blts->env[i])
+				return (1);
+		}
+		i++;
+	}
 	return (0);
 }
 

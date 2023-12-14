@@ -55,6 +55,10 @@ int	go_to_find_var_and_del(t_bui *blts, char *str)
 		find_var_in_tab_and_del(blts->exp, str);
 		find_var_in_tab_and_del(blts->env, str);
 	}
+	if (!ft_strncmp("PWD", str, 3))
+		blts->upwd = 1;
+	if (!ft_strncmp("OLDPWD", str, 6))
+		blts->uoldpwd = 1;
 	return (0);
 }
 

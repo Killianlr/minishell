@@ -110,6 +110,8 @@ t_bui   *set_builtins(void)
 	blts = malloc(sizeof(t_bui));
 	if (!blts)
 		return (NULL);
+	blts->uoldpwd = 0;
+	blts->upwd = 0;
 	blts->exi_env = 1;
 	if (!*environ)
 		blts->exi_env = 0;

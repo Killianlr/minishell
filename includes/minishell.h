@@ -42,6 +42,8 @@ typedef struct 	s_builtins
 	char	**env;
 	char	**exp;
 	char	*pwd;
+	int		upwd;
+	int		uoldpwd;
 }				t_bui;
 
 typedef struct 	garbage_colector
