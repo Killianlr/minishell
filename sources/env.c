@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:11 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/13 15:46:18 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/14 15:06:22 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,10 @@ int update_env(t_bui *blts)
 	oldpwd = NULL;
     while (blts->env[i])
     {
-        if (!ft_strncmp("PWD", blts->env[i], 3))
+        if (!ft_strncmp("PWD", blts->env[i], ft_size_var_env(blts->env[i])))
         {
+			oldpwd = ft_strdup(blts->env[i] + 4);
             free(blts->env[i]);
-			oldpwd = ft_strdup(blts->pwd);
 			free(blts->pwd);
 			blts->pwd = get_pwd();
 			if (!blts->pwd)
@@ -100,6 +100,8 @@ int update_env(t_bui *blts)
 		go_to_find_var_and_del(blts, "OLDPWD");
 		e = 1;
 	}
+	if (blts->uoldpwd)
+		free(oldpwd);
 	i = 0;
 	while (blts->env[i] && !e)
     {

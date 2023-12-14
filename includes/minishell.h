@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/13 15:24:36 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/14 14:08:26 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int		ft_pwd(t_gc *garbage, char **args);
 int		ft_export(t_gc *garbage, char **args);
 int		ft_unset(t_gc *garbage, char **args);
 int		ft_cd(t_gc *garbage, char **args);
+int		ft_echo(t_gc *garbage, char **args);
 
 
 int		print_env(t_gc *garbage);

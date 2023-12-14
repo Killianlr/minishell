@@ -6,11 +6,42 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:06 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/13 14:47:44 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/14 15:05:33 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	ft_echo(t_gc *garbage, char **args)
+{
+	int	e;
+	int	i;
+
+	e = 0;
+	i = 1;
+	if (!garbage->line)
+		return (0);
+	if (!ft_strncmp(args[0], "echo", ft_strlen(args[0])))
+	{
+		if (!ft_strncmp(args[1], "-n", ft_strlen(args[0])))
+			e = 1;
+		if (e)
+		{
+			while (args[i] && !ft_strncmp(args[i], "-n", ft_strlen(args[i])))
+				i++;
+		}
+		while (args[i] && args[i + 1])
+		{
+			write(STDOUT_FILENO, args[i], ft_strlen(args[i]));
+			write(STDOUT_FILENO, " ", 1);
+			i++;
+		}
+		write(STDOUT_FILENO, args[i], ft_strlen(args[i]));
+		if (!e)
+			write(STDOUT_FILENO, "\n", 1);
+	}
+	return (0);
+}
 
 int	ft_cd(t_gc *garbage, char **args)
 {
@@ -22,7 +53,7 @@ int	ft_cd(t_gc *garbage, char **args)
 			return (0);
 		if (chdir(args[1]))
 		{
-			printf("fail !\n");
+			printf("minishell: cd: %s: No such file or directory\n", args[1]);
 			return (0);
 		}
 		else
@@ -91,13 +122,16 @@ int	ft_env(t_gc *garbage, char **args)
 
 int	ft_pwd(t_gc *garbage, char **args)
 {
+	char	*pwd;
 	if (!garbage->line)
 		return (0);
 	if (!ft_strncmp(args[0], "pwd", 4))
 	{
-		free(garbage->blts->pwd);
-		garbage->blts->pwd = get_pwd();
-		printf("%s\n", garbage->blts->pwd);
+		pwd = get_pwd();
+		if (!pwd)
+			return (1);
+		printf("%s\n", pwd);
+		free(pwd);
 	}
 	return (0);
 }

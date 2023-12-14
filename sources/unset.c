@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:19:17 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/13 11:19:21 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/14 13:03:02 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,10 @@ int	go_to_find_var_and_del(t_bui *blts, char *str)
 	int	val;
 
 	val = check_var_exist(blts->exp, str);
+	if (!ft_strncmp("PWD", str, 3))
+		blts->upwd = 1;
+	if (!ft_strncmp("OLDPWD", str, 6))
+		blts->uoldpwd = 1;
 	if (val > ft_strlen_tab(blts->exp))
 		return (0);
 	else
@@ -55,10 +59,6 @@ int	go_to_find_var_and_del(t_bui *blts, char *str)
 		find_var_in_tab_and_del(blts->exp, str);
 		find_var_in_tab_and_del(blts->env, str);
 	}
-	if (!ft_strncmp("PWD", str, 3))
-		blts->upwd = 1;
-	if (!ft_strncmp("OLDPWD", str, 6))
-		blts->uoldpwd = 1;
 	return (0);
 }
 

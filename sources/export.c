@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:16 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/13 11:18:20 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/14 14:48:49 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,18 @@ int	new_name_var(t_bui *blts, char *arg)
 {
 	char *var_name;
 
+	printf("arg = %s\n", arg);
 	var_name = ft_strdup(arg);
 	if (replace_old_exp(blts, var_name))
+		return (1);
+	return (0);
+}
+
+int	check_arg_should_be_define(char *arg)
+{
+	if (!ft_strncmp(arg, "PWD", ft_strlen(arg)))
+		return (1);
+	if (!ft_strncmp(arg, "OLDPWD", ft_strlen(arg)))
 		return (1);
 	return (0);
 }
@@ -62,7 +72,12 @@ int	new_name_var(t_bui *blts, char *arg)
 int	add_var_export(t_gc *garbage, char *arg)
 {
 	int		val;
+	char	*tmp;
 
+	if (!ft_strncmp("PWD", arg, ft_size_var_env(arg)))
+		garbage->blts->upwd = 0;
+	if (!ft_strncmp("OLDPWD", arg, ft_size_var_env(arg)))
+		garbage->blts->uoldpwd = 0;
 	val = check_var_exist(garbage->blts->exp, arg);
 	if (!val)
 		return (0);
@@ -73,7 +88,17 @@ int	add_var_export(t_gc *garbage, char *arg)
 	}
 	else
 	{
-		if (it_is_an_equal(arg))
+		if (check_arg_should_be_define(arg))
+		{
+			printf("ici\n");
+			tmp = ft_strjoin(arg, "=");
+			if (!tmp)
+				return (1);
+			if (new_var_w_value(garbage->blts, tmp))
+				return (1);
+			free(tmp);
+		}
+		else if (it_is_an_equal(arg))
 		{
 			if (new_var_w_value(garbage->blts, arg))
 				return (1);

@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:43 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/13 11:21:01 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/14 14:08:08 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ int	is_builtins(t_gc *garbage, char **args)
 		return (1);
 	if (ft_cd(garbage, args))
 		return (1);
+	if (ft_echo(garbage, args))
+		return (1);	
 	return (0);
 }
 
