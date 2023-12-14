@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:05:15 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/13 14:28:01 by fserpe           ###   ########.fr       */
+/*   Updated: 2023/12/14 12:21:39 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,29 +199,37 @@ char	**get_line(char *str, int i, t_bui *blts)
 char	*get_here_doc(char *av)
 {
 	int		doc;
+	int		set;
 	char	*buf = NULL;
 	char	*ret = NULL;
 
 	doc = open(".heredoc_tmp", O_CREAT | O_WRONLY | O_TRUNC, 0000644);
 	if (doc < 0)
 		return (NULL);
+	set = 0;
 	while (1)
 	{
 		write(1, "> ", 3);
-		// buf = ms_strjoin(buf, get_next_line(0, 0), 2);
 		buf = get_next_line(0, 0);
 		if (!buf)
 			return (NULL);
-		ret = ms_strjoin(ret, buf, 2);
 		if (!ms_strcmp(av, buf, ft_strlen(av)))
+		{
+			free(buf);
 			break ;
+		}
 		write(doc, buf, ft_strlen(buf));
 		write(doc, "\n", 1);
-		free(buf);
+		if (set == 0)
+		{
+			ret = ms_strjoin(ret, buf, 2);
+			set = 1;
+		}
+		else if (set > 0)
+			ret = ms_strjoin(ret, buf, 3);
 	}
 	get_next_line(0, 1);
-	free(buf);
+	printf("ret = %s\n", ret);
 	close(doc);
-	printf("ret h_doc = %s\n", ret);
 	return (ret);
 }

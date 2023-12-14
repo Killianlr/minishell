@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:04 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/13 13:50:49 by fserpe           ###   ########.fr       */
+/*   Updated: 2023/12/14 12:19:43 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,7 @@ t_arg	*create_arg(char *str, int *i, t_bui *blts)
 t_arg *parsing(char *str, t_bui *blts)
 {
 	char 	*hdoc;
+	char *tmp = NULL;
     int		sep_count;
     t_arg	*arg;
 	t_arg	*first;
@@ -145,7 +146,10 @@ t_arg *parsing(char *str, t_bui *blts)
 	*i = 0;
 	hdoc = is_here_doc(str);
 	if (hdoc)
-		get_here_doc(hdoc);
+	{
+		tmp = get_here_doc(hdoc);
+		free(tmp);
+	}
 	free(hdoc);
     sep_count = count_sep(str);
 	arg = create_arg(str, i, blts);

@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:02:50 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/13 14:25:06 by fserpe           ###   ########.fr       */
+/*   Updated: 2023/12/14 12:04:06 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,14 @@ int	ms_strcmp(char *s1, char *s2, int n)
 		++i;
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
+
+// char	*hdoc_strjoin(char *s1, char *s2)
+// {
+// 	char *str;
+// 	int i;
+// 	int y;
+// 	int set;
+// }
 
 char	*ms_strjoin(char *s1, char *s2, int status)
 {
