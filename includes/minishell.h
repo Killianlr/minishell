@@ -51,7 +51,8 @@ typedef struct 	garbage_colector
 	t_prompt *prpt;
 	t_bui	*blts;
 	char	**args;
-	char			*line;
+	char	*line;
+	int		ret;
 }				t_gc;
 
 char	*ft_prompt();
@@ -68,6 +69,8 @@ int		ft_export(t_gc *garbage, char **args);
 int		ft_unset(t_gc *garbage, char **args);
 int		ft_cd(t_gc *garbage, char **args);
 int		ft_echo(t_gc *garbage, char **args);
+int		ft_put_ret_value(t_gc *garbage, char **args);
+
 
 
 int		print_env(t_gc *garbage);

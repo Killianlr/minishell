@@ -17,7 +17,7 @@ int		clear_or_exit(char **str)
 {
 	if (!str)
 		return (0);
-	if (!ft_strncmp("clear history", str[0], 14))
+	if (!ft_strncmp("clear history", str[0], ft_strlen(str[0])))
 		rl_clear_history();
     if (!ft_strncmp("exit", str[0], 4) && ft_strlen(str[0]) == 4)
         return (1);
@@ -41,6 +41,7 @@ int	is_builtins(t_gc *garbage, char **args)
 		return (1);
 	if (ft_echo(garbage, args))
 		return (1);	
+	ft_put_ret_value(garbage, args);
 	return (0);
 }
 
@@ -57,6 +58,7 @@ t_gc	*in_minishell()
 		free(garbage);
 		return (NULL);
 	}
+	garbage->ret = 0;
 	while (1)
 	{
 		garbage->args = NULL;

@@ -53,7 +53,6 @@ int	new_name_var(t_bui *blts, char *arg)
 {
 	char *var_name;
 
-	printf("arg = %s\n", arg);
 	var_name = ft_strdup(arg);
 	if (replace_old_exp(blts, var_name))
 		return (1);
@@ -90,7 +89,6 @@ int	add_var_export(t_gc *garbage, char *arg)
 	{
 		if (check_arg_should_be_define(arg))
 		{
-			printf("ici\n");
 			tmp = ft_strjoin(arg, "=");
 			if (!tmp)
 				return (1);

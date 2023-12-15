@@ -12,6 +12,18 @@
 
 #include "../includes/minishell.h"
 
+int	ft_put_ret_value(t_gc *garbage, char **args)
+{
+	if (!garbage->line)
+		return (0);
+	if (!ft_strncmp(args[0], "$?", 4))
+	{
+		ft_putnbr_fd(garbage->ret, STDOUT_FILENO);
+		write(STDOUT_FILENO, "\n", 1);
+	}
+	return (0);
+}
+
 int	ft_echo(t_gc *garbage, char **args)
 {
 	int	e;
@@ -54,6 +66,7 @@ int	ft_cd(t_gc *garbage, char **args)
 		if (chdir(args[1]))
 		{
 			printf("minishell: cd: %s: No such file or directory\n", args[1]);
+			garbage->ret = 1;
 			return (0);
 		}
 		else

@@ -33,7 +33,6 @@ int	cd_set_pwd(t_bui *blts)
 	i = 0;
 	e = 0;
 	pwd_exi = check_var_exist(blts->env, "PWD");
-	printf("uoldpwd = %d\n", blts->uoldpwd);
 	while (blts->env[i] && pwd_exi < ft_strlen_tab(blts->env) && !blts->uoldpwd)
 	{
 		if (!ft_strncmp("OLDPWD", blts->env[i], 6))

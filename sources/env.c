@@ -111,7 +111,6 @@ int update_env(t_bui *blts)
             blts->env[i] = ft_strjoin_fs2("OLDPWD=", oldpwd);
             if (!blts->env[i])
                 return (1);
-			printf("set OLDPWD : %s\n", blts->env[i]);
         }
         i++;
     }
