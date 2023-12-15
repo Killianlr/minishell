@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/14 18:45:47 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/15 16:48:25 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,19 +115,19 @@ void	print_cmd(t_arg *cmd);
 int		is_printable(char c);
 int		is_whitespace(char c);
 int		is_sep(char c);
-int		is_$(char c);
+int		is_var_env(char c);
 int		is_quote(char c);
 char	**strduptab(t_pars *pars);;
 int		count_char(t_pars *pars);
 int		count_word(t_pars *pars);
 int		count_sep(char *str);
 char	*get_in_env(char **env, char *str);
-char	*get_$(t_pars *pars);
+char	*get_var_env(t_pars *pars);
 char	*get_sep(t_pars *pars);
 char	**get_line(t_pars *pars);
 int		quote_is_closed(t_pars *pars);
 char	*handle_quotes(t_pars *pars);
-int		after_$(t_pars *pars);
+int		after_var_env(t_pars *pars);
 void	too_many_sep(t_pars *pars);
 char	*copy_str(t_pars *pars);
 char	*ms_strjoin(char *s1, char *s2, int status);

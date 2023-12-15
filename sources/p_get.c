@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_get.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:05:15 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/15 12:05:38 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/15 16:41:13 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 char	*get_in_env(char **env, char *str)
 {
-	char *buf;
-	int i;
-	int y;
-	int	j;
+	char	*buf;
+	int		i;
+	int		y;
+	int		j;
 
 	if (!env[0] || !str)
 		return (NULL);
@@ -31,7 +31,7 @@ char	*get_in_env(char **env, char *str)
 		{
 			y += ft_strlen(str) + 1;
 			if (env[i][y - 1] != '=')
-				break;
+				break ;
 			buf = malloc(sizeof(char) * (ft_strlen(env[i]) - y + 1));
 			if (!buf)
 				return (NULL);
@@ -43,10 +43,10 @@ char	*get_in_env(char **env, char *str)
 		}
 		i++;
 	}
-	return (ms_strjoin("$", str, 2));
+	return (ms_strjoin("var_env", str, 2));
 }
 
-char	*get_$(t_pars *pars)
+char	*get_var_env(t_pars *pars)
 {
 	char	*buf;
 	int		y;
@@ -54,7 +54,7 @@ char	*get_$(t_pars *pars)
 	int		i;
 
 	i = pars->i;
-	if (!is_$(pars->av[i]))
+	if (!is_var_env(pars->av[i]))
 		return (NULL);
 	if (is_quote(pars->av[i]) == 2)
 	{
@@ -65,7 +65,8 @@ char	*get_$(t_pars *pars)
 		i++;
 	y = 0;
 	j = i;
-	while (pars->av[i] && !is_whitespace(pars->av[i]) && !is_sep(pars->av[i]) && !is_quote(pars->av[i]))
+	while (pars->av[i] && !is_whitespace(pars->av[i])
+		&& !is_sep(pars->av[i]) && !is_quote(pars->av[i]))
 	{
 		y++;
 		i++;
@@ -75,18 +76,19 @@ char	*get_$(t_pars *pars)
 		return (NULL);
 	buf[0] = 0;
 	y = 0;
-	while (pars->av[j] && !is_whitespace(pars->av[j]) && !is_sep(pars->av[j]) && !is_quote(pars->av[j]))
+	while (pars->av[j] && !is_whitespace(pars->av[j])
+		&& !is_sep(pars->av[j]) && !is_quote(pars->av[j]))
 		buf[y++] = pars->av[j++];
 	buf[y] = 0;
 	buf = get_in_env(pars->env, buf);
 	return (buf);
 }
+
 char	*get_sep(t_pars *pars)
 {
-	char *buf;
-	int	status;
-	int	i;
-
+	char	*buf;
+	int		status;
+	int		i;
 
 	buf = NULL;
 	buf = malloc(sizeof(char) * 3);
@@ -101,7 +103,7 @@ char	*get_sep(t_pars *pars)
 		else if (status > 0 && is_quote(pars->av[i]) == status)
 			status = 0;
 		if (is_sep(pars->av[i]) && status == 0)
-			break;
+			break ;
 		i++;
 	}
 	if (!pars->av[i])
@@ -114,7 +116,8 @@ char	*get_sep(t_pars *pars)
 		buf[0] = pars->av[i];
 		buf[1] = 0;
 	}
-	if ((pars->av[i] == '<' || pars->av[i] == '>') && (pars->av[i] == pars->av[i + 1]))
+	if ((pars->av[i] == '<' || pars->av[i] == '>')
+		&& (pars->av[i] == pars->av[i + 1]))
 	{
 		buf[1] = pars->av[i];
 		buf[2] = 0;
@@ -140,7 +143,8 @@ int	get_next_word(t_pars *pars)
 				pars->i++;
 			return (pars->i);
 		}
-		else if (status == 0 && (is_whitespace(pars->av[pars->i]) || is_sep(pars->av[pars->i])))
+		else if (status == 0 && (is_whitespace(pars->av[pars->i])
+				|| is_sep(pars->av[pars->i])))
 			return (pars->i);
 		pars->i++;
 	}
@@ -149,11 +153,11 @@ int	get_next_word(t_pars *pars)
 
 char	**get_line(t_pars *pars)
 {
-	char **buf;
-	int	y;
-	int	word_count;
-	int	status;
-	int	i;
+	char	**buf;
+	int		y;
+	int		word_count;
+	int		status;
+	int		i;
 
 	word_count = count_word(pars);
 	if (!word_count)
@@ -173,7 +177,8 @@ char	**get_line(t_pars *pars)
 			return (NULL);
 		y++;
 		i = get_next_word(pars);
-		while (pars->av[i] && (is_whitespace(pars->av[i]) || is_sep(pars->av[i])))
+		while (pars->av[i] && (is_whitespace(pars->av[i])
+				|| is_sep(pars->av[i])))
 		{
 			if (is_quote(pars->av[i]))
 			{
@@ -193,7 +198,7 @@ char	**get_line(t_pars *pars)
 		}
 		word_count--;
 	}
-	buf[y] = NULL;	
+	buf[y] = NULL;
 	return (buf);
 }
 
@@ -201,9 +206,11 @@ char	*get_here_doc(char *av)
 {
 	int		doc;
 	int		set;
-	char	*buf = NULL;
-	char	*ret = NULL;
+	char	*buf;
+	char	*ret;
 
+	buf = NULL;
+	ret = NULL;
 	doc = open(".heredoc_tmp", O_CREAT | O_WRONLY | O_TRUNC, 0000644);
 	if (doc < 0)
 		return (NULL);

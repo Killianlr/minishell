@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_count.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:03:27 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/15 11:49:56 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/15 16:39:05 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ int	count_sep(char *str)
 int	count_word(t_pars *pars)
 {
 	int	count;
-
-	int	 i;
+	int	i;
 	int	set;
 	int	quote_s;
 
@@ -49,9 +48,8 @@ int	count_word(t_pars *pars)
 	i = pars->i;
 	while (pars->av[i])
 	{
-
 		if (is_sep(pars->av[i]) && quote_s == 0)
-			break;
+			break ;
 		else if (is_quote(pars->av[i]) && quote_s == 0)
 			quote_s = is_quote(pars->av[i]);
 		else if (is_whitespace(pars->av[i]) && quote_s == 0)
@@ -68,7 +66,6 @@ int	count_word(t_pars *pars)
 		}
 		else if (quote_s > 0 && set == 0)
 		{
-
 			count++;
 			set = 1;
 		}
@@ -79,26 +76,26 @@ int	count_word(t_pars *pars)
 
 int	count_char(t_pars *pars)
 {
-	int	count;
+	int		count;
 	char	*var_env;
-	int	i;
+	int		i;
 
 	count = 0;
 	var_env = NULL;
 	i = pars->i;
 	while (pars->av[i] && (is_sep(pars->av[i]) || is_whitespace(pars->av[i])))
 		i++;
-	while (pars->av[i] && ft_isprint(pars->av[i]) && !is_whitespace(pars->av[i]))
+	while (pars->av[i] && ft_isprint(pars->av[i])
+		&& !is_whitespace(pars->av[i]))
 	{
-		if (is_$(pars->av[i]))
+		if (is_var_env(pars->av[i]))
 		{
-			var_env = get_$(pars);
+			var_env = get_var_env(pars);
 			count += ft_strlen(var_env) - 1;
-			i = after_$(pars) - 1;
+			i = after_var_env(pars) - 1;
 		}
 		count++;
 		i++;
 	}
-
 	return (count);
 }

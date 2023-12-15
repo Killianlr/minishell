@@ -3,27 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   p_utils.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:02:50 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/14 18:26:41 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/15 16:37:59 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-// int	exist_in_env(char *str, int i, t_bui *blts)
-// {
-// 	int	y;
-
-// 	if (!str[i])
-// 		return (0);
-// 	y = 0;
-// 	while (blts->env[y])
-// 	{
-// 		if (!ft_strncmp(str + i, blts->env[y]))
-// 	}
-// }
 
 int	ms_strcmp(char *s1, char *s2, int n)
 {
@@ -40,14 +27,6 @@ int	ms_strcmp(char *s1, char *s2, int n)
 		++i;
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
-
-// char	*hdoc_strjoin(char *s1, char *s2)
-// {
-// 	char *str;
-// 	int i;
-// 	int y;
-// 	int set;
-// }
 
 char	*ms_strjoin(char *s1, char *s2, int status)
 {
@@ -89,8 +68,8 @@ char	*ms_strjoin(char *s1, char *s2, int status)
 
 char	**strduptab(t_pars *pars)
 {
-	char **dup;
-	int	y;
+	char	**dup;
+	int		y;
 
 	if (!pars->av || !pars->av[pars->i])
 		return (NULL);

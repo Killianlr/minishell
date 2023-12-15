@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   p_is.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:01:34 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/15 13:34:43 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/15 17:10:48 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
 
 int	is_printable(char c)
 {
@@ -23,8 +22,7 @@ int	is_printable(char c)
 
 int	is_whitespace(char c)
 {
-
-	if ((c != '\n' && c > 9 && c < 14 )|| c == ' ')
+	if ((c != '\n' && c > 9 && c < 14) || c == ' ')
 		return (1);
 	else
 		return (0);
@@ -34,16 +32,16 @@ int	is_sep(char c)
 {
 	if (!c)
 		return (0);
-	if (c == '<' || c == '>' || c == '|') 
+	if (c == '<' || c == '>' || c == '|')
 		return (1);
 	return (0);
 }
 
-int	is_$(char c)
+int	is_var_env(char c)
 {
 	if (!c)
 		return (0);
-	if (c == '$') 
+	if (c == '$')
 		return (1);
 	return (0);
 }
@@ -61,10 +59,14 @@ int	is_quote(char c)
 
 int	size_for_malloc_del(t_pars *pars)
 {
-	int	size;
-	int	i;
+	char	*tmp;
+	int		set;
+	int		size;
+	int		i;
 
 	size = 0;
+	set = 0;
+	tmp = NULL;
 	i = pars->i;
 	while (pars->av[i] && is_whitespace(pars->av[i]))
 		i++;
@@ -74,11 +76,20 @@ int	size_for_malloc_del(t_pars *pars)
 		return (0);
 	while (pars->av[i])
 	{
-		if (is_quote(pars->av[i]) > 0)
-			return ((int)ft_strlen(handle_quotes(pars)));
+		if (is_quote(pars->av[i]) && set == 0)
+		{
+			set = is_quote(pars->av[i]);
+			tmp = handle_quotes(pars);
+			// printf("tmp in size = %s\n", tmp);
+			size += (int) ft_strlen(tmp);
+			i++;
+			while (is_quote(pars->av[i]) && set > 0)
+				i++;
+		}
 		if (is_whitespace(pars->av[i]))
 			i++;
-		if (is_printable(pars->av[i]) && !is_sep(pars->av[i]) && !is_quote(pars->av[i]))
+		if (is_printable(pars->av[i]) && !is_sep(pars->av[i])
+			&& !is_quote(pars->av[i]))
 		{
 			size++;
 			i++;
@@ -92,14 +103,16 @@ int	size_for_malloc_del(t_pars *pars)
 char	*is_here_doc(t_pars *pars)
 {
 	char	*buf;
-	int	status;
-	int	set;
-	int y;
-	int	size;
-	int	i;
-	
+	char	*tmp;
+	int		status;
+	int		set;
+	int		y;
+	int		size;
+	int		i;
+
 	y = 0;
 	set = 0;
+	tmp = NULL;
 	i = pars->i;
 	status = is_quote(pars->av[i]);
 	while (pars->av[i] && is_whitespace(pars->av[i]))
@@ -114,6 +127,7 @@ char	*is_here_doc(t_pars *pars)
 		{
 			set = 1;
 			size = size_for_malloc_del(pars);
+			printf("size = %d\n", size);
 			buf = malloc(sizeof(char) * (size + 1));
 			if (!buf)
 				return (NULL);
@@ -121,10 +135,25 @@ char	*is_here_doc(t_pars *pars)
 			while (is_whitespace(pars->av[i]) && pars->av[i + 1])
 				i++;
 			if (is_quote(pars->av[i]))
+			{
+				printf("here\n");
 				return (handle_quotes(pars));
-			while (is_printable(pars->av[i]) && !is_sep(pars->av[i]) && y < size)
+			}
+			while (is_printable(pars->av[i])
+				&& !is_sep(pars->av[i]) && y < size)
+			{
+				if (is_quote(pars->av[i]))
+				{
+					tmp = handle_quotes(pars);
+					buf = ms_strjoin(buf, tmp, 1);
+					y += (int) ft_strlen(tmp);
+					i += (int) ft_strlen(tmp);
+					free(tmp);
+				}
 				buf[y++] = pars->av[i++];
-			if (!pars->av[i] || is_sep(pars->av[i]) || is_whitespace(pars->av[i]))
+			}
+			if (!pars->av[i] || is_sep(pars->av[i])
+				|| is_whitespace(pars->av[i]))
 				break ;
 		}
 		i++;
@@ -132,6 +161,5 @@ char	*is_here_doc(t_pars *pars)
 	if (set == 0)
 		return (NULL);
 	buf[y] = 0;
-	printf("buf = %s\n", buf);
 	return (buf);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_quote.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:06:01 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/15 13:32:00 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/15 16:51:31 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	quote_is_closed(t_pars *pars)
 {
-	char target;
-	int	i;
+	char	target;
+	int		i;
 
 	i = pars->i;
 	while (pars->av[i] && !is_quote(pars->av[i]))
@@ -30,7 +30,6 @@ int	quote_is_closed(t_pars *pars)
 		// ft_printf("Error 1, quote unclosed\n");
 		return (0);
 	}
-
 	while (pars->av[i])
 	{
 		if (pars->av[i] == target)
@@ -70,13 +69,13 @@ char	*handle_quotes(t_pars *pars)
 		i++;
 		while (pars->av[i] && i < end && is_quote(pars->av[i]) != 2)
 		{
-			if (is_$(pars->av[i]))
+			if (is_var_env(pars->av[i]))
 			{
-				buf = ms_strjoin(buf, get_$(pars), 3);
+				buf = ms_strjoin(buf, get_var_env(pars), 3);
 				if (!buf)
 					return (NULL);
 				y = ft_strlen(buf);
-				i = after_$(pars);
+				i = after_var_env(pars);
 			}
 			if (is_quote(pars->av[i]) == 2)
 			{
