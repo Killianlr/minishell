@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:05:15 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/14 18:59:35 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/15 12:05:38 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,22 +51,24 @@ char	*get_$(t_pars *pars)
 	char	*buf;
 	int		y;
 	int		j;
+	int		i;
 
-	if (!is_$(pars->av[pars->i]))
+	i = pars->i;
+	if (!is_$(pars->av[i]))
 		return (NULL);
-	if (is_quote(pars->av[pars->i]) == 2)
+	if (is_quote(pars->av[i]) == 2)
 	{
-		if (pars->av[pars->i + 1])
-			pars->i++;
+		if (pars->av[i + 1])
+			i++;
 	}
-	if (pars->av[pars->i + 1])
-		pars->i++;
+	if (pars->av[i + 1])
+		i++;
 	y = 0;
-	j = pars->i;
-	while (pars->av[pars->i] && !is_whitespace(pars->av[pars->i]) && !is_sep(pars->av[pars->i]) && !is_quote(pars->av[pars->i]))
+	j = i;
+	while (pars->av[i] && !is_whitespace(pars->av[i]) && !is_sep(pars->av[i]) && !is_quote(pars->av[i]))
 	{
 		y++;
-		pars->i++;
+		i++;
 	}
 	buf = malloc(sizeof(char) * y + 1);
 	if (!buf)
@@ -83,39 +85,41 @@ char	*get_sep(t_pars *pars)
 {
 	char *buf;
 	int	status;
+	int	i;
 
 
 	buf = NULL;
 	buf = malloc(sizeof(char) * 3);
 	status = 0;
+	i = pars->i;
 	if (!buf)
 		return (NULL);
-	while (pars->av[pars->i])
+	while (pars->av[i])
 	{
-		if (is_quote(pars->av[pars->i]) && quote_is_closed(pars) && status == 0)
-			status = is_quote(pars->av[pars->i]);
-		else if (status > 0 && is_quote(pars->av[pars->i]) == status)
+		if (is_quote(pars->av[i]) && quote_is_closed(pars) && status == 0)
+			status = is_quote(pars->av[i]);
+		else if (status > 0 && is_quote(pars->av[i]) == status)
 			status = 0;
-		if (is_sep(pars->av[pars->i]) && status == 0)
+		if (is_sep(pars->av[i]) && status == 0)
 			break;
-		pars->i++;
+		i++;
 	}
-	if (!pars->av[pars->i])
+	if (!pars->av[i])
 	{
 		free(buf);
 		return (NULL);
 	}
-	if (is_sep(pars->av[pars->i]))
+	if (is_sep(pars->av[i]))
 	{
-		buf[0] = pars->av[pars->i];
+		buf[0] = pars->av[i];
 		buf[1] = 0;
 	}
-	if ((pars->av[pars->i] == '<' || pars->av[pars->i] == '>') && (pars->av[pars->i] == pars->av[pars->i + 1]))
+	if ((pars->av[i] == '<' || pars->av[i] == '>') && (pars->av[i] == pars->av[i + 1]))
 	{
-		buf[1] = pars->av[pars->i];
+		buf[1] = pars->av[i];
 		buf[2] = 0;
 	}
-	if (pars->av[pars->i] && (is_sep(pars->av[pars->i]) || is_whitespace(pars->av[pars->i])))
+	if (pars->av[i] && (is_sep(pars->av[i]) || is_whitespace(pars->av[i])))
 		too_many_sep(pars);
 	return (buf);
 }
@@ -149,58 +153,47 @@ char	**get_line(t_pars *pars)
 	int	y;
 	int	word_count;
 	int	status;
+	int	i;
 
 	word_count = count_word(pars);
-	printf("A\ni in get_line = %d & av = %s\n", pars->i ,pars->av);
 	if (!word_count)
 		return (strduptab(pars));
 	buf = malloc(sizeof(char *) * (word_count + 1));
 	if (!buf)
 		return (NULL);
 	y = 0;
-	status = is_quote(pars->av[pars->i]);
-	while (pars->av[pars->i] && word_count > 0)
+	i = pars->i;
+	status = is_quote(pars->av[i]);
+	while (pars->av[i] && word_count > 0)
 	{
-		printf("B\n");
-
-		while (pars->av[pars->i] && is_whitespace(pars->av[pars->i]))
-			pars->i++;
+		while (pars->av[i] && is_whitespace(pars->av[i]))
+			i++;
 		buf[y] = copy_str(pars);
 		if (!buf[y])
 			return (NULL);
 		y++;
-		pars->i = get_next_word(pars);
-		while (pars->av[pars->i] && (is_whitespace(pars->av[pars->i]) || is_sep(pars->av[pars->i])))
+		i = get_next_word(pars);
+		while (pars->av[i] && (is_whitespace(pars->av[i]) || is_sep(pars->av[i])))
 		{
-			printf("C\n");
-
-			if (is_quote(pars->av[pars->i]))
+			if (is_quote(pars->av[i]))
 			{
-				status = is_quote(pars->av[pars->i]);
+				status = is_quote(pars->av[i]);
 				break ;
 			}
-			pars->i++;
+			i++;
 		}
-		while (pars->av[pars->i] && status > 0)
+		while (pars->av[i] && status > 0)
 		{
-			printf("D\n");
-
-			if (is_quote(pars->av[pars->i]) == status)
+			if (is_quote(pars->av[i]) == status)
 			{
-				pars->i++;
+				i++;
 				status = 0;
 			}
-			pars->i++;
+			i++;
 		}
 		word_count--;
 	}
-	buf[y] = NULL;
-	printf("E\n");
-
-	for (int l = 0; buf[l]; l++)
-		printf("GET LINE buf = %s\n", buf[l]);
-	// printf("GET LINE buf = %s\n", buf[l]);
-	
+	buf[y] = NULL;	
 	return (buf);
 }
 

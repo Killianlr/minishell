@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:03:27 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/14 19:01:13 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/15 11:49:56 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,33 +38,30 @@ int	count_sep(char *str)
 int	count_word(t_pars *pars)
 {
 	int	count;
+
+	int	 i;
 	int	set;
 	int	quote_s;
-	int	y;
 
 	count = 0;
 	set = 0;
 	quote_s = 0;
-	printf("a\n");
-	y = pars->i;
-	while (pars->av[pars->i])
+	i = pars->i;
+	while (pars->av[i])
 	{
-	printf("b\n");
 
-		if (is_sep(pars->av[pars->i]) && quote_s == 0)
+		if (is_sep(pars->av[i]) && quote_s == 0)
 			break;
-		else if (is_quote(pars->av[pars->i]) && quote_s == 0)
-			quote_s = is_quote(pars->av[pars->i]);
-		else if (is_whitespace(pars->av[pars->i]) && quote_s == 0)
+		else if (is_quote(pars->av[i]) && quote_s == 0)
+			quote_s = is_quote(pars->av[i]);
+		else if (is_whitespace(pars->av[i]) && quote_s == 0)
 			set = 0;
 		else if (set == 0 && quote_s == 0)
 		{
-			printf("qq\n");
-
 			count++;
 			set = 1;
 		}
-		else if (is_quote(pars->av[pars->i]) == quote_s && quote_s > 0)
+		else if (is_quote(pars->av[i]) == quote_s && quote_s > 0)
 		{
 			set = 0;
 			quote_s = 0;
@@ -75,10 +72,8 @@ int	count_word(t_pars *pars)
 			count++;
 			set = 1;
 		}
-		pars->i++;
+		i++;
 	}
-	printf("c\n");
-
 	return (count);
 }
 
@@ -86,21 +81,23 @@ int	count_char(t_pars *pars)
 {
 	int	count;
 	char	*var_env;
+	int	i;
 
 	count = 0;
 	var_env = NULL;
-	while (pars->av[pars->i] && (is_sep(pars->av[pars->i]) || is_whitespace(pars->av[pars->i])))
-		pars->i++;
-	while (pars->av[pars->i] && ft_isprint(pars->av[pars->i]) && !is_whitespace(pars->av[pars->i]))
+	i = pars->i;
+	while (pars->av[i] && (is_sep(pars->av[i]) || is_whitespace(pars->av[i])))
+		i++;
+	while (pars->av[i] && ft_isprint(pars->av[i]) && !is_whitespace(pars->av[i]))
 	{
-		if (is_$(pars->av[pars->i]))
+		if (is_$(pars->av[i]))
 		{
 			var_env = get_$(pars);
 			count += ft_strlen(var_env) - 1;
-			pars->i = after_$(pars) - 1;
+			i = after_$(pars) - 1;
 		}
 		count++;
-		pars->i++;
+		i++;
 	}
 
 	return (count);
