@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:06 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/14 15:05:33 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/15 14:55:53 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	ft_put_ret_value(t_gc *garbage, char **args)
 	if (!ft_strncmp(args[0], "$?", 4))
 	{
 		ft_putnbr_fd(garbage->ret, STDOUT_FILENO);
-		write(STDOUT_FILENO, "\n", 1);
+		write(STDOUT_FILENO, ": command not found\n", 21);
 	}
 	return (0);
 }
@@ -44,13 +44,22 @@ int	ft_echo(t_gc *garbage, char **args)
 		}
 		while (args[i] && args[i + 1])
 		{
-			write(STDOUT_FILENO, args[i], ft_strlen(args[i]));
-			write(STDOUT_FILENO, " ", 1);
-			i++;
+			if (!ft_strncmp(args[i], "$?", 4))
+				ft_putnbr_fd(garbage->ret, STDOUT_FILENO);
+			else
+			{
+				write(STDOUT_FILENO, args[i], ft_strlen(args[i]));
+				write(STDOUT_FILENO, " ", 1);
+				i++;
+			}
 		}
-		write(STDOUT_FILENO, args[i], ft_strlen(args[i]));
+		if (!ft_strncmp(args[i], "$?", 4))
+			ft_putnbr_fd(garbage->ret, STDOUT_FILENO);
+		else
+			write(STDOUT_FILENO, args[i], ft_strlen(args[i]));
 		if (!e)
 			write(STDOUT_FILENO, "\n", 1);
+		garbage->ret = 0;
 	}
 	return (0);
 }
@@ -61,6 +70,7 @@ int	ft_cd(t_gc *garbage, char **args)
 		return (0);
 	if (!ft_strncmp(args[0], "cd", 3))
 	{
+		garbage->ret = 0;
 		if (!args[1])
 			return (0);
 		if (chdir(args[1]))
@@ -72,7 +82,10 @@ int	ft_cd(t_gc *garbage, char **args)
 		else
 		{
 			if (cd_set_pwd(garbage->blts))
+			{
+				garbage->ret = 2;
 				return (1);
+			}
 		}
 	}
 	return (0);
@@ -84,10 +97,14 @@ int	ft_unset(t_gc *garbage, char **args)
 		return (0);
 	if (!ft_strncmp(args[0], "unset", 6))
 	{
+		garbage->ret = 0;
 		if (!args[1])
 			return (0);
 		if (del_var_unset(garbage, args))
+		{
+			garbage->ret = 1;
 			return (1);
+		}
 	}
 	return (0);
 }
@@ -101,6 +118,7 @@ int	ft_export(t_gc *garbage, char **args)
 	i = 0;
 	if (!ft_strncmp(args[0], "export", 7))
 	{
+		garbage->ret = 0;
 		if (!args[1])
 		{
 			while (garbage->blts->exp[i])
@@ -111,7 +129,10 @@ int	ft_export(t_gc *garbage, char **args)
 			return (0);
 		}
 		if (update_export(garbage, args))
+		{
+			garbage->ret = 1;
 			return (1);
+		}
 	}
 	return (0);
 }
@@ -122,11 +143,13 @@ int	ft_env(t_gc *garbage, char **args)
 		return (0);
 	if (!ft_strncmp(args[0], "env", 4))
 	{
+		garbage->ret = 0;
 		if (print_env(garbage))
 		{
 			free_tab(garbage->blts->env);
 			free_blts(garbage->blts);
 			free(garbage->blts);
+			garbage->ret = 1;
 			return (1);
 		}
 	}
@@ -136,23 +159,28 @@ int	ft_env(t_gc *garbage, char **args)
 int	ft_pwd(t_gc *garbage, char **args)
 {
 	char	*pwd;
+
 	if (!garbage->line)
 		return (0);
 	if (!ft_strncmp(args[0], "pwd", 4))
 	{
+		garbage->ret = 0;
 		pwd = get_pwd();
 		if (!pwd)
+		{
+		garbage->ret = 1;
 			return (1);
+		}
 		printf("%s\n", pwd);
 		free(pwd);
 	}
 	return (0);
 }
 
-t_bui   *set_builtins(void)
+t_bui	*set_builtins(void)
 {
-    t_bui       *blts;
-	extern char **environ;
+	t_bui		*blts;
+	extern char	**environ;
 
 	blts = malloc(sizeof(t_bui));
 	if (!blts)

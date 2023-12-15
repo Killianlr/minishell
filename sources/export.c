@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:16 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/14 14:48:49 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/15 14:24:45 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	new_var_w_value(t_bui *blts, char *arg)
 
 int	new_name_var(t_bui *blts, char *arg)
 {
-	char *var_name;
+	char	*var_name;
 
 	var_name = ft_strdup(arg);
 	if (replace_old_exp(blts, var_name))

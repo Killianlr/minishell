@@ -6,15 +6,15 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:19:22 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/13 11:19:26 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/15 14:32:14 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char    *get_pwd(void)
+char	*get_pwd(void)
 {
-    return (getcwd(NULL, 4096));
+	return (getcwd(NULL, 4096));
 }
 
 int	ft_strlen_tab(char **env)

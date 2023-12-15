@@ -6,21 +6,20 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:43 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/14 14:08:08 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/15 14:27:32 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../includes/minishell.h"
 
-int		clear_or_exit(char **str)
+int	clear_or_exit(char **str)
 {
 	if (!str)
 		return (0);
 	if (!ft_strncmp("clear history", str[0], ft_strlen(str[0])))
 		rl_clear_history();
-    if (!ft_strncmp("exit", str[0], 4) && ft_strlen(str[0]) == 4)
-        return (1);
+	if (!ft_strncmp("exit", str[0], 4) && ft_strlen(str[0]) == 4)
+		return (1);
 	else
 		return (0);
 }
@@ -40,12 +39,12 @@ int	is_builtins(t_gc *garbage, char **args)
 	if (ft_cd(garbage, args))
 		return (1);
 	if (ft_echo(garbage, args))
-		return (1);	
+		return (1);
 	ft_put_ret_value(garbage, args);
 	return (0);
 }
 
-t_gc	*in_minishell()
+t_gc	*in_minishell(void)
 {
 	t_gc	*garbage;
 
@@ -75,7 +74,7 @@ t_gc	*in_minishell()
 	return (garbage);
 }
 
-int main(void)
+int	main(void)
 {
 	t_gc	*garbage;
 

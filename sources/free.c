@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:21 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/13 11:18:25 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/15 14:25:18 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	free_tab(char **tableau)
 
 void	free_blts(t_bui *blts)
 {
-    free_tab(blts->env);
+	free_tab(blts->env);
 	free_tab(blts->exp);
 	free(blts->pwd);
 }
@@ -49,7 +49,6 @@ void	free_all(t_gc *garbage)
 	printf("DEBUT DU FREE\n");
 	if (!garbage)
 		return ;
-	// free(garbage->line);
 	free_blts(garbage->blts);
 	free(garbage->blts);
 	free_tab(garbage->args);

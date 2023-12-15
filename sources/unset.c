@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:19:17 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/14 13:03:02 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/15 14:31:45 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	find_var_in_tab_and_del(char **tabl, char *str)
 			}
 		}
 		if (!tabl[j])
-			break;
+			break ;
 		tabl[i] = tabl[j];
 		i++;
 		j++;
@@ -62,9 +62,9 @@ int	go_to_find_var_and_del(t_bui *blts, char *str)
 	return (0);
 }
 
-int del_var_unset(t_gc *garbage, char **args)
+int	del_var_unset(t_gc *garbage, char **args)
 {
-	int i;
+	int	i;
 	int	j;
 	int	e;
 

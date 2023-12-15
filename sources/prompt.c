@@ -6,10 +6,9 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:46 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/13 11:48:12 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/15 14:29:17 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../includes/minishell.h"
 
@@ -49,11 +48,13 @@ int	clear_string(t_prompt *prpt)
 		free(prpt->inpt);
 		exit(0);
 	}
-	while (prpt->inpt[start] && (!ft_isprint(prpt->inpt[start]) || prpt->inpt[start] == 32) && start <= end)
+	while (prpt->inpt[start] && (!ft_isprint(prpt->inpt[start])
+			|| prpt->inpt[start] == 32) && start <= end)
 		start++;
 	if ((size_t)start >= ft_strlen(prpt->inpt))
 		return (1);
-	while (prpt->inpt[end] && (!ft_isprint(prpt->inpt[end]) || prpt->inpt[end] == 32))
+	while (prpt->inpt[end] && (!ft_isprint(prpt->inpt[end])
+			|| prpt->inpt[end] == 32))
 		end--;
 	i_start = ft_strlen(prpt->inpt) - start;
 	i_end = ft_strlen(prpt->inpt) - (end + 1);
@@ -89,21 +90,21 @@ char	*pre_prompt(void)
 	return (pre_prompt);
 }
 
-char	*ft_prompt()
+char	*ft_prompt(void)
 {
 	t_prompt	prpt;
-	char	*prompt;
+	char		*prompt;
 
 	prpt.inpt = NULL;
 	prompt = pre_prompt();
-    prpt.inpt = readline(prompt);
+	prpt.inpt = readline(prompt);
 	free(prompt);
 	if (clear_string(&prpt))
 	{
 		free(prpt.inpt);
 		return (NULL);
 	}
-    add_history(prpt.inpt);
+	add_history(prpt.inpt);
 	free(prpt.inpt);
 	return (prpt.str);
 }

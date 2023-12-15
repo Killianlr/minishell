@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/04 10:53:08 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/13 11:18:41 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/15 14:25:46 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	ft_strcmp(char *s1, char *s2)
 	return (s1[i] - s2[i]);
 }
 
-void    ft_swap(char **a, char **b)
+void	ft_swap(char **a, char **b)
 {
 	char	*s;
 
@@ -69,7 +69,7 @@ char	*add_db_quote(char *src)
 
 char	**ft_sort_tab_n_add_dbq(char **tabl)
 {
-	int	i;
+	int		i;
 	char	**sorted_tab;
 
 	i = 0;

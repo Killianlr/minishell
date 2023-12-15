@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isprint.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 13:36:08 by fserpe            #+#    #+#             */
-/*   Updated: 2023/11/24 14:27:11 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/15 14:33:03 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int	ft_isprint(int c)
 {
-	// printf("char in isprintf = %c\n", c);
 	if (c >= 32 && c <= 126)
 		return (1);
 	else
