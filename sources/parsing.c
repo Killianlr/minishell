@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:04 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/15 16:54:15 by fserpe           ###   ########.fr       */
+/*   Updated: 2023/12/16 10:11:31 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,10 @@ char	*copy_str(t_pars *pars)
 	char	*buf;
 	char	*quote;
 
+	buf = NULL;
 	buf = malloc(sizeof(char) * (count_char(pars) + 1));
 	if (!buf)
 		return (NULL);
-	buf[0] = 0;
 	y = 0;
 	i = pars->i;
 	quote = NULL;
@@ -127,10 +127,9 @@ t_arg	*create_arg(t_pars *pars)
 	if (!ft_strncmp(arg->sep, "<<", 2))
 	{
 		tmp = is_here_doc(pars);
-		printf("tmp = %s\n", tmp);
 		if (tmp)
 			arg->h_doc = get_here_doc(tmp);
-		free(tmp);
+		// free(tmp);
 	}
 	else
 		arg->h_doc = NULL;
@@ -157,7 +156,7 @@ t_arg	*parsing(t_pars *pars)
 	t_arg	*arg;
 	t_arg	*first;
 
-	sep_count = count_sep(pars->av);
+	sep_count = count_sep(pars);
 	arg = create_arg(pars);
 	first = arg;
 	while (sep_count && pars->av[pars->i])

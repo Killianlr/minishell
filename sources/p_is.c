@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_is.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:01:34 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/15 17:10:48 by fserpe           ###   ########.fr       */
+/*   Updated: 2023/12/16 11:56:26 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,15 @@ int	size_for_malloc_del(t_pars *pars)
 		return (0);
 	while (pars->av[i])
 	{
+		if (set == is_quote(pars->av[i]) && set > 0)
+		{
+			set = 0;
+			i++;
+		}
 		if (is_quote(pars->av[i]) && set == 0)
 		{
 			set = is_quote(pars->av[i]);
 			tmp = handle_quotes(pars);
-			// printf("tmp in size = %s\n", tmp);
 			size += (int) ft_strlen(tmp);
 			i++;
 			while (is_quote(pars->av[i]) && set > 0)
@@ -127,18 +131,16 @@ char	*is_here_doc(t_pars *pars)
 		{
 			set = 1;
 			size = size_for_malloc_del(pars);
-			printf("size = %d\n", size);
 			buf = malloc(sizeof(char) * (size + 1));
 			if (!buf)
 				return (NULL);
 			i += 2;
-			while (is_whitespace(pars->av[i]) && pars->av[i + 1])
-				i++;
-			if (is_quote(pars->av[i]))
+			while (pars->av[i] && is_whitespace(pars->av[i]) && pars->av[i + 1])
 			{
-				printf("here\n");
-				return (handle_quotes(pars));
+				i++;
 			}
+			if (is_quote(pars->av[i]))
+				return (handle_quotes(pars));
 			while (is_printable(pars->av[i])
 				&& !is_sep(pars->av[i]) && y < size)
 			{
@@ -162,4 +164,5 @@ char	*is_here_doc(t_pars *pars)
 		return (NULL);
 	buf[y] = 0;
 	return (buf);
+
 }

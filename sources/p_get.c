@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_get.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:05:15 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/15 16:41:13 by fserpe           ###   ########.fr       */
+/*   Updated: 2023/12/16 10:04:19 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,22 +87,20 @@ char	*get_var_env(t_pars *pars)
 char	*get_sep(t_pars *pars)
 {
 	char	*buf;
-	int		status;
 	int		i;
 
 	buf = NULL;
 	buf = malloc(sizeof(char) * 3);
-	status = 0;
 	i = pars->i;
 	if (!buf)
 		return (NULL);
 	while (pars->av[i])
 	{
-		if (is_quote(pars->av[i]) && quote_is_closed(pars) && status == 0)
-			status = is_quote(pars->av[i]);
-		else if (status > 0 && is_quote(pars->av[i]) == status)
-			status = 0;
-		if (is_sep(pars->av[i]) && status == 0)
+		if (is_quote(pars->av[i]))
+		{
+			i = quote_is_closed(pars);
+		}
+		if (is_sep(pars->av[i]))
 			break ;
 		i++;
 	}
@@ -129,22 +127,16 @@ char	*get_sep(t_pars *pars)
 
 int	get_next_word(t_pars *pars)
 {
-	int	status;
-
 	if (!pars->av[pars->i])
 		return (0);
-	status = is_quote(pars->av[pars->i]);
-	pars->i++;
+	while (pars->av[pars->i] && !is_printable(pars->av[pars->i])
+			&& !is_quote(pars->av[pars->i]))
+		pars->i++;
 	while (pars->av[pars->i])
 	{
-		if (status > 0)
-		{
-			while (pars->av[pars->i] && is_quote(pars->av[pars->i]) != status)
-				pars->i++;
-			return (pars->i);
-		}
-		else if (status == 0 && (is_whitespace(pars->av[pars->i])
-				|| is_sep(pars->av[pars->i])))
+		if (is_quote(pars->av[pars->i]) > 0)
+			pars->i = quote_is_closed(pars);
+		else if ((is_whitespace(pars->av[pars->i]) || is_sep(pars->av[pars->i])))
 			return (pars->i);
 		pars->i++;
 	}
@@ -170,6 +162,7 @@ char	**get_line(t_pars *pars)
 	status = is_quote(pars->av[i]);
 	while (pars->av[i] && word_count > 0)
 	{
+		pars->i = i;
 		while (pars->av[i] && is_whitespace(pars->av[i]))
 			i++;
 		buf[y] = copy_str(pars);
@@ -239,5 +232,6 @@ char	*get_here_doc(char *av)
 	get_next_line(0, 1);
 	close(doc);
 	unlink(".heredoc_tmp");
+	free(av);
 	return (ret);
 }

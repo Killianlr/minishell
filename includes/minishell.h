@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/15 16:48:25 by fserpe           ###   ########.fr       */
+/*   Updated: 2023/12/15 20:42:16 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ int		is_quote(char c);
 char	**strduptab(t_pars *pars);;
 int		count_char(t_pars *pars);
 int		count_word(t_pars *pars);
-int		count_sep(char *str);
+int		count_sep(t_pars *pars);
 char	*get_in_env(char **env, char *str);
 char	*get_var_env(t_pars *pars);
 char	*get_sep(t_pars *pars);
