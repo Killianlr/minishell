@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:01:34 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/16 11:56:26 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/17 17:44:43 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,13 @@ int	size_for_malloc_del(t_pars *pars)
 			i++;
 		}
 		if (is_sep(pars->av[i]))
+		{
+			free(tmp);
 			return (size);
+		}
 	}
+	if (tmp)
+		free(tmp);
 	return (size);
 }
 

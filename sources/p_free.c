@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_free.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 16:17:12 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/15 16:48:52 by fserpe           ###   ########.fr       */
+/*   Updated: 2023/12/17 14:23:00 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	print_cmd(t_arg *cmd)
 {
+	if (!cmd)
+		return ;
 	while (cmd->next)
 	{
 		for (int i = 0; cmd->line[i]; i++)
@@ -21,14 +23,14 @@ void	print_cmd(t_arg *cmd)
 		printf("sep = %s\n", cmd->sep);
 		if (cmd->h_doc)
 			printf("h_doc = %s\n", cmd->h_doc);
-		cmd = cmd->next;
+		if (cmd->next)
+			cmd = cmd->next;
 	}
 	for (int y = 0; cmd->line[y]; y++)
 		printf("line = %s\n", cmd->line[y]);
 	printf("sep = %s\n", cmd->sep);
 	if (cmd->h_doc)
 		printf("h_doc = %s\n", cmd->h_doc);
-
 }
 
 void	free_pars_tab(char **arr)

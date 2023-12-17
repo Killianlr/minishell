@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/15 20:42:16 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/17 20:19:30 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,15 +122,17 @@ int		count_char(t_pars *pars);
 int		count_word(t_pars *pars);
 int		count_sep(t_pars *pars);
 char	*get_in_env(char **env, char *str);
-char	*get_var_env(t_pars *pars);
+char	*get_var_env(t_pars *pars, int i);
+int		after_var_env(t_pars *pars, int i);
 char	*get_sep(t_pars *pars);
 char	**get_line(t_pars *pars);
-int		quote_is_closed(t_pars *pars);
-char	*handle_quotes(t_pars *pars);
-int		after_var_env(t_pars *pars);
+int		quote_is_closed(t_pars *pars, int l);
+char	*handle_quotes(t_pars *pars, int l);
+int		count_quote(t_pars *pars);
 void	too_many_sep(t_pars *pars);
 char	*copy_str(t_pars *pars);
 char	*ms_strjoin(char *s1, char *s2, int status);
+char	*ms_strjoin_len(char *s1, char *s2, int status, int len);
 char	*is_here_doc(t_pars *pars);
 int		ms_strcmp(char *s1, char *s2, int n);
 char	*get_here_doc(char *av);

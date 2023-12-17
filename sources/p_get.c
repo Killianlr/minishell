@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:05:15 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/16 10:04:19 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/17 17:40:07 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ char	*get_in_env(char **env, char *str)
 			buf = malloc(sizeof(char) * (ft_strlen(env[i]) - y + 1));
 			if (!buf)
 				return (NULL);
+			buf[0] = 0;
 			while (env[i][y])
 				buf[j++] = env[i][y++];
 			buf[j] = 0;
@@ -43,24 +44,19 @@ char	*get_in_env(char **env, char *str)
 		}
 		i++;
 	}
-	return (ms_strjoin("var_env", str, 2));
+	return (ms_strjoin("$", str, 2));
 }
 
-char	*get_var_env(t_pars *pars)
+char	*get_var_env(t_pars *pars, int i)
 {
 	char	*buf;
 	int		y;
 	int		j;
-	int		i;
 
-	i = pars->i;
-	if (!is_var_env(pars->av[i]))
+	while (pars->av[i] && !is_var_env(pars->av[i]))
+		i++;
+	if (!pars->av[i])
 		return (NULL);
-	if (is_quote(pars->av[i]) == 2)
-	{
-		if (pars->av[i + 1])
-			i++;
-	}
 	if (pars->av[i + 1])
 		i++;
 	y = 0;
@@ -84,44 +80,45 @@ char	*get_var_env(t_pars *pars)
 	return (buf);
 }
 
+int	get_sep_size(t_pars *pars)
+{
+	int	i;
+	int	count;
+
+	i = pars->i;
+	count = 0;
+	while (pars->av[i] && !is_sep(pars->av[i]))
+		i++;
+	while (pars->av[i] && is_sep(pars->av[i]))
+	{
+		count++;
+		i++;
+	}
+	return (count);
+}
+
 char	*get_sep(t_pars *pars)
 {
 	char	*buf;
 	int		i;
+	int		y;
 
-	buf = NULL;
-	buf = malloc(sizeof(char) * 3);
-	i = pars->i;
+	buf = malloc(sizeof(char) * (get_sep_size(pars) + 1));
 	if (!buf)
 		return (NULL);
-	while (pars->av[i])
-	{
-		if (is_quote(pars->av[i]))
-		{
-			i = quote_is_closed(pars);
-		}
-		if (is_sep(pars->av[i]))
-			break ;
+	buf[0] = 0;
+	i = pars->i;
+	y = 0;
+	while (pars->av[i] && !is_sep(pars->av[i]))
 		i++;
-	}
 	if (!pars->av[i])
 	{
 		free(buf);
 		return (NULL);
 	}
-	if (is_sep(pars->av[i]))
-	{
-		buf[0] = pars->av[i];
-		buf[1] = 0;
-	}
-	if ((pars->av[i] == '<' || pars->av[i] == '>')
-		&& (pars->av[i] == pars->av[i + 1]))
-	{
-		buf[1] = pars->av[i];
-		buf[2] = 0;
-	}
-	if (pars->av[i] && (is_sep(pars->av[i]) || is_whitespace(pars->av[i])))
-		too_many_sep(pars);
+	while (pars->av[i] && is_sep(pars->av[i]))
+		buf[y++] = pars->av[i++];
+	buf[y] = 0;
 	return (buf);
 }
 
@@ -134,8 +131,8 @@ int	get_next_word(t_pars *pars)
 		pars->i++;
 	while (pars->av[pars->i])
 	{
-		if (is_quote(pars->av[pars->i]) > 0)
-			pars->i = quote_is_closed(pars);
+		if (is_quote(pars->av[pars->i]) > 0 && quote_is_closed(pars, pars->i) > 0)
+			pars->i = quote_is_closed(pars, pars->i);
 		else if ((is_whitespace(pars->av[pars->i]) || is_sep(pars->av[pars->i])))
 			return (pars->i);
 		pars->i++;
@@ -148,8 +145,6 @@ char	**get_line(t_pars *pars)
 	char	**buf;
 	int		y;
 	int		word_count;
-	int		status;
-	int		i;
 
 	word_count = count_word(pars);
 	if (!word_count)
@@ -158,37 +153,16 @@ char	**get_line(t_pars *pars)
 	if (!buf)
 		return (NULL);
 	y = 0;
-	i = pars->i;
-	status = is_quote(pars->av[i]);
-	while (pars->av[i] && word_count > 0)
+	while (pars->av[pars->i] && word_count > 0)
 	{
-		pars->i = i;
-		while (pars->av[i] && is_whitespace(pars->av[i]))
-			i++;
+		while (pars->av[pars->i] && is_whitespace(pars->av[pars->i]))
+			pars->i++;
 		buf[y] = copy_str(pars);
 		if (!buf[y])
 			return (NULL);
 		y++;
-		i = get_next_word(pars);
-		while (pars->av[i] && (is_whitespace(pars->av[i])
-				|| is_sep(pars->av[i])))
-		{
-			if (is_quote(pars->av[i]))
-			{
-				status = is_quote(pars->av[i]);
-				break ;
-			}
-			i++;
-		}
-		while (pars->av[i] && status > 0)
-		{
-			if (is_quote(pars->av[i]) == status)
-			{
-				i++;
-				status = 0;
-			}
-			i++;
-		}
+		// if (get_next_word(pars) == 0)
+		// 	break ;
 		word_count--;
 	}
 	buf[y] = NULL;

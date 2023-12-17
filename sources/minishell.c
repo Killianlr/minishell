@@ -46,8 +46,8 @@ t_gc	*in_minishell()
 		if (ft_strlen(garbage->line))
 		{
 			garbage->arg = main_pars(garbage->line, garbage->blts);
-			if (!garbage->arg)
-				break;
+			// if (!garbage->arg)
+			// 	break;
 		}
 		if (clear_or_exit(garbage->line))
 			break ;
