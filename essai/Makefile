@@ -7,6 +7,7 @@ LIBFT_DIR = libft
 LIB = $(addprefix $(LIBFT_DIR)/, $(LIBFT))
 
 SOURCES = ft_exec.c \
+			utiles_exec.c \
 
 OBJECTS = $(SOURCES:.c=.o)
 

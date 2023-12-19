@@ -1,0 +1,18 @@
+total 104
+-rwxr-xr-x 1 kle-rest 2022_paris 15960 Dec 19 15:38 a.out
+-rw-r--r-- 1 kle-rest 2022_paris  2231 Dec 19 15:15 command_bonus.c
+-rwxr-xr-x 1 kle-rest 2022_paris 21520 Dec 19 17:11 essai
+-rw-r--r-- 1 kle-rest 2022_paris   441 Dec 19 16:38 essai.h
+-rw-r--r-- 1 kle-rest 2022_paris    13 Dec 19 15:01 file.txt
+-rw-r--r-- 1 kle-rest 2022_paris  2132 Dec 19 15:15 free_bonus.c
+-rw-r--r-- 1 kle-rest 2022_paris  5485 Dec 19 17:11 ft_exec.c
+-rw-r--r-- 1 kle-rest 2022_paris  7752 Dec 19 17:11 ft_exec.o
+drwxr-xr-x 2 kle-rest 2022_paris  4096 Dec 19 17:03 libft
+-rw-r--r-- 1 kle-rest 2022_paris  2312 Dec 19 15:22 main_bonus.c
+-rw-r--r-- 1 kle-rest 2022_paris   425 Dec 19 16:41 Makefile
+-rw-r--r-- 1 kle-rest 2022_paris    81 Dec 19 15:01 return.c
+-rw-r--r-- 1 kle-rest 2022_paris     0 Dec 19 17:10 temporaire
+-rw-r--r-- 1 kle-rest 2022_paris   152 Dec 19 15:38 test.c
+-rw-r--r-- 1 kle-rest 2022_paris  2118 Dec 15 15:16 utiles_bonus.c
+-rw-r--r-- 1 kle-rest 2022_paris  1189 Dec 19 15:01 utiles_exec.c
+-rw-r--r-- 1 kle-rest 2022_paris  3080 Dec 19 17:03 utiles_exec.o

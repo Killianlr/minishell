@@ -16,7 +16,7 @@ typedef struct arg
     struct arg  *next;
 }               t_arg;
 
-void    ft_exec(t_arg *s_cmd, char **env, int lstsize);
+void    ft_init_exec(t_arg *s_cmd, char **env, int lstsize);
 char	*find_path(char **envp);
 char	*get_cmd(char **paths, char	**cmd, char **envp);
 
