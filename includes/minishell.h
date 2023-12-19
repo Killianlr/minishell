@@ -69,6 +69,8 @@ int		ft_unset(t_gc *garbage, char **args);
 int		ft_cd(t_gc *garbage, char **args);
 int		ft_echo(t_gc *garbage, char **args);
 int		ft_put_ret_value(t_gc *garbage, char **args);
+int		ft_define_var(t_gc *garbage, char **args);
+
 
 int		print_env(t_gc *garbage);
 int		set_env(t_bui *blts);

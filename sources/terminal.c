@@ -28,7 +28,7 @@ int	clear_terminal(void)
 {
 	char		*clear;
 	char		*args[2];
-	extern char	**__environ;
+	extern char	**environ;
 	int			pid;
 
 	clear = "/usr/bin/clear";
@@ -40,7 +40,7 @@ int	clear_terminal(void)
 		if (!__environ[0])
 			return (1);
 		if (access(clear, X_OK) == 0)
-			execve(clear, args, __environ);
+			execve(clear, args, environ);
 		return (1);
 	}
 	else if (pid > 0)

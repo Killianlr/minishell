@@ -16,8 +16,14 @@ int	clear_or_exit(char **str)
 {
 	if (!str)
 		return (0);
-	if (!ft_strncmp("clear history", str[0], ft_strlen(str[0])))
-		rl_clear_history();
+	if (!ft_strncmp("clear", str[0], ft_strlen(str[0])))
+	{
+		if (str[1])
+		{
+			if (!ft_strncmp("history", str[1], ft_strlen(str[1])))
+				rl_clear_history();
+		}
+	}
 	if (!ft_strncmp("exit", str[0], 4) && ft_strlen(str[0]) == 4)
 		return (1);
 	else
@@ -39,6 +45,8 @@ int	is_builtins(t_gc *garbage, char **args)
 	if (ft_cd(garbage, args))
 		return (1);
 	if (ft_echo(garbage, args))
+		return (1);
+	if (ft_define_var(garbage, args))
 		return (1);
 	ft_put_ret_value(garbage, args);
 	return (0);

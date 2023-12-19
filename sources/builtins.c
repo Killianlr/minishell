@@ -12,6 +12,30 @@
 
 #include "../includes/minishell.h"
 
+int	ft_define_var(t_gc *garbage, char **args)
+{
+	int	i;
+	int	val;
+
+	i = 0;
+	if (!garbage->line)
+		return (0);
+	while (args[i])
+	{
+		if (it_is_an_equal(args[i]))
+		{
+			val = check_var_exist(garbage->blts->exp, args[i]);
+			if (val <= ft_strlen_tab(garbage->blts->exp))
+			{
+				if (update_var(garbage->blts, args[i], val))
+					return (1);
+			}
+		}
+		i++;
+	}
+	return (0);
+}
+
 int	ft_put_ret_value(t_gc *garbage, char **args)
 {
 	if (!garbage->line)
