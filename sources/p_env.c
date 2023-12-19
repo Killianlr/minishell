@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_env.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 11:49:41 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/19 11:51:51 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/19 16:39:38 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,38 +27,52 @@ int	after_var_env(t_pars *pars, int i)
 	return (y);
 }
 
+char	*get_in_env_3(char *ret, t_gie *data)
+{
+	ret = data->buf;
+	free(data);
+	return (ret);
+}
+
+char	*get_in_env_2(char **env, char *str, t_gie *data)
+{
+	data->y += ft_strlen(str) + 1;
+	if (env[data->i][data->y - 1] != '=')
+		return (NULL);
+	data->buf = malloc(sizeof(char) * (ft_strlen(env[data->i]) - data->y + 1));
+	if (!data->buf)
+		return (NULL);
+	data->buf[0] = 0;
+	while (env[data->i][data->y])
+		data->buf[data->j++] = env[data->i][data->y++];
+	data->buf[data->j] = 0;
+	free(str);
+	return (data->buf);
+}
+
 char	*get_in_env(char **env, char *str)
 {
-	char	*buf;
-	int		i;
-	int		y;
-	int		j;
+	t_gie	*data;
+	char	*ret;
 
-	if (!env[0] || !str)
+	data = malloc(sizeof(t_gie));
+	if (!data)
 		return (NULL);
-	i = 0;
-	buf = NULL;
-	while (env[i])
+	data->i = 0;
+	data->buf = NULL;
+	ret = NULL;
+	while (env[data->i])
 	{
-		y = 0;
-		j = 0;
-		if (!ft_strncmp(env[i], str, ft_strlen(str)))
+		data->y = 0;
+		data->j = 0;
+		if (!ft_strncmp(env[data->i], str, ft_strlen(str)))
 		{
-			y += ft_strlen(str) + 1;
-			if (env[i][y - 1] != '=')
-				break ;
-			buf = malloc(sizeof(char) * (ft_strlen(env[i]) - y + 1));
-			if (!buf)
-				return (NULL);
-			buf[0] = 0;
-			while (env[i][y])
-				buf[j++] = env[i][y++];
-			buf[j] = 0;
-			free(str);
-			return (buf);
+			get_in_env_2(env, str, data);
+			return (get_in_env_3(ret, data));
 		}
-		i++;
+		data->i++;
 	}
+	free(data);
 	return (ms_strjoin("$", str, 2));
 }
 
@@ -74,14 +88,8 @@ char	*get_var_env(t_pars *pars, int i)
 		return (NULL);
 	if (pars->av[i + 1])
 		i++;
-	y = 0;
+	y = get_var_env_2(pars, i);
 	j = i;
-	while (pars->av[i] && !is_whitespace(pars->av[i])
-		&& !is_sep(pars->av[i]) && !is_quote(pars->av[i]))
-	{
-		y++;
-		i++;
-	}
 	buf = malloc(sizeof(char) * y + 1);
 	if (!buf)
 		return (NULL);

@@ -20,12 +20,12 @@ MY_SOURCES = 	minishell.c \
 				p_line.c \
 				p_count.c \
 				p_is.c \
-				p_get.c \
 				p_sep.c \
 				p_hdoc.c \
 				p_env.c \
 				p_quote.c \
 				p_utils.c \
+				p_utils_2.c \
 				p_free.c \
 
 SOURCES_DIR = sources

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_utils.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:02:50 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/19 12:45:06 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/19 17:46:07 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	ms_strcmp(char *s1, char *s2, int n)
 	int	i;
 
 	i = 0;
+	printf("in\n");
 	if (n == 0)
 		return (0);
 	if (n != (int)ft_strlen(s2) - 1)
@@ -25,6 +26,8 @@ int	ms_strcmp(char *s1, char *s2, int n)
 		return (1);
 	while (s1[i] == s2[i] && i < n - 1 && s1[i] && s2[i])
 		++i;
+	printf("out\n");
+
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
@@ -48,8 +51,22 @@ int	ms_strjoin_size(char *s1, char *s2, int size)
 		s1[i + y] = s2[y];
 		y++;
 	}
+	s1[i + y] = 0;
 	free(s2);
 	return (1);
+}
+
+void	ms_strjoin_free(char *s1, char *s2, int status)
+{
+	if (status == 1)
+		free(s1);
+	else if (status == 2)
+		free(s2);
+	else if (status == 3)
+	{
+		free(s1);
+		free(s2);
+	}
 }
 
 char	*ms_strjoin(char *s1, char *s2, int status)
@@ -60,8 +77,6 @@ char	*ms_strjoin(char *s1, char *s2, int status)
 
 	if (!s1)
 		return (s2);
-	if (!s2)
-		return (s1);
 	str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!str)
 		return (0);
@@ -78,15 +93,7 @@ char	*ms_strjoin(char *s1, char *s2, int status)
 		y++;
 	}
 	str[i + y] = 0;
-	if (status == 1)
-		free(s1);
-	else if (status == 2)
-		free(s2);
-	else if (status == 3)
-	{
-		free(s1);
-		free(s2);
-	}
+	ms_strjoin_free(s1, s2, status);
 	return (str);
 }
 

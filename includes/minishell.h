@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/19 12:46:19 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/19 17:41:29 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,25 @@ typedef struct pars
 	char	**env;
 	int		i;
 }			t_pars;
+
+
+typedef struct 	get_in_env
+{
+	char	*buf;
+	int		i;
+	int		y;
+	int		j;
+}			t_gie;
+
+
+typedef struct 	word_count
+{
+	int		count;
+	int		i;
+	int		set;
+	char	*quote;
+}			t_wc;
+
 
 typedef struct 	garbage_colector
 {
@@ -126,6 +145,7 @@ int		ms_strjoin_size(char *s1, char *s2, int size);
 int		ms_strcmp(char *s1, char *s2, int n);
 char	*no_quote(t_pars *pars);
 
+int	get_var_env_2(t_pars *pars, int i);			//p_utils_2.c
 
 int		count_char(t_pars *pars);		//p_count.c
 int		count_word(t_pars *pars);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_quote.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:06:01 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/19 11:44:00 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/19 16:22:59 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ int	count_quote(t_pars *pars)
 	int	i;
 	int	s_count;
 	int	d_count;
-
 
 	i = 0;
 	s_count = 0;
@@ -37,7 +36,7 @@ int	count_quote(t_pars *pars)
 
 int	quote_is_closed(t_pars *pars, int l)
 {
-	int	target;
+	int		target;
 	int		i;
 
 	target = 0;
@@ -61,7 +60,6 @@ int	quote_is_closed(t_pars *pars, int l)
 			i++;
 		}
 	}
-	// ft_printf("Error 2, quote unclosed\n");
 	return (0);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_hdoc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 11:47:42 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/19 14:22:28 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/19 17:46:13 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,40 +100,58 @@ char	*get_here_doc(char *av)
 	}
 	get_next_line(0, 1);
 	close(doc);
-	unlink(".heredoc_tmp");
+	// unlink(".heredoc_tmp");
 	free(av);
 	return (ret);
 }
 
+char	*handle_quotes_hdoc(t_pars *pars, int l)
+{
+	char	*buf;
+	int		end;
+	int		y;
+	int		i;
+
+	i = l;
+	while (pars->av[i] && !is_quote(pars->av[i]))
+		i++;
+	end = quote_is_closed(pars, i);
+	if (end == 0)
+		return (NULL);
+	buf = malloc(sizeof(char) * (end - i + 1));
+	if (!buf)
+		return (NULL);
+	buf[0] = 0;
+	y = 0;
+	if (is_quote(pars->av[i]))
+	{
+		i++;
+		while (pars->av[i] && i < end)
+			buf[y++] = pars->av[i++];
+	}
+	buf[y] = 0;
+	return (buf);
+}
 
 int	size_for_del(t_pars *pars, int l)
 {
-	int	i;
-	int	count;
-	int	status;
+	int		i;
+	int		count;
+	char	*quote;
 
 	i = l;
 	count = 0;
-	status = 0;
+	quote = NULL;
 	while (pars->av[i])
 	{
-		if ((is_whitespace(pars->av[i]) || is_sep(pars->av[i])) && status == 0)
+		if ((is_whitespace(pars->av[i]) || is_sep(pars->av[i])))
 			break ;
-		else if (is_quote(pars->av[i]) > 0
-			&& is_quote(pars->av[i]) == is_quote(pars->av[i + 1])
-				&& status == 0) 
-			count++;
-		else if (is_quote(pars->av[i]) > 0 && status == 0)
-			status = is_quote(pars->av[i]);
-		else
+		else if (is_quote(pars->av[i]))
 		{
-			while (status > 0)
-			{
-				if (status == is_quote(pars->av[i]))
-					status = 0;
-				count++;
-				i++;
-			}
+			quote = handle_quotes_hdoc(pars, i);
+			count += (int)ft_strlen(quote);
+			free(quote);
+			i = quote_is_closed(pars, i);
 		}
 		if (is_printable(pars->av[i]) && !is_quote(pars->av[i])
 			&& !is_sep(pars->av[i]))
@@ -147,6 +165,7 @@ char	*get_del_hdoc(t_pars *pars)
 {
 	int		i;
 	int		y;
+	char	*quote;
 	int		size;
 	char	*ret;
 
@@ -158,25 +177,30 @@ char	*get_del_hdoc(t_pars *pars)
 	while (is_sep(pars->av[i]) || is_whitespace(pars->av[i]))
 		i++;
 	size = size_for_del(pars, i);
+	quote = NULL;
 	printf("size = %d\n", size);
 	ret = malloc(sizeof(char) * (size + 1));
 	if (!ret)
 		return (NULL);
+	ret[0] = 0;
 	y = 0;
 	while (pars->av[i] && y < size)
 	{
 		if (is_sep(pars->av[i]) || is_whitespace(pars->av[i]))
 			break ;
-		if (is_quote(pars->av[i]) > 0 
-			&& is_quote(pars->av[i]) == is_quote(pars->av[i + 1]) && size == 1)
-		{
-			printf("in\n");
-			free(ret);
-			return (ft_strdup(""));
-		}
 		if (is_quote(pars->av[i]))
-			i++;
-		ret[y++] = pars->av[i++];
+		{
+			quote = handle_quotes(pars, i);
+			if (!quote)
+				return (NULL);
+			if (!ms_strjoin_size(ret, quote, size))
+				return (NULL);
+			y = ft_strlen(ret);
+			i = quote_is_closed(pars, i);
+		}
+		if (is_printable(pars->av[i]) && !is_sep(pars->av[i])
+			&& !is_quote(pars->av[i]))
+			ret[y++] = pars->av[i++];
 	}
 	ret[y] = 0;
 	return (ret);
