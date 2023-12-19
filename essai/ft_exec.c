@@ -14,41 +14,81 @@ int	ft_lstsize_targ(t_arg *lst)
 	return (size);
 }
 
-void    ft_exec(t_arg *s_cmd, char **env)
+void    ft_cmd_not_find(char **paths, char *cmd)
+{
+    write(2, cmd[0], ft_strlen(cmd[0]));
+	write(2, ": command not found\n", 21);
+    free(paths);
+    // mettre a jours ret a 127;
+    exit(1);
+}
+
+int check_sep(t_arg *s_cmd)
+{
+    if (!s_cmd->sep)
+        return (0);
+    if (!ft_strncmp(s_cmd->sep, "<", 2))
+        return (1);
+    if (!ft_strncmp(s_cmd->sep, ">", 2))
+        return (2);
+    if (!ft_strncmp(s_cmd->sep, "<<", 3))
+        return (3);
+    if (!ft_strncmp(s_cmd->sep, ">>", 3))
+        return (4);
+    return (0);
+}
+
+int count_sep(t_arg *s_cmd)
 {
     int i;
-    int nb_cmd;
-    char *path;
-    int pid;
-    int pip[2];
 
     i = 0;
-    nb_cmd = ft_lstsize_targ(s_cmd);
-    printf("nb_cmd = %d\n", nb_cmd);
-    pipe(pip);
-    while (i < nb_cmd)
+    while (s_cmd->next)
     {
-        path = ft_strjoin("/usr/bin/", s_cmd->line[0]);
+        if (s_cmd->sep)
+            i++;
+        s_cmd = s_cmd->next;
+    }
+    if (s_cmd->sep)
+            i++;
+    return (i);
+}
+
+void    ft_exec(t_arg *s_cmd, char **env, int lstsize)
+{
+    int i;
+    char **paths;
+    char *cmd_path;
+    int pid;
+    int input;
+    int output;
+    int typeofsep;
+    int *pip;
+
+    i = 0;
+    input = 0;
+    output = 0;
+    typeofsep = 0;
+    paths = ft_split(find_path(env), ":");
+    cmd_path = NULL;
+    pip = malloc(sizeof(int) * (2 * count_sep(s_cmd)));
+    if (!pip)
+        return ;
+    get_pipes()
+    while (i < lstsize)
+    {
         pid = fork();
+        if (pid == -1)
+            return ;
         if (!pid)
         {
-            if (i == 0)
-            {
-                close(pip[0]);
-                dup2(pip[1], STDOUT_FILENO);
-            }
-            else if (i == nb_cmd - 1)
-            {
-                close(pip[1]);
-                dup2(STDOUT_FILENO, pip[0]);
-            }
-            else
-            {
-                dup2(pip[0], STDIN_FILENO);
-                close(pip[0]);
-                dup2(pip[1], STDOUT_FILENO);
-            }
-            execve(path, s_cmd->line, env);
+            typeofsep = check_sep(s_cmd);
+            if (typeofsep)
+                lafonctionchiantedup2(typeofsep, pip);
+            cmd_path = get_cmd(paths, s_cmd->line, env);
+            if (!cmd_path)
+                ft_cmd_not_find(paths, s_cmd->line[0]);
+            execve(cmd_path, s_cmd->line, env);
         }
         i++;
         s_cmd = s_cmd->next;
@@ -97,6 +137,7 @@ int main(int ac, char **av, char **env)
     t_arg *s1;
     t_arg *s2;
     t_arg *s3;
+    int lstsize;
 
     s1 = malloc(sizeof(t_arg));
     s2 = malloc(sizeof(t_arg));
@@ -125,7 +166,8 @@ int main(int ac, char **av, char **env)
     s3->next = NULL;
 
     print_line_cmd(s1);
-    ft_exec(s1, env);
+    lstsize = ft_lstsize_targ(s1);
+    ft_exec(s1, env, lstsize);
     printf("sorti exec\n");
     waitpid(-1, NULL, 0);
 }
