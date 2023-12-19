@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "alloca.h": "c",
-        "mspars.h": "c"
+        "mspars.h": "c",
+        "minishell.h": "c"
     }
 }

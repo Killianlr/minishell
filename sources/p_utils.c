@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:02:50 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/17 18:16:54 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/19 12:45:06 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,52 +28,28 @@ int	ms_strcmp(char *s1, char *s2, int n)
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
-char	*ms_strjoin_len(char *s1, char *s2, int status, int len)
+int	ms_strjoin_size(char *s1, char *s2, int size)
 {
-	char	*str;
 	int		i;
 	int		y;
 
-	printf("A\n");
-	if (len <= 0)
-		return (NULL);
-	printf("s1 = %s & s2 = %s & len = %d\n", s1, s2, len);
+	if (size < 0)
+		return (0);
 	if (!s1)
-		return (s2);
+		return (0);
 	if (!s2)
-		return (s1);
-	str = malloc(sizeof(char) * (len + 1));
-	if (!str)
 		return (0);
 	i = 0;
 	while (s1[i])
-	{
-		str[i] = s1[i];
 		i++;
-	}
-	printf(" B\n");
-
 	y = 0;
-	while (s2[y] && i + y < len)
+	while (s2[y] && i + y < size)
 	{
-		str[i + y] = s2[y];
+		s1[i + y] = s2[y];
 		y++;
 	}
-	printf("  C\n");
-
-	str[len + 1] = 0;
-	if (status == 1)
-		free(s1);
-	else if (status == 2)
-		free(s2);
-	else if (status == 3)
-	{
-		free(s1);
-		free(s2);
-	}
-	printf("   D\n");
-
-	return (str);
+	free(s2);
+	return (1);
 }
 
 char	*ms_strjoin(char *s1, char *s2, int status)

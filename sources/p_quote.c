@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:06:01 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/17 18:34:44 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/19 11:44:00 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ char	*handle_quotes(t_pars *pars, int l)
 	end = quote_is_closed(pars, i);
 	if (end == 0)
 		return (NULL);
-	printf("END of quote = %d of %c%d\n", end, pars->av[i], i);
 	while (pars->av[i] && !is_quote(pars->av[i]))
 		i++;
 	buf = malloc(sizeof(char) * (end - i + 1));

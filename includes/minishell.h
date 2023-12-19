@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/17 20:19:30 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/19 12:46:19 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "../libft/libft.h"
-// #include "mspars.h"
 
 typedef struct 	s_prompt
 {
@@ -108,38 +107,48 @@ int		update_export(t_gc *garbage);
 
 
 
-t_arg	*main_pars(char *str, t_bui *blts);
+t_arg	*main_pars(char *str, t_bui *blts);		//pars.c
 t_arg	*parsing(t_pars *pars);
-void	free_parsing(t_arg *cmd);
+t_arg	*create_arg(t_pars *pars);
+
+void	free_parsing(t_arg *cmd);		//p_free.c
 void	print_cmd(t_arg *cmd);
-int		is_printable(char c);
+
+int		is_printable(char c);		//p_is.c
 int		is_whitespace(char c);
 int		is_sep(char c);
 int		is_var_env(char c);
 int		is_quote(char c);
-char	**strduptab(t_pars *pars);;
-int		count_char(t_pars *pars);
+
+char	**strduptab(t_pars *pars);;			//p_utils.c
+char	*ms_strjoin(char *s1, char *s2, int status);
+int		ms_strjoin_size(char *s1, char *s2, int size);
+int		ms_strcmp(char *s1, char *s2, int n);
+char	*no_quote(t_pars *pars);
+
+
+int		count_char(t_pars *pars);		//p_count.c
 int		count_word(t_pars *pars);
 int		count_sep(t_pars *pars);
-char	*get_in_env(char **env, char *str);
+
+char	*get_in_env(char **env, char *str);		//p_env.c
 char	*get_var_env(t_pars *pars, int i);
 int		after_var_env(t_pars *pars, int i);
-char	*get_sep(t_pars *pars);
-char	**get_line(t_pars *pars);
-int		quote_is_closed(t_pars *pars, int l);
+
+char	*get_sep(t_pars *pars);			//p_sep.c
+int		get_sep_size(t_pars *pars);
+void	too_many_sep(t_pars *pars);
+
+char	**get_line(t_pars *pars);		//p_line.c
+char	*copy_str(t_pars *pars);
+char	size_for_line(t_pars *pars);
+
+int		quote_is_closed(t_pars *pars, int l);		//p_quote.c
 char	*handle_quotes(t_pars *pars, int l);
 int		count_quote(t_pars *pars);
-void	too_many_sep(t_pars *pars);
-char	*copy_str(t_pars *pars);
-char	*ms_strjoin(char *s1, char *s2, int status);
-char	*ms_strjoin_len(char *s1, char *s2, int status, int len);
-char	*is_here_doc(t_pars *pars);
-int		ms_strcmp(char *s1, char *s2, int n);
+
+char	*get_del_hdoc(t_pars *pars);		//p_hdoc.c
 char	*get_here_doc(char *av);
-
-
-
-
-
+int		size_for_malloc_del(t_pars *pars);
 
 #endif
