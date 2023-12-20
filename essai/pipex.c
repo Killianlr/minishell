@@ -10,7 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex_bonus.h"
+#include "pipex.h"
+#include "essai.h"
 
 void	get_pipes(t_p *pip)
 {
@@ -25,60 +26,32 @@ void	get_pipes(t_p *pip)
 	}
 }
 
-void	files_in_out(int ac, char **av, t_p *pip)
-{
-	if (access(av[1], R_OK) == -1)
-		msg_error("error access file\n", pip);
-	pip->infile = open(av[1], O_RDONLY);
-	if (pip->infile < 0)
-		msg_error("error open infile\n", pip);
-	pip->outfile = open(av[ac - 1], O_TRUNC | O_CREAT | O_RDWR, 0000644);
-	if (pip->outfile < 0)
-		msg_error("error open outfile\n", pip);
-}
-
-int	av_count(char *av, t_p *pip)
-{
-	if (!ft_strncmp(av, "here_doc", 9))
-	{
-		pip->here_doc = 1;
-		return (6);
-	}
-	else
-	{
-		pip->here_doc = 0;
-		return (5);
-	}
-}
-
-void	check_args(int ac, char **av, t_p *pip)
-{
-	int	i;
-
-	i = 2 + pip->here_doc;
-	while (i < ac)
-	{
-		av[i] = ft_is_empty(av[i]);
-		i++;
-	}
-	pip->path = NULL;
-	pip->args = NULL;
-	pip->cmd = NULL;
-	pip->pipe = NULL;
-}
-
-int	pipex(int ac, char **av, char **envp)
+int	pipex(int ac, char **av, t_exec *ex, char **envp)
 {
 	t_p	pip;
+	int	i = 0;
 
-	pip.infile = 
-	pip.outfile =
+	if (ex->infile[ex->i])
+		pip.infile = ex->infile[ex->i];
+	else
+		pip.infile = -1;
+	pip.outfile = ex->res_pipex;
 	pip.cmd_nbr = ac;
+	printf("dans pipex\n");
+	while(av[i])
+	{
+		printf("av[%d] %s\n", i, av[i]);
+		i++;
+	}
+	printf("infile = %d\n", pip.infile);
+	printf("outfile = %d\n", pip.outfile);
+	printf("nb_cmd = %d\n", pip.cmd_nbr);
 	pip.pipe_nbr = 2 * (pip.cmd_nbr - 1);
+	printf("pipe_nbr = %d\n", pip.pipe_nbr);
 	pip.pipe = malloc(sizeof(int) * pip.pipe_nbr);
 	if (!pip.pipe)
 		msg_error("error pipe\n", &pip);
-	pip.path = ft_split(find_path(envp, &pip), ':');
+	pip.path = ft_split(find_path(envp), ':');
 	if (!pip.path)
 		free_pipe(&pip);
 	get_pipes(&pip);

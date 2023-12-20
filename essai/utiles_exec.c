@@ -1,5 +1,6 @@
 
 #include "essai.h"
+#include "pipex.h"
 
 int	pi_strcmp(char *s1, char *s2, int n)
 {
@@ -50,25 +51,31 @@ char	*find_path(char **envp)
 	return (NULL);
 }
 
-char	*get_cmd(char **paths, char	**cmd, char **envp)
+int	msg_error(char *str, t_p *pip)
 {
-	char	*tmp;
-	char	*command;
+	int	i;
 
-	if (cmd[0][0] == '/' || (cmd[0][0] == '.' && cmd[0][1] == '/'))
+	write(2, str, ft_strlen(str));
+	i = 0;
+	while (pip->args && pip->args[i])
 	{
-		if (access(cmd[0], 0) == 0)
-			execve(cmd[0], cmd, envp);
+		free(pip->args[i]);
+		i++;
 	}
-	while (*paths)
+	while (pip->path && pip->path[i])
 	{
-		tmp = ft_strjoin(*paths, "/");
-		command = ft_strjoin(tmp, cmd[0]);
-		free(tmp);
-		if (access(command, 0) == 0)
-			return (command);
-		free(command);
-		paths++;
+		free(pip->path[i]);
+		i++;
 	}
-	return (NULL);
+	if (pip->path)
+		free(pip->path);
+	if (pip->args)
+		free(pip->args);
+	if (pip->cmd)
+		free(pip->cmd);
+	close(pip->infile);
+	close(pip->outfile);
+	if (pip->here_doc)
+		unlink(".heredoc_tmp");
+	exit (1);
 }

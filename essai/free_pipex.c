@@ -11,13 +11,13 @@
 /* ************************************************************************** */
 
 #include "essai.h"
+#include "pipex.h"
 
 void	free_pipe(t_p *pip)
 {
-	close(pip->infile);
+	if (pip->infile)
+		close(pip->infile);
 	close(pip->outfile);
-	if (pip->here_doc)
-		unlink(".heredoc_tmp");
 	free(pip->pipe);
 	write(2, "error envp\n", 12);
 	exit(1);
@@ -40,7 +40,8 @@ void	free_child(t_p *pip)
 	int	i;
 
 	i = 0;
-	close(pip->infile);
+	if (pip->infile)
+		close(pip->infile);
 	close(pip->outfile);
 	while (pip->args && pip->args[i])
 	{
@@ -68,10 +69,9 @@ void	free_parent(t_p *pip)
 	int	i;
 
 	i = 0;
-	close(pip->infile);
+	if (pip->infile)
+		close(pip->infile);
 	close(pip->outfile);
-	if (pip->here_doc)
-		unlink(".heredoc_tmp");
 	while (pip->args && pip->args[i])
 	{
 		free(pip->args[i]);
@@ -88,10 +88,9 @@ void	free_main(t_p *pip)
 	int	i;
 
 	i = 0;
-	close(pip->infile);
+	if (pip->infile)
+		close(pip->infile);
 	close(pip->outfile);
-	if (pip->here_doc)
-		unlink(".heredoc_tmp");
 	while (pip->path && pip->path[i])
 	{
 		free(pip->path[i]);

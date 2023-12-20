@@ -8,6 +8,9 @@ LIB = $(addprefix $(LIBFT_DIR)/, $(LIBFT))
 
 SOURCES = ft_exec.c \
 			utiles_exec.c \
+			free_pipex.c \
+			pipex.c \
+			command_pipex.c \
 
 OBJECTS = $(SOURCES:.c=.o)
 

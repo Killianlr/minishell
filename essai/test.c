@@ -6,10 +6,10 @@
 
 int main(void)
 {
-    int i;
+    int fd;
+    char    buf[4096];
 
-    i = 2;
-    i = i / 2;
-    printf("%d\n", i);
-    return (0);
+    fd = open("file.txt", O_RDWR, 0000644);
+    read(fd, buf, 4096);
+    printf("%s\n", buf);
 }

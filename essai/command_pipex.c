@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "essai.h"
+#include "pipex.h"
 
 void	set_fd(int in, int out)
 {
@@ -64,7 +65,9 @@ void	child(t_p pip, char **av, char **envp)
 	pip.pid = fork();
 	if (!pip.pid)
 	{
-		if (pip.idx == 0)
+		if (pip.infile < 0)
+			dup2(pip.pipe[1], STDOUT_FILENO);
+		else if (pip.infile)
 		{
 			set_fd(pip.infile, pip.pipe[1]);
 			close(pip.outfile);
@@ -72,12 +75,14 @@ void	child(t_p pip, char **av, char **envp)
 		else if (pip.idx == pip.cmd_nbr - 1)
 		{
 			set_fd(pip.pipe[2 * pip.idx - 2], pip.outfile);
-			close(pip.infile);
+			if (pip.infile)
+				close(pip.infile);
 		}
 		else
 		{
 			set_fd(pip.pipe[2 * pip.idx - 2], pip.pipe[2 * pip.idx + 1]);
-			close(pip.infile);
+			if (pip.infile)
+				close(pip.infile);
 			close(pip.outfile);
 		}
 		next(pip, av, envp);
