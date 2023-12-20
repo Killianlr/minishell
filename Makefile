@@ -18,6 +18,18 @@ MY_SOURCES = 	minishell.c \
 				builtins.c \
 				utiles_builtins.c \
 				ft_sort_tab_n_add_dbq.c \
+				parsing.c \
+				p_line.c \
+				p_count.c \
+				p_is.c \
+				p_sep.c \
+				p_hdoc.c \
+				p_hdoc_2.c \
+				p_env.c \
+				p_quote.c \
+				p_utils.c \
+				p_utils_2.c \
+				p_free.c \
 
 SOURCES_DIR = sources
 SOURCES = $(addprefix $(SOURCES_DIR)/, $(MY_SOURCES))

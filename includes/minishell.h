@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/15 14:36:37 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/20 23:39:10 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,72 @@ typedef struct s_builtins
 	int		uoldpwd;
 }				t_bui;
 
+typedef struct arg
+{
+	char	**line;
+	char	*sep;
+	struct arg	*next;
+}			t_arg;
+
 typedef struct garbage_colector
 {
 	t_prompt	*prpt;
 	t_bui		*blts;
-	char		**args;
+	t_arg		*arg;
 	char		*line;
 	int			ret;
+	int			fd_hdoc;
 }					t_gc;
+
+
+
+typedef struct pars
+{
+	char	*av;
+	char	**env;
+	int		i;
+}			t_pars;
+
+typedef struct 	s_size_for_line
+{
+	int		i;
+	char	*tmp;
+	char	*quote;
+	int		count;
+}			t_sfl;
+
+typedef struct 	s_size_for_malloc_del
+{
+	char	*tmp;
+	int		set;
+	int		i;
+}			t_sfmd;
+
+
+typedef struct 	s_get_del_hdoc
+{
+	int		i;
+	int		y;
+	char	*quote;
+	int		size;
+}			t_gdh;
+
+typedef struct 	s_handle_quotes
+{
+	char	*buf;
+	int		end;
+	int		y;
+	int		i;
+}			t_hq;
+
+
+typedef struct 	s_get_in_env
+{
+	char	*buf;
+	int		i;
+	int		y;
+	int		j;
+}			t_gie;
 
 char	*ft_prompt(void);
 
@@ -107,5 +165,55 @@ int		del_var_unset(t_gc *garbage, char **args);
 int		go_to_find_var_and_del(t_bui *blts, char *str);
 
 int		cd_set_pwd(t_bui *blts);
+
+void	free_parsing(t_arg *cmd);		//p_free.c
+void	print_cmd(t_arg *cmd);
+void	free_pars_tab(char **arr);
+int		ft_error(char *msg, int ret);
+
+
+
+int		is_printable(char c);		//p_is.c
+int		is_whitespace(char c);
+int		is_sep(char c);
+int		is_var_env(char c);
+int		is_quote(char c);
+
+char	**strduptab(t_pars *pars);;			//p_utils.c
+char	*ms_strjoin(char *s1, char *s2, int status);
+int		ms_strjoin_size(char *s1, char *s2, int size);
+int		ms_strcmp(char *s1, char *s2, int n);
+char	*no_quote(t_pars *pars);
+
+int		get_var_env_2(t_pars *pars, int i);			//p_utils_2.c
+int		ft_strncmp_ms(char *s1,  char *s2, int size, int l);
+
+
+int		count_char(t_pars *pars);		//p_count.c
+int		count_word(t_pars *pars);
+int		count_sep(t_pars *pars);
+
+char	*get_in_env(char **env, char *str);		//p_env.c
+char	*get_var_env(t_pars *pars, int i);
+int		after_var_env(t_pars *pars, int i);
+
+char	*get_sep(t_pars *pars);			//p_sep.c
+int		get_sep_size(t_pars *pars);
+void	too_many_sep(t_pars *pars);
+int		check_sep(char *sep);
+
+char	**get_line(t_pars *pars);		//p_line.c
+char	*copy_str(t_pars *pars);
+int		size_for_line(t_pars *pars);
+
+int		quote_is_closed(t_pars *pars, int l);		//p_quote.c
+char	*handle_quotes(t_pars *pars, int l);
+int		count_quote(t_pars *pars);
+
+char	*get_del_hdoc(t_pars *pars, int l);		//p_hdoc.c
+int		get_here_doc(char *av, int fd);
+int		size_for_del(t_pars *pars, int l);
+int		scan_av_for_hdoc(t_pars *pars, int fd_hdoc);
+
 
 #endif
