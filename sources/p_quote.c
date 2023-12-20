@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_quote.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:06:01 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/19 16:22:59 by fserpe           ###   ########.fr       */
+/*   Updated: 2023/12/20 23:01:30 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,7 @@ int	quote_is_closed(t_pars *pars, int l)
 	target = 0;
 	i = l;
 	if (count_quote(pars) % 2 != 0)
-	{
-		ft_printf("Error 1, quote unclosed\n");
-		return (0);
-	}
+		return (ft_error("Error 1, quote unclosed", 0));
 	else
 	{
 		while (pars->av[i])
@@ -63,53 +60,70 @@ int	quote_is_closed(t_pars *pars, int l)
 	return (0);
 }
 
+void	handle_quote_3(t_pars *pars, t_hq *data)
+{
+	data->i++;
+	while (pars->av[data->i] && data->i < data->end
+		&& is_quote(pars->av[data->i]) != 2)
+	{
+		if (is_var_env(pars->av[data->i]))
+		{
+			data->buf = ms_strjoin(data->buf, get_var_env(pars, data->i), 3);
+			if (!data->buf)
+				return ;
+			data->y = ft_strlen(data->buf);
+			data->i = after_var_env(pars, data->i);
+				if (data->i < 0)
+				return ;
+		}
+		if (is_quote(pars->av[data->i]) == 2)
+		{
+			data->buf[data->y] = 0;
+			return ;
+		}
+		data->buf[data->y++] = pars->av[data->i++];
+	}
+}
+
+void	handle_quote_2(t_pars *pars, t_hq *data)
+{
+	if (is_quote(pars->av[data->i]) == 1)
+	{
+		data->i++;
+		while (pars->av[data->i] && data->i < data->end)
+			data->buf[data->y++] = pars->av[data->i++];
+	}
+	else if (is_quote(pars->av[data->i]) == 2)
+		handle_quote_3(pars, data);
+	if (!data->buf)
+		return ;
+	data->buf[data->y] = 0;
+}
+
 char	*handle_quotes(t_pars *pars, int l)
 {
-	char	*buf;
-	int		end;
-	int		y;
-	int		i;
+	t_hq	*data;
+	char	*ret;
 
-	i = l;
-	end = quote_is_closed(pars, i);
-	if (end == 0)
+	ret = NULL;
+	data = malloc(sizeof(t_hq));
+	if (!data)
 		return (NULL);
-	while (pars->av[i] && !is_quote(pars->av[i]))
-		i++;
-	buf = malloc(sizeof(char) * (end - i + 1));
-	if (!buf)
+	data->i = l;
+	data->end = quote_is_closed(pars, data->i);
+	if (data->end == 0)
 		return (NULL);
-	buf[0] = 0;
-	y = 0;
-	if (is_quote(pars->av[i]) == 1)
-	{
-		i++;
-		while (pars->av[i] && i < end)
-			buf[y++] = pars->av[i++];
-	}
-	else if (is_quote(pars->av[i]) == 2)
-	{
-		i++;
-		while (pars->av[i] && i < end && is_quote(pars->av[i]) != 2)
-		{
-			if (is_var_env(pars->av[i]))
-			{
-				buf = ms_strjoin(buf, get_var_env(pars, i), 3);
-				if (!buf)
-					return (NULL);
-				y = ft_strlen(buf);
-				i = after_var_env(pars, i);
-				if (i < 0)
-					break ;
-			}
-			if (is_quote(pars->av[i]) == 2)
-			{
-				buf[y] = 0;
-				return (buf);
-			}
-			buf[y++] = pars->av[i++];
-		}
-	}
-	buf[y] = 0;
-	return (buf);
+	while (pars->av[data->i] && !is_quote(pars->av[data->i]))
+		data->i++;
+	data->buf = malloc(sizeof(char) * (data->end - data->i + 1));
+	if (!data->buf)
+		return (NULL);
+	data->buf[0] = 0;
+	data->y = 0;
+	handle_quote_2(pars, data);
+	if (!data->buf)
+		return (NULL);
+	ret = data->buf;
+	free(data);
+	return (ret);
 }

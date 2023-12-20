@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_count.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:03:27 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/19 16:44:02 by fserpe           ###   ########.fr       */
+/*   Updated: 2023/12/19 22:16:53 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ int	count_word_2(t_pars *pars, t_wc *data, int count)
 	}
 	count = data->count;
 	free(data);
-	printf("word count = %d\n", count);
 	return (count);
 }
 

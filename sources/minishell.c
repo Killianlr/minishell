@@ -33,6 +33,7 @@ t_gc	*in_minishell()
 	garbage = malloc(sizeof(t_gc));
 	if (!garbage)
 		return (NULL);
+	garbage->fd_hdoc = 0;
 	garbage->blts = set_builtins();
 	if (!garbage->blts)
 	{
@@ -45,7 +46,7 @@ t_gc	*in_minishell()
 		garbage->line = ft_prompt();
 		if (ft_strlen(garbage->line))
 		{
-			garbage->arg = main_pars(garbage->line, garbage->blts);
+			garbage->arg = main_pars(garbage->line, garbage->blts, garbage);
 			// if (!garbage->arg)
 			// 	break;
 		}

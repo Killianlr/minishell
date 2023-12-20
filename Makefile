@@ -22,6 +22,7 @@ MY_SOURCES = 	minishell.c \
 				p_is.c \
 				p_sep.c \
 				p_hdoc.c \
+				p_hdoc_2.c \
 				p_env.c \
 				p_quote.c \
 				p_utils.c \

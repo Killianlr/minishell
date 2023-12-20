@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/19 17:41:29 by fserpe           ###   ########.fr       */
+/*   Updated: 2023/12/20 23:34:30 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ typedef struct arg
 {
 	char	**line;
 	char	*sep;
-	char	*h_doc;
 	struct arg	*next;
 }			t_arg;
 
@@ -59,8 +58,40 @@ typedef struct pars
 	int		i;
 }			t_pars;
 
+typedef struct 	s_size_for_line
+{
+	int		i;
+	char	*tmp;
+	char	*quote;
+	int		count;
+}			t_sfl;
 
-typedef struct 	get_in_env
+typedef struct 	s_size_for_malloc_del
+{
+	char	*tmp;
+	int		set;
+	int		i;
+}			t_sfmd;
+
+
+typedef struct 	s_get_del_hdoc
+{
+	int		i;
+	int		y;
+	char	*quote;
+	int		size;
+}			t_gdh;
+
+typedef struct 	s_handle_quotes
+{
+	char	*buf;
+	int		end;
+	int		y;
+	int		i;
+}			t_hq;
+
+
+typedef struct 	s_get_in_env
 {
 	char	*buf;
 	int		i;
@@ -69,7 +100,7 @@ typedef struct 	get_in_env
 }			t_gie;
 
 
-typedef struct 	word_count
+typedef struct 	s_word_count
 {
 	int		count;
 	int		i;
@@ -78,11 +109,12 @@ typedef struct 	word_count
 }			t_wc;
 
 
-typedef struct 	garbage_colector
+typedef struct 	s_garbage_colector
 {
 	t_prompt *prpt;
 	t_bui	*blts;
 	t_arg	*arg;
+	int		fd_hdoc;
 	char			*line;
 }				t_gc;
 
@@ -126,12 +158,16 @@ int		update_export(t_gc *garbage);
 
 
 
-t_arg	*main_pars(char *str, t_bui *blts);		//pars.c
-t_arg	*parsing(t_pars *pars);
+t_arg	*main_pars(char *str, t_bui *blts, t_gc *garbage);		//pars.c
+t_arg	*parsing(t_pars *pars, t_gc *garbage);
 t_arg	*create_arg(t_pars *pars);
 
 void	free_parsing(t_arg *cmd);		//p_free.c
 void	print_cmd(t_arg *cmd);
+void	free_pars_tab(char **arr);
+int		ft_error(char *msg, int ret);
+
+
 
 int		is_printable(char c);		//p_is.c
 int		is_whitespace(char c);
@@ -145,7 +181,9 @@ int		ms_strjoin_size(char *s1, char *s2, int size);
 int		ms_strcmp(char *s1, char *s2, int n);
 char	*no_quote(t_pars *pars);
 
-int	get_var_env_2(t_pars *pars, int i);			//p_utils_2.c
+int		get_var_env_2(t_pars *pars, int i);			//p_utils_2.c
+int		ft_strncmp_ms(char *s1,  char *s2, int size, int l);
+
 
 int		count_char(t_pars *pars);		//p_count.c
 int		count_word(t_pars *pars);
@@ -158,17 +196,20 @@ int		after_var_env(t_pars *pars, int i);
 char	*get_sep(t_pars *pars);			//p_sep.c
 int		get_sep_size(t_pars *pars);
 void	too_many_sep(t_pars *pars);
+int		check_sep(char *sep);
 
 char	**get_line(t_pars *pars);		//p_line.c
 char	*copy_str(t_pars *pars);
-char	size_for_line(t_pars *pars);
+int		size_for_line(t_pars *pars);
 
 int		quote_is_closed(t_pars *pars, int l);		//p_quote.c
 char	*handle_quotes(t_pars *pars, int l);
 int		count_quote(t_pars *pars);
 
-char	*get_del_hdoc(t_pars *pars);		//p_hdoc.c
-char	*get_here_doc(char *av);
-int		size_for_malloc_del(t_pars *pars);
+char	*get_del_hdoc(t_pars *pars, int l);		//p_hdoc.c
+int		get_here_doc(char *av, int fd);
+int		size_for_del(t_pars *pars, int l);
+int		scan_av_for_hdoc(t_pars *pars, int fd_hdoc);
+// int		size_for_malloc_del(t_pars *pars);
 
 #endif
