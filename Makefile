@@ -6,10 +6,18 @@ LIBFT = libft.a
 LIBFT_DIR = libft
 LIB = $(addprefix $(LIBFT_DIR)/, $(LIBFT))
 
-MY_SOURCES = 	main.c \
+MY_SOURCES = 	minishell.c \
 				prompt.c \
 				terminal.c \
-				handler.c \
+				signal.c \
+				env.c \
+				export.c \
+				unset.c \
+				free.c \
+				cd.c \
+				builtins.c \
+				utiles_builtins.c \
+				ft_sort_tab_n_add_dbq.c \
 
 SOURCES_DIR = sources
 SOURCES = $(addprefix $(SOURCES_DIR)/, $(MY_SOURCES))

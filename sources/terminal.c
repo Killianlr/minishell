@@ -1,9 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   terminal.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/13 11:19:12 by kle-rest          #+#    #+#             */
+/*   Updated: 2023/12/15 14:34:01 by kle-rest         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void    display_minishell()
+void	display_minishell(void)
 {
-    printf(" ___ __ __    ________  ___   __     ________  ______   ___   ___   ______   __       __         \n");
+	printf(" ___ __ __    ________  ___   __     ________  ______   ___   ___   ______   __       __         \n");
 	printf("/__//_//_/\\  /_______/\\/__/\\ /__/\\  /_______/\\/_____/\\ /__/\\ /__/\\ /_____/\\ /_/\\     /_/\\        \n");
 	printf("\\::\\| \\| \\ \\ \\__.::._\\/\\::\\_\\\\  \\ \\ \\__.::._\\/\\::::_\\/_\\::\\ \\\\  \\ \\\\::::_\\/_\\:\\ \\    \\:\\ \\       \n");
 	printf(" \\:.      \\ \\   \\::\\ \\  \\:. `-\\  \\ \\   \\::\\ \\  \\:\\/___/\\\\::\\/_\\ .\\ \\\\:\\/___/\\\\:\\ \\    \\:\\ \\      \n");
@@ -13,12 +24,12 @@ void    display_minishell()
 	printf("\n");
 }
 
-int	clear_terminal()
+int	clear_terminal(void)
 {
-	char	*clear;
-	char	*args[2];
-	extern char **__environ;
-	int	pid;
+	char		*clear;
+	char		*args[2];
+	extern char	**environ;
+	int			pid;
 
 	clear = "/usr/bin/clear";
 	args[0] = clear;
@@ -26,8 +37,10 @@ int	clear_terminal()
 	pid = fork();
 	if (pid == 0)
 	{
+		if (!__environ[0])
+			return (1);
 		if (access(clear, X_OK) == 0)
-			execve(clear, args, __environ);	
+			execve(clear, args, environ);
 		return (1);
 	}
 	else if (pid > 0)

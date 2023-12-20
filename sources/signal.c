@@ -1,21 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isprint.c                                       :+:      :+:    :+:   */
+/*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/07 13:36:08 by fserpe            #+#    #+#             */
-/*   Updated: 2023/12/15 14:33:03 by kle-rest         ###   ########.fr       */
+/*   Created: 2023/12/13 11:19:07 by kle-rest          #+#    #+#             */
+/*   Updated: 2023/12/15 14:29:53 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../includes/minishell.h"
 
-int	ft_isprint(int c)
+void	signal_handler(int signum)
 {
-	if (c >= 32 && c <= 126)
+	if (signum == SIGINT)
+	{
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+	else if (signum == SIGQUIT)
+	{
+		write(1, "\b\b  \b\b", 7);
+	}
+}
+
+int	signal_init(void)
+{
+	if (signal(SIGINT, signal_handler))
 		return (1);
-	else
-		return (0);
+	if (signal(SIGQUIT, signal_handler))
+		return (1);
+	return (0);
 }
