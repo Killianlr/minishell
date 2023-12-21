@@ -12,12 +12,15 @@ MY_SOURCES = 	minishell.c \
 				signal.c \
 				env.c \
 				export.c \
+				unset.c \
 				free.c \
+				cd.c \
 				builtins.c \
 				utiles_builtins.c \
-				ft_sort_tab.c \
+				ft_sort_tab_n_add_dbq.c \
 				parsing.c \
 				p_line.c \
+				p_copy_str.c \
 				p_count.c \
 				p_is.c \
 				p_sep.c \

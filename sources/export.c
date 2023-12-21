@@ -1,13 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/13 11:18:16 by kle-rest          #+#    #+#             */
+/*   Updated: 2023/12/15 14:24:45 by kle-rest         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	replace_old_exp(t_bui *blts, char *arg)
+int	replace_old_exp(t_bui *blts, char *arg_w_db_q)
 {
 	int		i;
 	char	**new_export;
 	int		size_tab;
 
 	i = 0;
+	if (!arg_w_db_q)
+		return (1);
 	size_tab = ft_strlen_tab(blts->exp);
 	new_export = malloc(sizeof(char *) * (size_tab + 2));
 	if (!new_export)
@@ -17,68 +30,111 @@ int	replace_old_exp(t_bui *blts, char *arg)
 		new_export[i] = blts->exp[i];
 		i++;
 	}
-	new_export[i] = ft_strdup(arg);
+	new_export[i] = arg_w_db_q;
 	new_export[i + 1] = NULL;
 	free(blts->exp);
 	blts->exp = new_export;
 	return (0);
 }
 
-int	add_var_export(t_gc *garbage)
+int	new_var_w_value(t_bui *blts, char *arg)
 {
-	int		i;
-	int		j;
-	char	*tmp;
+	char	*var_w_db_q;
 
-	i = 0;
-	if (check_var_exist(garbage, garbage->arg->line[i]))
-		return (0);
-	printf("ici\n");
-	while (garbage->arg->line[i])
-	{
-		j = 0;
-		tmp = garbage->arg->line[i];
-		if (garbage->arg->line[i][j] == '=')
-		{
-			if (add_var_env(garbage->blts, garbage->arg->line[i]))
-				return (1);
-			garbage->arg->line[i] = add_db_quote(garbage->arg->line[i]);
-			if (!garbage->arg->line[i])
-				return (1);
-			free(tmp);
-			j++;
-		}
-		i++;
-	}
-	if (replace_old_exp(garbage->blts, garbage->arg->line[i]))
+	var_w_db_q = add_db_quote(arg);
+	if (add_var_env(blts, var_w_db_q))
+		return (1);
+	if (replace_old_exp(blts, var_w_db_q))
 		return (1);
 	return (0);
 }
 
-int	update_export(t_gc *garbage)
+int	new_name_var(t_bui *blts, char *arg)
+{
+	char	*var_name;
+
+	var_name = ft_strdup(arg);
+	if (replace_old_exp(blts, var_name))
+		return (1);
+	return (0);
+}
+
+int	check_arg_should_be_define(char *arg)
+{
+	if (!ft_strncmp(arg, "PWD", ft_strlen(arg)))
+		return (1);
+	if (!ft_strncmp(arg, "OLDPWD", ft_strlen(arg)))
+		return (1);
+	return (0);
+}
+
+int	add_var_export(t_gc *garbage, char *arg)
+{
+	int		val;
+	char	*tmp;
+
+	if (!ft_strncmp("PWD", arg, ft_size_var_env(arg)))
+		garbage->blts->upwd = 0;
+	if (!ft_strncmp("OLDPWD", arg, ft_size_var_env(arg)))
+		garbage->blts->uoldpwd = 0;
+	val = check_var_exist(garbage->blts->exp, arg);
+	if (!val)
+		return (0);
+	else if (val <= ft_strlen_tab(garbage->blts->exp))
+	{
+		if (update_var(garbage->blts, arg, val))
+			return (1);
+	}
+	else
+	{
+		if (check_arg_should_be_define(arg))
+		{
+			tmp = ft_strjoin(arg, "=");
+			if (!tmp)
+				return (1);
+			if (new_var_w_value(garbage->blts, tmp))
+				return (1);
+			free(tmp);
+		}
+		else if (it_is_an_equal(arg))
+		{
+			if (new_var_w_value(garbage->blts, arg))
+				return (1);
+		}
+		else
+		{
+			if (new_name_var(garbage->blts, arg))
+				return (1);
+		}
+	}
+	garbage->blts->exp = ft_sort_tab(garbage->blts->exp);
+	return (0);
+}
+
+int	update_export(t_gc *garbage, char **args)
 {
 	int	i;
 	int	j;
 
 	i = 1;
-	while (garbage->arg->line[i])
+	while (args[i])
 	{
 		j = 0;
-		while (garbage->arg->line[i][j])
+		while (args[i][j])
 		{
-			if ((!ft_isalpha(garbage->arg->line[i][j]) && garbage->arg->line[i][j] != '=')
-				|| (!j && garbage->arg->line[i][j] == '='))
+			if ((!ft_isalpha(args[i][j]) && args[i][j] != '=')
+				|| (!j && args[i][j] == '='))
 			{
-				printf("minishell: export: `%c': not a valid identifier\n", garbage->arg->line[i][j]);
+				printf("minishell: export: `%c': not a valid identifier\n", args[i][j]);
 				break ;
 			}
-			if (garbage->arg->line[i][j] == '=')
+			if (args[i][j] == '=')
 				break ;
 			j++;
 		}
-		if (j == (int)ft_strlen(garbage->arg->line[i]) || garbage->arg->line[i][j] == '=')
+		if (j == (int)ft_strlen(args[i]) || args[i][j] == '=')
 		{
-			if (add_var_export(garbage))
+			if (add_var_export(garbage, args[i]))
 				return (1);
 		}
 		i++;
@@ -88,7 +144,7 @@ int	update_export(t_gc *garbage)
 
 int	set_export(t_bui *blts)
 {
-	blts->exp = ft_sort_tab(blts->env);
+	blts->exp = ft_sort_tab_n_add_dbq(blts->env);
 	if (!blts->exp)
 	{
 		free_blts(blts);

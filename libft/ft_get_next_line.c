@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 16:45:14 by fserpe            #+#    #+#             */
-/*   Updated: 2023/12/20 22:14:49 by flavian          ###   ########.fr       */
+/*   Updated: 2023/11/16 15:34:35 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	*gnl_line(char *mem)
 		line[i] = mem[i];
 		i++;
 	}
-	line[i] = 0;
+	line[i] = '\0';
 	return (line);
 }
 
@@ -99,7 +99,6 @@ char	*get_next_line(int fd, int x)
 		return (NULL);
 	if (x == 1)
 	{
-		printf("hreeeerere\n");
 		free(mem[fd]);
 		return (NULL);
 	}

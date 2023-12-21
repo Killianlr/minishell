@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   p_hdoc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/20 17:35:39 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/20 23:31:11 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/21 10:25:52 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
 
 int	get_here_doc_2(char *av, int fd, char *buf)
 {
@@ -45,7 +44,7 @@ int	get_here_doc(char *av, int fd)
 	{
 		close(fd);
 		unlink(".heredoc_tmp");
-		fd = open(".heredoc_tmp", O_CREAT | O_WRONLY | O_TRUNC, 0000644);;
+		fd = open(".heredoc_tmp", O_CREAT | O_WRONLY | O_TRUNC, 0000644);
 	}
 	if (fd < 0)
 		return (0);
@@ -80,35 +79,17 @@ char	*handle_quotes_hdoc(t_pars *pars, int l)
 	return (buf);
 }
 
-int	size_for_del(t_pars *pars, int l)
+int	scan_av_for_hdoc_2(t_pars *pars, int fd_hdoc, int i)
 {
-	int		i;
-	int		count;
-	char	*quote;
-
-	i = l;
-	count = 0;
-	quote = NULL;
-	while (pars->av[i])
+	if (is_sep(pars->av[i + 1]) == 2 && !is_sep(pars->av[i + 2]))
 	{
-		if ((is_whitespace(pars->av[i]) || is_sep(pars->av[i])))
-			break ;
-		else if (is_quote(pars->av[i]))
-		{
-			quote = handle_quotes_hdoc(pars, i);
-			count += (int)ft_strlen(quote);
-			free(quote);
-			i = quote_is_closed(pars, i);
-		}
-		if (is_printable(pars->av[i]) && !is_quote(pars->av[i])
-			&& !is_sep(pars->av[i]))
-			count++;
-		i++;
+		fd_hdoc = get_here_doc(get_del_hdoc(pars, i), fd_hdoc);
+		return (fd_hdoc);
 	}
-	return (count);
+	return (fd_hdoc);
 }
 
-int		scan_av_for_hdoc(t_pars *pars, int fd_hdoc)
+int	scan_av_for_hdoc(t_pars *pars, int fd_hdoc)
 {
 	int		i;
 	int		len;
@@ -127,13 +108,7 @@ int		scan_av_for_hdoc(t_pars *pars, int fd_hdoc)
 			}
 		}
 		else if (is_sep(pars->av[i]) == 2 && len - (i + 3) > 0)
-		{
-			if (is_sep(pars->av[i + 1]) == 2 && !is_sep(pars->av[i + 2]))
-			{
-				fd_hdoc = get_here_doc(get_del_hdoc(pars, i), fd_hdoc);
-				return (fd_hdoc);
-			}
-		}
+			fd_hdoc = scan_av_for_hdoc_2(pars, fd_hdoc, i);
 		i++;
 	}
 	return (fd_hdoc);

@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/13 11:18:21 by kle-rest          #+#    #+#             */
+/*   Updated: 2023/12/21 11:15:40 by kle-rest         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
@@ -11,13 +22,26 @@ void	free_tab(char **tableau)
 		free(tableau[i]);
 		i++;
 	}
+	free(tableau);
 }
 
 void	free_blts(t_bui *blts)
 {
-    free(blts->env);
-	free(blts->exp);
+	free_tab(blts->env);
+	free_tab(blts->exp);
 	free(blts->pwd);
+}
+
+void	exit_error(t_gc *garbage)
+{
+	printf("debut free error\n");
+	free_blts(garbage->blts);
+	free(garbage->blts);
+	free(garbage->line);
+	free_parsing(garbage->arg);
+	free(garbage);
+	printf("fin free error\n");
+	exit(0);
 }
 
 void	free_all(t_gc *garbage)
@@ -26,9 +50,6 @@ void	free_all(t_gc *garbage)
 	if (!garbage)
 		return ;
 	free_parsing(garbage->arg);
-	free(garbage->line);
-	free_tab(garbage->blts->env);
-	free_tab(garbage->blts->exp);
 	free_blts(garbage->blts);
 	free(garbage->blts);
 	free(garbage);

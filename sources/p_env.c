@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 11:49:41 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/19 16:39:38 by fserpe           ###   ########.fr       */
+/*   Updated: 2023/12/21 14:02:49 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,11 @@ char	*get_var_env(t_pars *pars, int i)
 		&& !is_sep(pars->av[j]) && !is_quote(pars->av[j]))
 		buf[y++] = pars->av[j++];
 	buf[y] = 0;
+	if (buf[0] == '?' && !buf[1])
+	{
+		free(buf);
+		return (ft_strdup("$?"));
+	}
 	buf = get_in_env(pars->env, buf);
 	return (buf);
 }

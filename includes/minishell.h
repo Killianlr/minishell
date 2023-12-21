@@ -3,45 +3,47 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/20 23:34:30 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/21 11:18:39 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/wait.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <dirent.h>
-#include <signal.h>
-#include <string.h>
-#include <errno.h>
-#include <curses.h>
-#include <term.h>
-#include <termios.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include "../libft/libft.h"
+# include <stdlib.h>
+# include <unistd.h>
+# include <fcntl.h>
+# include <sys/wait.h>
+# include <sys/stat.h>
+# include <sys/types.h>
+# include <dirent.h>
+# include <signal.h>
+# include <string.h>
+# include <errno.h>
+# include <curses.h>
+# include <term.h>
+# include <termios.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include "../libft/libft.h"
 
-typedef struct 	s_prompt
+typedef struct s_prompt
 {
 	char	*inpt;
 	char	*str;
 }				t_prompt;
 
-typedef struct 	s_builtins
+typedef struct s_builtins
 {
 	int		exi_env;
 	char	**env;
 	char	**exp;
 	char	*pwd;
+	int		upwd;
+	int		uoldpwd;
 }				t_bui;
 
 typedef struct arg
@@ -50,6 +52,23 @@ typedef struct arg
 	char	*sep;
 	struct arg	*next;
 }			t_arg;
+
+typedef struct garbage_colector
+{
+	t_prompt	*prpt;
+	t_bui		*blts;
+	t_arg		*arg;
+	char		*line;
+	int			ret;
+	int			fd_hdoc;
+}					t_gc;
+
+typedef struct s_copy_str
+{
+	int		y;
+	char	*quote;
+	int		size;
+}			t_cs;
 
 typedef struct pars
 {
@@ -99,8 +118,7 @@ typedef struct 	s_get_in_env
 	int		j;
 }			t_gie;
 
-
-typedef struct 	s_word_count
+typedef struct count_word
 {
 	int		count;
 	int		i;
@@ -108,55 +126,58 @@ typedef struct 	s_word_count
 	char	*quote;
 }			t_wc;
 
+char	*ft_prompt(void);
 
-typedef struct 	s_garbage_colector
-{
-	t_prompt *prpt;
-	t_bui	*blts;
-	t_arg	*arg;
-	int		fd_hdoc;
-	char			*line;
-}				t_gc;
+int		clear_terminal(void);
 
+t_gc	*in_minishell(void);
 
-char	*ft_prompt();
-
-int		clear_terminal();
-
-t_gc	*in_minishell();
-
-t_bui   *set_builtins(void);
-int		ft_env(t_gc *garbage);
-int		ft_pwd(t_gc *garbage);
-int		ft_export(t_gc *garbage);
+t_bui	*set_builtins(void);
+int		ft_env(t_gc *garbage, char **args);
+int		ft_pwd(t_gc *garbage, char **args);
+int		ft_export(t_gc *garbage, char **args);
+int		ft_unset(t_gc *garbage, char **args);
+int		ft_cd(t_gc *garbage, char **args);
+int		ft_echo(t_gc *garbage, char **args);
+int		ft_put_ret_value(t_gc *garbage, char **args);
+int		ft_define_var(t_gc *garbage, char **args);
 
 
 int		print_env(t_gc *garbage);
 int		set_env(t_bui *blts);
 
-
-
 void	free_all(t_gc *garbage);
 void	free_blts(t_bui *blts);
-void    free_tab(char **env);
+void	free_tab(char **env);
+void	exit_error(t_gc *garbage);
 
 int		signal_init(void);
 
 int		ft_strlen_tab(char **env);
-char    *get_pwd(void);
+char	*get_pwd(void);
 int		ft_size_var_env(char *str);
-int		check_var_exist(t_gc *garbage, char *arg);
+int		check_var_exist(char **tableau, char *arg);
+int		it_is_an_equal(char *str);
+int		update_var(t_bui *blts, char *arg, int j);
+char	**ft_sort_tab(char **tabl);
 
 char	*remove_quote(char *str);
 int		add_var_env(t_bui *blts, char *arg);
+int		update_var_env(t_bui *blts, char *str);
+int		update_env(t_bui *blts);
 
-char	**ft_sort_tab(char **tabl);
+char	**ft_sort_tab_n_add_dbq(char **tabl);
 char	*add_db_quote(char *src);
+void	ft_swap(char **a, char **b);
+int		ft_strcmp(char *s1, char *s2);
 
 int		set_export(t_bui *blts);
-int		update_export(t_gc *garbage);
+int		update_export(t_gc *garbage, char **args);
 
+int		del_var_unset(t_gc *garbage, char **args);
+int		go_to_find_var_and_del(t_bui *blts, char *str);
 
+int		cd_set_pwd(t_bui *blts);
 
 t_arg	*main_pars(char *str, t_bui *blts, t_gc *garbage);		//pars.c
 t_arg	*parsing(t_pars *pars, t_gc *garbage);
@@ -166,8 +187,6 @@ void	free_parsing(t_arg *cmd);		//p_free.c
 void	print_cmd(t_arg *cmd);
 void	free_pars_tab(char **arr);
 int		ft_error(char *msg, int ret);
-
-
 
 int		is_printable(char c);		//p_is.c
 int		is_whitespace(char c);
@@ -210,6 +229,6 @@ char	*get_del_hdoc(t_pars *pars, int l);		//p_hdoc.c
 int		get_here_doc(char *av, int fd);
 int		size_for_del(t_pars *pars, int l);
 int		scan_av_for_hdoc(t_pars *pars, int fd_hdoc);
-// int		size_for_malloc_del(t_pars *pars);
+char	*handle_quotes_hdoc(t_pars *pars, int l);
 
 #endif

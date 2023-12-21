@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 13:46:48 by fserpe            #+#    #+#             */
-/*   Updated: 2023/12/17 14:20:54 by flavian          ###   ########.fr       */
+/*   Updated: 2023/10/05 10:52:16 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	i = 0;
 	if (n == 0)
 		return (0);
-	if (!s1 || !s2)
+	if (!s1)
 		return (1);
 	while (s1[i] == s2[i] && i < n - 1 && s1[i] && s2[i])
 	{

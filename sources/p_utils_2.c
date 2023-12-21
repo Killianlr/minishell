@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   p_utils_2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 16:39:23 by fserpe            #+#    #+#             */
-/*   Updated: 2023/12/20 18:05:22 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/21 10:07:04 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_strncmp_ms(char *s1,  char *s2, int size, int l)
+int	ft_strncmp_ms(char *s1, char *s2, int size, int l)
 {
 	int	i;
 
