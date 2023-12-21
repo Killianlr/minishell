@@ -6,19 +6,19 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 11:38:09 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/21 13:12:44 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/21 18:28:06 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 #include "../includes/pipex.h"
 
-void    ft_cmd_not_find(char **paths, char *cmd)
+void    ft_cmd_not_find(char **paths, char *cmd, t_gc *garbage)
 {
     write(2, cmd, ft_strlen(cmd));
 	write(2, ": command not found\n", 21);
-    free(paths);
-    // mettre a jours ret a 127;
+    free_tab(paths);
+    garbage->ret = 127;
     exit(1);
 }
 
@@ -103,13 +103,6 @@ void    ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex)
 		return ;
 	if (!pid)
 	{
-		if (ex->r && ft_lstsize_targ(s_cmd) == 1)
-		{
-			read(ex->res_pipex, buf, 2);
-			write(STDOUT_FILENO, buf, ft_strlen(buf));
-			write(STDOUT_FILENO, "\n", 1);
-		}
-    printf("C\n");
 		if (ex->infile && ex->infile[ex->i] > 0)
 		{
 			if (ex->r)
@@ -133,27 +126,32 @@ void    ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex)
 				dup2(ex->outfile[ex->o], STDOUT_FILENO);
         }
         if (is_builtins(garbage, s_cmd->line) == 2)
+        {
+            printf("exit\n");
 			exit(0);
+        }
+        // printf("avant execve line[0] = %s sep = %s\n", s_cmd->line[0], s_cmd->sep);
+        if (s_cmd->line[0][0] == ' ')
+        {
+            // printf("exit\n");   
+            exit(0);
+        }
 		cmd_path = get_cmd(paths, s_cmd->line, garbage->blts->env);
 		if (!cmd_path)
-			ft_cmd_not_find(paths, s_cmd->line[0]);
+			ft_cmd_not_find(paths, s_cmd->line[0], garbage);
 		execve(cmd_path, s_cmd->line, garbage->blts->env);
 	}
 }
 
-int init_t_exec(t_exec *ex, t_arg *s_cmd, char **env)
+int init_t_exec(t_exec *ex, t_arg *s_cmd, t_gc *garbage)
 {
     ex->i = -1;
     ex->o = -1;
     ex->r = 0;
     ex->infile = NULL;
     ex->outfile = NULL;
-    ex->paths = ft_split(find_path(env), ':');
-    ex->res_pipex = open(".res_pipex", O_CREAT | O_TRUNC | O_RDWR, 0000644);
-    if (!ex->res_pipex)
-    {
-        return (1);
-    }
+    ex->paths = ft_split(find_path(garbage->blts->env), ':');
+    ex->res_pipex = -1;
 	if (count_sep_exec(s_cmd, "<", "<<"))
 	{
     	ex->infile = malloc(sizeof(int) * count_sep_exec(s_cmd, "<", "<<"));
@@ -177,6 +175,7 @@ int init_open(t_exec *ex, t_arg *s_cmd, int typeofsep)
 {
     if (typeofsep && typeofsep % 2 == 0)
     {
+        printf("outfile open\n");
         ex->o++;
         ex->outfile[ex->o] = ft_open(s_cmd->next->line[0], typeofsep);
         if (ex->outfile[ex->o] == -1)
@@ -184,10 +183,9 @@ int init_open(t_exec *ex, t_arg *s_cmd, int typeofsep)
             printf("error access file or open %s ", s_cmd->next->line[0]);
             return (1);
         }
-        free(s_cmd->next->line[0]);
-		s_cmd->next->line++;
+        reset_line(s_cmd->next->line);
     }
-    else if (typeofsep && typeofsep % 2 == 1 && typeofsep != 5)
+    if (typeofsep && typeofsep % 2 == 1 && typeofsep != 5)
     {
         ex->i++;
         ex->infile[ex->i] = ft_open(s_cmd->next->line[0], typeofsep);
@@ -196,8 +194,7 @@ int init_open(t_exec *ex, t_arg *s_cmd, int typeofsep)
             printf("error access file or open %s\n", s_cmd->next->line[0]);
             return (1);
         }
-        free(s_cmd->next->line[0]);
-		s_cmd->next->line++;
+        reset_line(s_cmd->next->line);
     }
     return (0);
 }
@@ -246,53 +243,59 @@ int	init_pipex(t_exec *ex, t_arg *s_cmd, char **env)
     char    *str_cmd;
     int     i;
 
+    // printf("init_pipex\n");
     i = 0;
 	nb_cmd = count_pipex_cmds(s_cmd);
+    ex->res_pipex = open(".res_pipex", O_CREAT | O_TRUNC | O_RDWR, 0000644);
     cmds_pipex = malloc(sizeof(char *) * (nb_cmd + 1));
     if (!cmds_pipex)
-        return (1);
+        return (-1);
     while (i < nb_cmd)
     {
         str_cmd = convert_tab_2_str(s_cmd->line);
         if (!str_cmd)
-            return (1);
+            return (-1);
         cmds_pipex[i] = str_cmd;
         i++;
 		if (s_cmd->next)
     		s_cmd = s_cmd->next;
     }
     cmds_pipex[i] = NULL;
+    // printf("avant pipex\n");
 	pipex(nb_cmd, cmds_pipex, ex, env);
-	return (0);
+    // printf("apres pipex\n");
+    dup2(STDOUT_FILENO, ex->res_pipex);
+	return (nb_cmd);
 }
 
-void    ft_init_exec(t_arg *s_cmd, t_gc *garbage, int lstsize)
+void    ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
 {
-    t_exec  ex;
-    int j;
     int typeofsep;
+    int i;
 
-    j = 0;
     typeofsep = 0;
-    if (init_t_exec(&ex, s_cmd, garbage->blts->env))
-        return ;
     // printf("A\n");
-    while (j < lstsize)
-    {
-        typeofsep = check_sep_exec(s_cmd);
-        if (init_open(&ex, s_cmd, typeofsep))
+    typeofsep = check_sep_exec(s_cmd);
+    if (init_open(ex, s_cmd, typeofsep))
+        return ;
+    if (typeofsep == 5)
+	{
+        i = init_pipex(ex, s_cmd, garbage->blts->env);
+        if (i < 0)
             return ;
-        if (typeofsep == 5)
-		{
-            if (init_pipex(&ex, s_cmd, garbage->blts->env))
-				return ;
-			ex.r = 1;
-		}
-    // printf("B\n");
-		if (s_cmd->line[0])
-        	ft_exec(s_cmd, ex.paths, garbage, &ex);
-        j++;
-        s_cmd = s_cmd->next;
-    }
-
+        // printf("AAAAAAAAAAAAAAAAAAAAAA\n");
+        while (i-- && s_cmd->next)
+        {
+            s_cmd = s_cmd->next;
+            garbage->nb_exec--;
+        }
+		ex->r = 1;
+        // printf("BBBBBBBBBBBBBBBBBBb\n");
+        if (!s_cmd->next)
+            return ;
+	}
+    // printf("CCCCCCCCCCCCCCCCCCCCCCC\n");
+	if (s_cmd->line[0])
+        ft_exec(s_cmd, ex->paths, garbage, ex);
+    // printf("DDDDDDDDDDDDDDDDDDDDD\n");
 }

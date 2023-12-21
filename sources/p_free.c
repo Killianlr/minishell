@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 16:17:12 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/21 13:14:02 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/21 18:10:08 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,16 @@ void	free_pars_tab(char **arr)
 
 	i = 0;
 	if (!arr[i])
-	{
-		free(arr);
 		return ;
-	}
 	while (arr[i])
 	{
+		// printf("arr[%d] %s\n", i, arr[i]);
 		free(arr[i]);
 		i++;
 	}
-	free(arr);
+	if (arr)
+		free(arr);
+	// printf("---------H-------\n");
 }
 
 int	ft_error(char *msg, int ret)
@@ -65,19 +65,26 @@ void	free_parsing(t_arg *cmd)
 	if (!cmd)
 		return ;
 	tmp = cmd->next;
+	// printf("------A-----\n");
 	while (tmp)
 	{
 		if (cmd->line)
 			free_pars_tab(cmd->line);
+	// printf("------B-----\n");
 		if (cmd->sep)
 			free(cmd->sep);
+	// printf("------C-----\n");
 		free(cmd);
+	// printf("------D-----\n");
 		cmd = tmp;
 		tmp = cmd->next;
 	}
 	if (cmd->line)
 		free_pars_tab(cmd->line);
+	// printf("------E-----\n");
 	if (cmd->sep)
 		free(cmd->sep);
+	// printf("------F-----\n");
 	free(cmd);
+	// printf("------G-----\n");
 }

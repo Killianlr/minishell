@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:43 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/21 13:10:31 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/21 18:44:25 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ int	clear_or_exit(char **str)
 	
 	if (!str || !str[0])
 		return (0);
-	printf("str[0] = %s\n", str[0]);
 	if (!ft_strncmp("clear", str[0], ft_strlen(str[0])))
 	{
 		if (str[1])
@@ -133,25 +132,33 @@ int	test(t_arg *s_cmd)
 	return (0);
 }
 
-int	loop_lst(char *str, t_arg *s_cmd, t_gc *garbage)
+int	loop_lst(char *str, t_arg *s_cm, t_gc *garbage)
 {
-	int	i;
-	t_arg	*save;
+	t_exec	ex;
+	t_arg	*s_cmd;
 
+	s_cmd = s_cm;
 	if (!str)
 		return (0);
-	save = s_cmd;
-	i = ft_lstsize_targ(s_cmd);
-	while (i)
+	garbage->nb_exec = ft_lstsize_targ(s_cmd);
+	if (init_t_exec(&ex, s_cmd, garbage))
+        return (1);
+	while (garbage->nb_exec)
 	{
+		// printf("-----------loooooping--------\n");
 		if (clear_or_exit(s_cmd->line))
 			return (1);
-		ft_init_exec(s_cmd, garbage, i);
+		ft_init_exec(s_cmd, garbage, &ex);
 		waitpid(-1, NULL, 0);
 		s_cmd = s_cmd->next;
-		i--;
+		garbage->nb_exec--;
+		for (int b = 0; garbage->blts->env[b]; b++)
+			printf("%s\n", garbage->blts->env[b]);	
 	}
+	free_tab(ex.paths);
+	// printf("fin de looop\n");
 	free_parsing(garbage->arg);
+	// printf("apres free_parsing\n");
 	return (0);
 }
 
@@ -168,6 +175,7 @@ t_gc	*in_minishell(void)
 		free(garbage);
 		return (NULL);
 	}
+	garbage->nb_exec = 0;
 	garbage->ret = 0;
 	while (1)
 	{
@@ -179,7 +187,7 @@ t_gc	*in_minishell(void)
 		// if (test(garbage->arg))
 		// 	garbage->arg->line = NULL;
 		if (loop_lst(garbage->line, garbage->arg, garbage))
-			break ;
+			break ;	
 	}
 	return (garbage);
 }

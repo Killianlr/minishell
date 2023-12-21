@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/21 12:40:00 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/21 18:06:35 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct garbage_colector
 	t_bui		*blts;
 	t_arg		*arg;
 	char		*line;
+	int			nb_exec;
 	int			ret;
 	int			fd_hdoc;
 }					t_gc;
@@ -247,9 +248,11 @@ char	*handle_quotes_hdoc(t_pars *pars, int l);
 
 int		pipex(int ac, char **av, t_exec *ex, char **envp);
 void	ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex);
-void	ft_init_exec(t_arg *s_cmd, t_gc *garbage, int lstsize);
+void	ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex);
+int 	init_t_exec(t_exec *ex, t_arg *s_cmd, t_gc *garbage);
 char	*find_path(char **envp);
 char	*get_cmd(char **paths, char	**cmd, char **envp);
 int		ft_lstsize_targ(t_arg *lst);
+void	reset_line(char **tabl);
 
 #endif

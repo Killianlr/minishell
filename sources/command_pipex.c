@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 11:56:31 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/21 11:40:11 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/21 18:12:58 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*get_cmd(char **paths, char	**cmd, char **envp)
 void	next(t_p pip, char **av, char **envp)
 {
 	close_pipes(&pip);
-	pip.args = ft_split(av[2 + pip.idx + pip.here_doc], ' ');
+	pip.args = ft_split(av[pip.idx], ' ');
 	pip.cmd = get_cmd(pip.path, pip.args, envp);
 	if (!pip.cmd)
 	{
@@ -65,9 +65,7 @@ void	child(t_p pip, char **av, char **envp)
 	pip.pid = fork();
 	if (!pip.pid)
 	{
-		if (pip.infile < 0)
-			dup2(pip.pipe[1], STDOUT_FILENO);
-		else if (pip.infile)
+		if (pip.idx == 0)
 		{
 			set_fd(pip.infile, pip.pipe[1]);
 			close(pip.outfile);
@@ -75,14 +73,12 @@ void	child(t_p pip, char **av, char **envp)
 		else if (pip.idx == pip.cmd_nbr - 1)
 		{
 			set_fd(pip.pipe[2 * pip.idx - 2], pip.outfile);
-			if (pip.infile)
-				close(pip.infile);
+			close(pip.infile);
 		}
 		else
 		{
 			set_fd(pip.pipe[2 * pip.idx - 2], pip.pipe[2 * pip.idx + 1]);
-			if (pip.infile)
-				close(pip.infile);
+			close(pip.infile);
 			close(pip.outfile);
 		}
 		next(pip, av, envp);

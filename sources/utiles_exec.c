@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 11:38:35 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/21 11:43:27 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/21 18:07:15 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,6 @@ int	msg_error(char *str, t_p *pip)
 		free(pip->cmd);
 	close(pip->infile);
 	close(pip->outfile);
-	if (pip->here_doc)
-		unlink(".heredoc_tmp");
 	exit (1);
 }
 
@@ -102,4 +100,20 @@ int	ft_lstsize_targ(t_arg *lst)
 		size++;
 	}
 	return (size);
+}
+
+void	reset_line(char **tabl)
+{
+	int		i;
+	char	*save;
+
+	i = 0;
+	save = tabl[0];
+	while (i < ft_strlen_tab(tabl))
+	{
+		tabl[i] = tabl[i + 1];
+		i++;
+	}
+	free(save);
+	tabl[i] = NULL;
 }

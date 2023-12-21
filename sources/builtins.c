@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:06 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/21 13:06:27 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/21 18:25:30 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,7 @@ int	ft_export(t_gc *garbage, char **args)
 				printf("declare -x %s\n", garbage->blts->exp[i]);
 				i++;
 			}
-			return (0);
+			return (2);
 		}
 		if (update_export(garbage, args))
 		{

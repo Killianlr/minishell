@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 11:39:50 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/21 11:40:49 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/21 15:04:27 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ typedef struct s_p
 {
 	int		infile;
 	int		outfile;
-	int		here_doc;
 	int		cmd_nbr;
 	int		pipe_nbr;
 	int		idx;
