@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/21 10:10:13 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/21 11:18:39 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,12 @@ typedef struct garbage_colector
 	int			fd_hdoc;
 }					t_gc;
 
-
+typedef struct s_copy_str
+{
+	int		y;
+	char	*quote;
+	int		size;
+}			t_cs;
 
 typedef struct pars
 {
@@ -174,7 +179,9 @@ int		go_to_find_var_and_del(t_bui *blts, char *str);
 
 int		cd_set_pwd(t_bui *blts);
 
-t_arg	*main_pars(char *str, t_bui *blts, t_gc *garbage);
+t_arg	*main_pars(char *str, t_bui *blts, t_gc *garbage);		//pars.c
+t_arg	*parsing(t_pars *pars, t_gc *garbage);
+t_arg	*create_arg(t_pars *pars);
 
 void	free_parsing(t_arg *cmd);		//p_free.c
 void	print_cmd(t_arg *cmd);
@@ -222,6 +229,6 @@ char	*get_del_hdoc(t_pars *pars, int l);		//p_hdoc.c
 int		get_here_doc(char *av, int fd);
 int		size_for_del(t_pars *pars, int l);
 int		scan_av_for_hdoc(t_pars *pars, int fd_hdoc);
-
+char	*handle_quotes_hdoc(t_pars *pars, int l);
 
 #endif

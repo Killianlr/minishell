@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_quote.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:06:01 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/20 23:01:30 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/21 10:05:01 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	handle_quote_3(t_pars *pars, t_hq *data)
 				return ;
 			data->y = ft_strlen(data->buf);
 			data->i = after_var_env(pars, data->i);
-				if (data->i < 0)
+			if (data->i < 0)
 				return ;
 		}
 		if (is_quote(pars->av[data->i]) == 2)

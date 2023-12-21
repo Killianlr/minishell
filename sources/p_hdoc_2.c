@@ -3,14 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   p_hdoc_2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/20 23:28:28 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/20 23:31:23 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/21 10:33:12 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	size_for_del(t_pars *pars, int l)
+{
+	int		i;
+	int		count;
+	char	*quote;
+
+	i = l;
+	count = 0;
+	quote = NULL;
+	while (pars->av[i])
+	{
+		if ((is_whitespace(pars->av[i]) || is_sep(pars->av[i])))
+			break ;
+		else if (is_quote(pars->av[i]))
+		{
+			quote = handle_quotes_hdoc(pars, i);
+			count += (int)ft_strlen(quote);
+			free(quote);
+			i = quote_is_closed(pars, i);
+		}
+		if (is_printable(pars->av[i]) && !is_quote(pars->av[i])
+			&& !is_sep(pars->av[i]))
+			count++;
+		i++;
+	}
+	return (count);
+}
 
 char	*get_del_hdoc_2(t_pars *pars, t_gdh *data, char *ret)
 {
