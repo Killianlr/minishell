@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:21 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/15 14:25:18 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/21 11:15:40 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	exit_error(t_gc *garbage)
 	free_blts(garbage->blts);
 	free(garbage->blts);
 	free(garbage->line);
-	free_tab(garbage->args);
+	free_parsing(garbage->arg);
 	free(garbage);
 	printf("fin free error\n");
 	exit(0);
@@ -49,9 +49,9 @@ void	free_all(t_gc *garbage)
 	printf("DEBUT DU FREE\n");
 	if (!garbage)
 		return ;
+	free_parsing(garbage->arg);
 	free_blts(garbage->blts);
 	free(garbage->blts);
-	free_tab(garbage->args);
 	free(garbage);
 	printf("FIN DU PROGRAMME\n");
 }

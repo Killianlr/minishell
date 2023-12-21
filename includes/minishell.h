@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/20 23:39:10 by flavian          ###   ########.fr       */
+/*   Updated: 2023/12/21 10:10:13 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,14 @@ typedef struct 	s_get_in_env
 	int		j;
 }			t_gie;
 
+typedef struct count_word
+{
+	int		count;
+	int		i;
+	int		set;
+	char	*quote;
+}			t_wc;
+
 char	*ft_prompt(void);
 
 int		clear_terminal(void);
@@ -166,12 +174,12 @@ int		go_to_find_var_and_del(t_bui *blts, char *str);
 
 int		cd_set_pwd(t_bui *blts);
 
+t_arg	*main_pars(char *str, t_bui *blts, t_gc *garbage);
+
 void	free_parsing(t_arg *cmd);		//p_free.c
 void	print_cmd(t_arg *cmd);
 void	free_pars_tab(char **arr);
 int		ft_error(char *msg, int ret);
-
-
 
 int		is_printable(char c);		//p_is.c
 int		is_whitespace(char c);
