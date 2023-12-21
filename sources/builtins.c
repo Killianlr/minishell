@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:06 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/15 14:55:53 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/21 13:06:27 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,34 +16,60 @@ int	ft_define_var(t_gc *garbage, char **args)
 {
 	int	i;
 	int	val;
+	int	e;
 
 	i = 0;
+	e = 0;
 	if (!garbage->line)
 		return (0);
-	while (args[i])
+	while (args[i] && it_is_an_equal(args[i]))
 	{
-		if (it_is_an_equal(args[i]))
+		val = check_var_exist(garbage->blts->exp, args[i]);
+		if (val <= ft_strlen_tab(garbage->blts->exp))
 		{
-			val = check_var_exist(garbage->blts->exp, args[i]);
-			if (val <= ft_strlen_tab(garbage->blts->exp))
-			{
-				if (update_var(garbage->blts, args[i], val))
-					return (1);
-			}
+			if (update_var(garbage->blts, args[i], val))
+				return (1);
 		}
 		i++;
+		e++;
 	}
+	if (e > 0)
+		return (2);
 	return (0);
 }
 
 int	ft_put_ret_value(t_gc *garbage, char **args)
 {
+	int		pid;
+	char	**paths;
+	char	*cmd_tab[2];
+	char	*cmd;
+
 	if (!garbage->line)
 		return (0);
 	if (!ft_strncmp(args[0], "$?", 4))
 	{
-		ft_putnbr_fd(garbage->ret, STDOUT_FILENO);
-		write(STDOUT_FILENO, ": command not found\n", 21);
+		pid = fork();
+		if (pid == -1)
+			return (1);
+		if (pid == 0)
+		{
+			cmd_tab[0] = ft_itoa(garbage->ret);
+			cmd_tab[1] = NULL;
+			paths = ft_split(find_path(garbage->blts->env), ':');
+			cmd = get_cmd(paths, cmd_tab, garbage->blts->env);
+			if (!cmd)
+			{
+				write(2, ": command not found\n", 21);
+				write(2, cmd_tab[0], ft_strlen(cmd_tab[0]));
+				write(2, "\n", 1);
+				free_tab(paths);
+				garbage->ret = 127;
+				exit(0);
+			}
+			execve(cmd, cmd_tab, garbage->blts->env);
+		}
+		return (2);
 	}
 	return (0);
 }
@@ -84,6 +110,7 @@ int	ft_echo(t_gc *garbage, char **args)
 		if (!e)
 			write(STDOUT_FILENO, "\n", 1);
 		garbage->ret = 0;
+		return (2);
 	}
 	return (0);
 }
@@ -96,7 +123,7 @@ int	ft_cd(t_gc *garbage, char **args)
 	{
 		garbage->ret = 0;
 		if (!args[1])
-			return (0);
+			return (2);
 		if (chdir(args[1]))
 		{
 			printf("minishell: cd: %s: No such file or directory\n", args[1]);
@@ -111,6 +138,7 @@ int	ft_cd(t_gc *garbage, char **args)
 				return (1);
 			}
 		}
+		return (2);
 	}
 	return (0);
 }
@@ -129,6 +157,7 @@ int	ft_unset(t_gc *garbage, char **args)
 			garbage->ret = 1;
 			return (1);
 		}
+		return (2);
 	}
 	return (0);
 }
@@ -157,6 +186,7 @@ int	ft_export(t_gc *garbage, char **args)
 			garbage->ret = 1;
 			return (1);
 		}
+		return (2);
 	}
 	return (0);
 }
@@ -176,6 +206,7 @@ int	ft_env(t_gc *garbage, char **args)
 			garbage->ret = 1;
 			return (1);
 		}
+		return (2);
 	}
 	return (0);
 }
@@ -197,6 +228,7 @@ int	ft_pwd(t_gc *garbage, char **args)
 		}
 		printf("%s\n", pwd);
 		free(pwd);
+		return (2);
 	}
 	return (0);
 }

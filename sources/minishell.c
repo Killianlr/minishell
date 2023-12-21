@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:43 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/21 11:15:22 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/21 13:10:31 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 
 int	clear_or_exit(char **str)
 {
-	if (!str)
+	
+	if (!str || !str[0])
 		return (0);
+	printf("str[0] = %s\n", str[0]);
 	if (!ft_strncmp("clear", str[0], ft_strlen(str[0])))
 	{
 		if (str[1])
@@ -32,23 +34,51 @@ int	clear_or_exit(char **str)
 
 int	is_builtins(t_gc *garbage, char **args)
 {
+	int	i;
+
+	i = 0;
 	if (!args)
 		return (0);
-	if (ft_env(garbage, args))
-		return (1);
-	if (ft_pwd(garbage, args))
-		return (1);
-	if (ft_export(garbage, args))
-		return (1);
-	if (ft_unset(garbage, args))
-		return (1);
-	if (ft_cd(garbage, args))
-		return (1);
-	if (ft_echo(garbage, args))
-		return (1);
-	if (ft_define_var(garbage, args))
-		return (1);
-	ft_put_ret_value(garbage, args);
+	i = ft_env(garbage, args);
+	if (i == 1)
+		exit_error(garbage);
+	else if (i == 2)
+		return (2);
+	i = ft_pwd(garbage, args);
+	if (i == 1)
+		exit_error(garbage);
+	else if (i == 2)
+		return (2);
+	i = ft_export(garbage, args);
+	if (i == 1)
+		exit_error(garbage);
+	else if (i == 2)
+		return (2);
+	i = ft_unset(garbage, args);
+	if (i == 1)
+		exit_error(garbage);
+	else if (i == 2)
+		return (2);
+	i = ft_cd(garbage, args);
+	if (i == 1)
+		exit_error(garbage);
+	else if (i == 2)
+		return (2);
+	i = ft_echo(garbage, args);
+	if (i == 1)
+		exit_error(garbage);
+	else if (i == 2)
+		return (2);
+	i = ft_define_var(garbage, args);
+	if (i == 1)
+		exit_error(garbage);
+	else if (i == 2)
+		return (2);
+	i = ft_put_ret_value(garbage, args);
+	if (i == 1)
+		exit_error(garbage);
+	else if (i == 2)
+		return (2);
 	return (0);
 }
 
@@ -103,19 +133,6 @@ int	test(t_arg *s_cmd)
 	return (0);
 }
 
-int	ft_lstsize_targ(t_arg *lst)
-{
-	int	size;
-
-	size = 0;
-	while (lst)
-	{
-		lst = lst->next;
-		size++;
-	}
-	return (size);
-}
-
 int	loop_lst(char *str, t_arg *s_cmd, t_gc *garbage)
 {
 	int	i;
@@ -129,8 +146,8 @@ int	loop_lst(char *str, t_arg *s_cmd, t_gc *garbage)
 	{
 		if (clear_or_exit(s_cmd->line))
 			return (1);
-		if (is_builtins(garbage, s_cmd->line))
-			return (1);
+		ft_init_exec(s_cmd, garbage, i);
+		waitpid(-1, NULL, 0);
 		s_cmd = s_cmd->next;
 		i--;
 	}

@@ -31,6 +31,11 @@ MY_SOURCES = 	minishell.c \
 				p_utils.c \
 				p_utils_2.c \
 				p_free.c \
+				command_pipex.c \
+				free_pipex.c \
+				ft_exec.c \
+				pipex.c \
+				utiles_exec.c \
 
 SOURCES_DIR = sources
 SOURCES = $(addprefix $(SOURCES_DIR)/, $(MY_SOURCES))

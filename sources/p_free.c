@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_free.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 16:17:12 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/21 11:19:42 by fserpe           ###   ########.fr       */
+/*   Updated: 2023/12/21 13:14:02 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,11 @@ void	free_pars_tab(char **arr)
 	int	i;
 
 	i = 0;
+	if (!arr[i])
+	{
+		free(arr);
+		return ;
+	}
 	while (arr[i])
 	{
 		free(arr[i]);
