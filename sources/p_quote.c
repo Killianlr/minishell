@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:06:01 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/21 14:42:17 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/03 14:43:10 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,28 @@
 int	count_quote(t_pars *pars)
 {
 	int	i;
+	int	set;
 	int	s_count;
 	int	d_count;
 
 	i = 0;
 	s_count = 0;
 	d_count = 0;
+	set = 0;
 	while (pars->av[i])
 	{
-		if (is_quote(pars->av[i]) == 1)
+		if (is_quote(pars->av[i]) == 1 && set != 2)
+		{
 			s_count++;
-		if (is_quote(pars->av[i]) == 2)
+			set = 1;
+		}
+		else if (is_quote(pars->av[i]) == 2 && set != 1)
+		{
 			d_count++;
+			set = 2;
+		}
+		if (s_count % 2 == 0 && d_count % 2 == 0)
+			set = 0;
 		i++;
 	}
 	if (s_count % 2 != 0 || d_count % 2 != 0)
@@ -90,12 +100,6 @@ void	handle_quote_2(t_pars *pars, t_hq *data)
 	if (is_quote(pars->av[data->i]) == 1)
 	{
 		data->i++;
-		if (pars->av[data->i] == '$' && pars->av[data->i + 1] == '?')
-		{
-			free(data->buf);
-			data->buf = ft_strdup("'$?'");
-			return ;
-		}
 		while (pars->av[data->i] && data->i < data->end)
 			data->buf[data->y++] = pars->av[data->i++];
 	}
@@ -121,7 +125,7 @@ char	*handle_quotes(t_pars *pars, int l)
 		return (NULL);
 	while (pars->av[data->i] && !is_quote(pars->av[data->i]))
 		data->i++;
-	data->buf = malloc(sizeof(char) * (data->end - data->i + 1));
+	data->buf = ft_calloc(data->end - data->i + 1, sizeof(char));
 	if (!data->buf)
 		return (NULL);
 	data->buf[0] = 0;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:43 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/21 11:15:22 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/03 15:10:06 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 int	clear_or_exit(char **str)
 {
-	if (!str)
+	
+	if (!str || !str[0])
 		return (0);
 	if (!ft_strncmp("clear", str[0], ft_strlen(str[0])))
 	{
@@ -32,23 +33,51 @@ int	clear_or_exit(char **str)
 
 int	is_builtins(t_gc *garbage, char **args)
 {
+	int	i;
+
+	i = 0;
 	if (!args)
 		return (0);
-	if (ft_env(garbage, args))
-		return (1);
-	if (ft_pwd(garbage, args))
-		return (1);
-	if (ft_export(garbage, args))
-		return (1);
-	if (ft_unset(garbage, args))
-		return (1);
-	if (ft_cd(garbage, args))
-		return (1);
-	if (ft_echo(garbage, args))
-		return (1);
-	if (ft_define_var(garbage, args))
-		return (1);
-	ft_put_ret_value(garbage, args);
+	i = ft_env(garbage, args);
+	if (i == 1)
+		exit_error(garbage);
+	else if (i == 2)
+		return (2);
+	i = ft_pwd(garbage, args);
+	if (i == 1)
+		exit_error(garbage);
+	else if (i == 2)
+		return (2);
+	i = ft_export(garbage, args);
+	if (i == 1)
+		exit_error(garbage);
+	else if (i == 2)
+		return (2);
+	i = ft_unset(garbage, args);
+	if (i == 1)
+		exit_error(garbage);
+	else if (i == 2)
+		return (2);
+	i = ft_cd(garbage, args);
+	if (i == 1)
+		exit_error(garbage);
+	else if (i == 2)
+		return (2);
+	i = ft_echo(garbage, args);
+	if (i == 1)
+		exit_error(garbage);
+	else if (i == 2)
+		return (2);
+	i = ft_define_var(garbage, args);
+	if (i == 1)
+		exit_error(garbage);
+	else if (i == 2)
+		return (2);
+	i = ft_put_ret_value(garbage, args);
+	if (i == 1)
+		exit_error(garbage);
+	else if (i == 2)
+		return (2);
 	return (0);
 }
 
@@ -103,38 +132,33 @@ int	test(t_arg *s_cmd)
 	return (0);
 }
 
-int	ft_lstsize_targ(t_arg *lst)
+int	loop_lst(char *str, t_arg *s_cm, t_gc *garbage)
 {
-	int	size;
+	t_exec	ex;
+	t_arg	*s_cmd;
 
-	size = 0;
-	while (lst)
-	{
-		lst = lst->next;
-		size++;
-	}
-	return (size);
-}
-
-int	loop_lst(char *str, t_arg *s_cmd, t_gc *garbage)
-{
-	int	i;
-	t_arg	*save;
-
-	if (!str)
+	s_cmd = s_cm;
+	if (!str || !s_cm)
 		return (0);
-	save = s_cmd;
-	i = ft_lstsize_targ(s_cmd);
-	while (i)
+	garbage->nb_exec = ft_lstsize_targ(s_cmd);
+	if (init_t_exec(&ex, s_cmd, garbage))
+        return (1);
+	while (garbage->nb_exec)
 	{
+		// printf("-----------loooooping--------\n");
 		if (clear_or_exit(s_cmd->line))
 			return (1);
-		if (is_builtins(garbage, s_cmd->line))
-			return (1);
+		ft_init_exec(s_cmd, garbage, &ex);
+		waitpid(-1, NULL, 0);
 		s_cmd = s_cmd->next;
-		i--;
+		garbage->nb_exec--;
+		// for (int b = 0; garbage->blts->env[b]; b++)
+		// 	printf("%s\n", garbage->blts->env[b]);	
 	}
+	free_tab(ex.paths);
+	// printf("fin de looop\n");
 	free_parsing(garbage->arg);
+	// printf("apres free_parsing\n");
 	return (0);
 }
 
@@ -151,7 +175,9 @@ t_gc	*in_minishell(void)
 		free(garbage);
 		return (NULL);
 	}
+	garbage->nb_exec = 0;
 	garbage->ret = 0;
+	garbage->fd_hdoc = 0;
 	while (1)
 	{
 		garbage->arg = NULL;
@@ -162,7 +188,7 @@ t_gc	*in_minishell(void)
 		// if (test(garbage->arg))
 		// 	garbage->arg->line = NULL;
 		if (loop_lst(garbage->line, garbage->arg, garbage))
-			break ;
+			break ;	
 	}
 	return (garbage);
 }

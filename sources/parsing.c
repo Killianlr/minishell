@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:04 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/21 14:34:59 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/03 14:08:38 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ t_arg	*create_arg(t_pars *pars)
 	t_arg	*arg;
 
 	arg = malloc(sizeof(t_arg));
+	if (!arg)
+		return (NULL);
 	arg->line = get_line(pars);
 	if (!arg->line)
 	{

@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:11 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/15 14:23:23 by kle-rest         ###   ########.fr       */
+/*   Updated: 2023/12/21 18:40:23 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ int	print_env(t_gc *garbage)
 	int	i;
 
 	i = 0;
+	printf("mon env\n");
 	while (garbage->blts->env[i])
 	{
 		printf("%s\n", garbage->blts->env[i]);

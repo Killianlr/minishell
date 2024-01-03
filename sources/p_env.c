@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 11:49:41 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/21 14:02:49 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/03 14:38:09 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ char	*get_in_env_2(char **env, char *str, t_gie *data)
 	while (env[data->i][data->y])
 		data->buf[data->j++] = env[data->i][data->y++];
 	data->buf[data->j] = 0;
-	free(str);
 	return (data->buf);
 }
 
@@ -65,9 +64,10 @@ char	*get_in_env(char **env, char *str)
 	{
 		data->y = 0;
 		data->j = 0;
-		if (!ft_strncmp(env[data->i], str, ft_strlen(str)))
+		if (!env_strncmp(env[data->i], str, ft_strlen(str)))
 		{
 			get_in_env_2(env, str, data);
+			free(str);
 			return (get_in_env_3(ret, data));
 		}
 		data->i++;
@@ -88,6 +88,8 @@ char	*get_var_env(t_pars *pars, int i)
 		return (NULL);
 	if (pars->av[i + 1])
 		i++;
+	else
+		return (ft_strdup("$"));
 	y = get_var_env_2(pars, i);
 	j = i;
 	buf = malloc(sizeof(char) * y + 1);
@@ -99,11 +101,6 @@ char	*get_var_env(t_pars *pars, int i)
 		&& !is_sep(pars->av[j]) && !is_quote(pars->av[j]))
 		buf[y++] = pars->av[j++];
 	buf[y] = 0;
-	if (buf[0] == '?' && !buf[1])
-	{
-		free(buf);
-		return (ft_strdup("$?"));
-	}
 	buf = get_in_env(pars->env, buf);
 	return (buf);
 }

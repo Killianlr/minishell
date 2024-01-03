@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/21 11:18:39 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/03 14:24:54 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct garbage_colector
 	t_bui		*blts;
 	t_arg		*arg;
 	char		*line;
+	int			nb_exec;
 	int			ret;
 	int			fd_hdoc;
 }					t_gc;
@@ -126,10 +127,24 @@ typedef struct count_word
 	char	*quote;
 }			t_wc;
 
+typedef struct exec
+{
+    int *infile;
+    int i;
+    int *outfile;
+    int o;
+    char **paths;
+    int res_pipex;
+    int r;
+}           t_exec;
+
+
+
 char	*ft_prompt(void);
 
 int		clear_terminal(void);
 
+int	is_builtins(t_gc *garbage, char **args);
 t_gc	*in_minishell(void);
 
 t_bui	*set_builtins(void);
@@ -200,6 +215,9 @@ int		ms_strjoin_size(char *s1, char *s2, int size);
 int		ms_strcmp(char *s1, char *s2, int n);
 char	*no_quote(t_pars *pars);
 
+int		env_strncmp(char *s1, char *s2, int n);
+
+
 int		get_var_env_2(t_pars *pars, int i);			//p_utils_2.c
 int		ft_strncmp_ms(char *s1,  char *s2, int size, int l);
 
@@ -211,6 +229,7 @@ int		count_sep(t_pars *pars);
 char	*get_in_env(char **env, char *str);		//p_env.c
 char	*get_var_env(t_pars *pars, int i);
 int		after_var_env(t_pars *pars, int i);
+
 
 char	*get_sep(t_pars *pars);			//p_sep.c
 int		get_sep_size(t_pars *pars);
@@ -230,5 +249,14 @@ int		get_here_doc(char *av, int fd);
 int		size_for_del(t_pars *pars, int l);
 int		scan_av_for_hdoc(t_pars *pars, int fd_hdoc);
 char	*handle_quotes_hdoc(t_pars *pars, int l);
+
+int		pipex(int ac, char **av, t_exec *ex, char **envp);
+void	ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex);
+void	ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex);
+int 	init_t_exec(t_exec *ex, t_arg *s_cmd, t_gc *garbage);
+char	*find_path(char **envp);
+char	*get_cmd(char **paths, char	**cmd, char **envp);
+int		ft_lstsize_targ(t_arg *lst);
+void	reset_line(char **tabl);
 
 #endif

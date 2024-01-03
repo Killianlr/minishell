@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 11:44:50 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/21 14:34:45 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/03 12:42:33 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,10 @@ char	**get_line(t_pars *pars)
 			pars->i++;
 		buf[y] = copy_str(pars);
 		if (!buf[y])
+		{
+			free_pars_tab(buf);	
 			return (NULL);
+		}
 		y++;
 		word_count--;
 	}
