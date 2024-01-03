@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:43 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/21 18:44:25 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/02 14:46:14 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,8 +152,8 @@ int	loop_lst(char *str, t_arg *s_cm, t_gc *garbage)
 		waitpid(-1, NULL, 0);
 		s_cmd = s_cmd->next;
 		garbage->nb_exec--;
-		for (int b = 0; garbage->blts->env[b]; b++)
-			printf("%s\n", garbage->blts->env[b]);	
+		// for (int b = 0; garbage->blts->env[b]; b++)
+		// 	printf("%s\n", garbage->blts->env[b]);	
 	}
 	free_tab(ex.paths);
 	// printf("fin de looop\n");

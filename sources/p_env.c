@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_env.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 11:49:41 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/19 16:39:38 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/02 14:57:44 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ char	*get_in_env_2(char **env, char *str, t_gie *data)
 	while (env[data->i][data->y])
 		data->buf[data->j++] = env[data->i][data->y++];
 	data->buf[data->j] = 0;
-	free(str);
 	return (data->buf);
 }
 
@@ -68,6 +67,7 @@ char	*get_in_env(char **env, char *str)
 		if (!ft_strncmp(env[data->i], str, ft_strlen(str)))
 		{
 			get_in_env_2(env, str, data);
+			free(str);
 			return (get_in_env_3(ret, data));
 		}
 		data->i++;

@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:02:50 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/20 23:01:59 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/02 14:53:07 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ char	*ms_strjoin(char *s1, char *s2, int status)
 
 	if (!s1)
 		return (s2);
+	if (!s2)
+		return (s1);
 	str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!str)
 		return (0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_free.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 16:17:12 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/21 18:10:08 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/02 14:45:18 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	print_cmd(t_arg *cmd)
 	int	i;
 
 	i = 0;
+	(void) i;
 	if (!cmd)
 		return ;
 // 	while (cmd->next)

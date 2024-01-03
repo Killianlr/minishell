@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_copy_str.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 10:32:14 by fserpe            #+#    #+#             */
-/*   Updated: 2023/12/21 13:48:06 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/02 14:55:08 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@ char	*copy_str_4(t_pars *pars, t_cs *data, char *buf)
 	if (!buf)
 		return (NULL);
 	data->y = ft_strlen(buf);
+	while (pars->av[pars->i] && (!is_whitespace(pars->av[pars->i])
+		|| !is_sep(pars->av[pars->i])))
+		pars->i++;
 	return (buf);
 }
 
@@ -49,18 +52,24 @@ char	*copy_str_2(t_pars *pars, t_cs *data, char *buf)
 			buf = copy_str_3(pars, data, buf);
 			if (!buf)
 				return (NULL);
+			if (!pars->av[pars->i])
+				break;
 		}
 		else if (is_var_env(pars->av[pars->i]))
 		{
 			buf = copy_str_4(pars, data, buf);
 			if (!buf)
 				return (NULL);
+			if (!pars->av[pars->i])
+				break;
 		}
 		else if (!is_quote(pars->av[pars->i]) && !is_var_env(pars->av[pars->i])
 			&& !is_sep(pars->av[pars->i]) && !is_whitespace(pars->av[pars->i]))
 		{
 			buf[data->y] = pars->av[pars->i];
 			data->y++;
+			if (!pars->av[pars->i])
+				break;
 		}
 		pars->i++;
 	}
