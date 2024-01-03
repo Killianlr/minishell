@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/20 17:35:39 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/21 10:25:52 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/03 15:07:56 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	get_here_doc_2(char *av, int fd, char *buf)
 			break ;
 		}
 		write(fd, buf, ft_strlen(buf));
-		write(fd, "\n", 1);
+		// write(fd, "\n", 1);
 		free(buf);
 	}
 	free(av);

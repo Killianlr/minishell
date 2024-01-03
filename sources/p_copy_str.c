@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_copy_str.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 10:32:14 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/02 14:55:08 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/03 14:21:30 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,19 @@ char	*copy_str_4(t_pars *pars, t_cs *data, char *buf)
 
 char	*copy_str_3(t_pars *pars, t_cs *data, char *buf)
 {
-	if (is_quote(pars->av[pars->i]) && quote_is_closed(pars, pars->i))
-	{
-		data->quote = handle_quotes(pars, pars->i);
-		if (!data->quote)
-			return (NULL);
-		if (!ms_strjoin_size(buf, data->quote, data->size))
-			return (NULL);
-		data->y = ft_strlen(buf);
-		if (quote_is_closed(pars, pars->i) > 0)
-			pars->i = quote_is_closed(pars, pars->i);
-		else
-			return (ft_strdup(""));
-	}
+	// if (is_quote(pars->av[pars->i]) && quote_is_closed(pars, pars->i))
+	// {
+	data->quote = handle_quotes(pars, pars->i);
+	if (!data->quote)
+		return (NULL);
+	if (!ms_strjoin_size(buf, data->quote, data->size))
+		return (NULL);
+	data->y = ft_strlen(buf);
+	if (quote_is_closed(pars, pars->i) > 0)
+		pars->i = quote_is_closed(pars, pars->i);
+	else
+		return (ft_strdup(""));
+	// }
 	return (buf);
 }
 
@@ -53,7 +53,7 @@ char	*copy_str_2(t_pars *pars, t_cs *data, char *buf)
 			if (!buf)
 				return (NULL);
 			if (!pars->av[pars->i])
-				break;
+				break ;
 		}
 		else if (is_var_env(pars->av[pars->i]))
 		{
@@ -61,7 +61,7 @@ char	*copy_str_2(t_pars *pars, t_cs *data, char *buf)
 			if (!buf)
 				return (NULL);
 			if (!pars->av[pars->i])
-				break;
+				break ;
 		}
 		else if (!is_quote(pars->av[pars->i]) && !is_var_env(pars->av[pars->i])
 			&& !is_sep(pars->av[pars->i]) && !is_whitespace(pars->av[pars->i]))
@@ -94,6 +94,6 @@ char	*copy_str(t_pars *pars)
 	while (pars->av[pars->i] && is_whitespace(pars->av[pars->i]))
 		pars->i++;
 	buf = copy_str_2(pars, data, buf);
-	free (data);
+	free(data);
 	return (buf);
 }

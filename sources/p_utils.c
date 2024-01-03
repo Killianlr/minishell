@@ -3,14 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   p_utils.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:02:50 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/02 14:53:07 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/03 14:37:52 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	env_strncmp(char *s1, char *s2, int n)
+{
+	int	i;
+
+	i = 0;
+	if (n <= 0)
+		return (-1);
+	if (!s1 || !s2)
+		return (1);
+	while (s1[i] == s2[i] && i < n - 1 && s1[i] && s2[i])
+		++i;
+	if (s1[i + 1] && s1[i + 1] != '=')
+		return (1);
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+}
 
 int	ms_strcmp(char *s1, char *s2, int n)
 {

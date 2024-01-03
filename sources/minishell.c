@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:43 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/02 14:46:14 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/03 15:10:06 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ int	loop_lst(char *str, t_arg *s_cm, t_gc *garbage)
 	t_arg	*s_cmd;
 
 	s_cmd = s_cm;
-	if (!str)
+	if (!str || !s_cm)
 		return (0);
 	garbage->nb_exec = ft_lstsize_targ(s_cmd);
 	if (init_t_exec(&ex, s_cmd, garbage))
@@ -177,6 +177,7 @@ t_gc	*in_minishell(void)
 	}
 	garbage->nb_exec = 0;
 	garbage->ret = 0;
+	garbage->fd_hdoc = 0;
 	while (1)
 	{
 		garbage->arg = NULL;

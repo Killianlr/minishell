@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/21 18:06:35 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/03 14:24:54 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,6 +215,9 @@ int		ms_strjoin_size(char *s1, char *s2, int size);
 int		ms_strcmp(char *s1, char *s2, int n);
 char	*no_quote(t_pars *pars);
 
+int		env_strncmp(char *s1, char *s2, int n);
+
+
 int		get_var_env_2(t_pars *pars, int i);			//p_utils_2.c
 int		ft_strncmp_ms(char *s1,  char *s2, int size, int l);
 
@@ -226,6 +229,7 @@ int		count_sep(t_pars *pars);
 char	*get_in_env(char **env, char *str);		//p_env.c
 char	*get_var_env(t_pars *pars, int i);
 int		after_var_env(t_pars *pars, int i);
+
 
 char	*get_sep(t_pars *pars);			//p_sep.c
 int		get_sep_size(t_pars *pars);

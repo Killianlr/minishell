@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_env.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 11:49:41 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/02 14:57:44 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/03 14:38:09 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ char	*get_in_env(char **env, char *str)
 	{
 		data->y = 0;
 		data->j = 0;
-		if (!ft_strncmp(env[data->i], str, ft_strlen(str)))
+		if (!env_strncmp(env[data->i], str, ft_strlen(str)))
 		{
 			get_in_env_2(env, str, data);
 			free(str);
@@ -88,6 +88,8 @@ char	*get_var_env(t_pars *pars, int i)
 		return (NULL);
 	if (pars->av[i + 1])
 		i++;
+	else
+		return (ft_strdup("$"));
 	y = get_var_env_2(pars, i);
 	j = i;
 	buf = malloc(sizeof(char) * y + 1);

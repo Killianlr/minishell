@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exec.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 11:38:09 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/21 18:28:06 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/03 15:05:16 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int count_sep_exec(t_arg *s_cmd, char *sep1, char *sep2)
     return (i);
 }
 
-int ft_open(char *file, int typeofsep)
+int ft_open(char *file, int typeofsep, t_gc *garbage)
 {
 	printf("file = %s\n", file);
     if (typeofsep == 1)
@@ -74,8 +74,7 @@ int ft_open(char *file, int typeofsep)
     }
     else if (typeofsep == 3)
     {
-        printf("is heredoc\n");
-        return (10);
+        return (garbage->fd_hdoc);
     }
     else if (typeofsep == 4)
     {
@@ -171,13 +170,13 @@ int init_t_exec(t_exec *ex, t_arg *s_cmd, t_gc *garbage)
     return (0);
 }
 
-int init_open(t_exec *ex, t_arg *s_cmd, int typeofsep)
+int init_open(t_exec *ex, t_arg *s_cmd, int typeofsep, t_gc *garbage)
 {
     if (typeofsep && typeofsep % 2 == 0)
     {
         printf("outfile open\n");
         ex->o++;
-        ex->outfile[ex->o] = ft_open(s_cmd->next->line[0], typeofsep);
+        ex->outfile[ex->o] = ft_open(s_cmd->next->line[0], typeofsep, garbage);
         if (ex->outfile[ex->o] == -1)
         {
             printf("error access file or open %s ", s_cmd->next->line[0]);
@@ -188,7 +187,7 @@ int init_open(t_exec *ex, t_arg *s_cmd, int typeofsep)
     if (typeofsep && typeofsep % 2 == 1 && typeofsep != 5)
     {
         ex->i++;
-        ex->infile[ex->i] = ft_open(s_cmd->next->line[0], typeofsep);
+        ex->infile[ex->i] = ft_open(s_cmd->next->line[0], typeofsep, garbage);
         if (ex->infile[ex->i] == -1)
         {
             printf("error access file or open %s\n", s_cmd->next->line[0]);
@@ -276,7 +275,7 @@ void    ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
     typeofsep = 0;
     // printf("A\n");
     typeofsep = check_sep_exec(s_cmd);
-    if (init_open(ex, s_cmd, typeofsep))
+    if (init_open(ex, s_cmd, typeofsep, garbage))
         return ;
     if (typeofsep == 5)
 	{

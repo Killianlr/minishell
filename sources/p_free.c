@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_free.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 16:17:12 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/02 14:45:18 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/03 13:07:06 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,18 @@ void	print_cmd(t_arg *cmd)
 	(void) i;
 	if (!cmd)
 		return ;
-// 	while (cmd->next)
-// 	{
-// 		while (cmd->line[i])
-// 			ft_printf("line = %s\n", cmd->line[i++]);
-// 		ft_printf("sep = %s\n", cmd->sep);
-// 		if (cmd->next)
-// 			cmd = cmd->next;
-// 	}
-// 	i = 0;
-// 	while (cmd->line[i])
-// 		ft_printf("line = %s\n", cmd->line[i++]);
-// 	ft_printf("sep = %s\n", cmd->sep);
+	while (cmd->next)
+	{
+		while (cmd->line[i])
+			ft_printf("line = %s\n", cmd->line[i++]);
+		ft_printf("sep = %s\n", cmd->sep);
+		if (cmd->next)
+			cmd = cmd->next;
+	}
+	i = 0;
+	while (cmd->line[i])
+		ft_printf("line = %s\n", cmd->line[i++]);
+	ft_printf("sep = %s\n", cmd->sep);
 }
 
 void	free_pars_tab(char **arr)
