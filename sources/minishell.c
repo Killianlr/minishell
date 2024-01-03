@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:43 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/03 15:10:06 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/03 16:50:59 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	is_builtins(t_gc *garbage, char **args)
 		exit_error(garbage);
 	else if (i == 2)
 		return (2);
-	i = ft_export(garbage, args);
+	i = ft_export(garbage, args, 0);
 	if (i == 1)
 		exit_error(garbage);
 	else if (i == 2)
@@ -145,20 +145,24 @@ int	loop_lst(char *str, t_arg *s_cm, t_gc *garbage)
         return (1);
 	while (garbage->nb_exec)
 	{
-		// printf("-----------loooooping--------\n");
 		if (clear_or_exit(s_cmd->line))
+		{
+			free_tab(ex.paths);
 			return (1);
+		}
+		if (!garbage->go)
+			break ;
+		// printf("s_cmd->line[0] = %s\n", s_cmd->line[0]);
+		// printf("garbage->go = %d\n", garbage->go);
 		ft_init_exec(s_cmd, garbage, &ex);
 		waitpid(-1, NULL, 0);
 		s_cmd = s_cmd->next;
 		garbage->nb_exec--;
-		// for (int b = 0; garbage->blts->env[b]; b++)
-		// 	printf("%s\n", garbage->blts->env[b]);	
 	}
 	free_tab(ex.paths);
-	// printf("fin de looop\n");
+	// printf("garbage->arg->line[0] = %s\n", garbage->arg->line[0]);
+	garbage->arg = s_cm;
 	free_parsing(garbage->arg);
-	// printf("apres free_parsing\n");
 	return (0);
 }
 
@@ -177,6 +181,7 @@ t_gc	*in_minishell(void)
 	}
 	garbage->nb_exec = 0;
 	garbage->ret = 0;
+	garbage->go = 1;
 	garbage->fd_hdoc = 0;
 	while (1)
 	{
@@ -185,10 +190,8 @@ t_gc	*in_minishell(void)
 		if ((int)ft_strlen(garbage->line))
 			garbage->arg = main_pars(garbage->line, garbage->blts, garbage);
 		free(garbage->line);
-		// if (test(garbage->arg))
-		// 	garbage->arg->line = NULL;
 		if (loop_lst(garbage->line, garbage->arg, garbage))
-			break ;	
+			break ;
 	}
 	return (garbage);
 }
@@ -197,8 +200,8 @@ int	main(void)
 {
 	t_gc	*garbage;
 
-	if (clear_terminal())
-		return (1);
+	// if (clear_terminal())
+	// 	return (1);
 	if (signal_init())
 		return (1);
 	garbage = in_minishell();

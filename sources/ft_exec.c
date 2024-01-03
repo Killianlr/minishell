@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exec.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 11:38:09 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/03 15:05:16 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/03 16:44:45 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int count_sep_exec(t_arg *s_cmd, char *sep1, char *sep2)
     return (i);
 }
 
-int ft_open(char *file, int typeofsep, t_gc *garbage)
+int ft_open(char *file, int typeofsep)
 {
 	printf("file = %s\n", file);
     if (typeofsep == 1)
@@ -74,7 +74,8 @@ int ft_open(char *file, int typeofsep, t_gc *garbage)
     }
     else if (typeofsep == 3)
     {
-        return (garbage->fd_hdoc);
+        printf("is heredoc\n");
+        return (10);
     }
     else if (typeofsep == 4)
     {
@@ -93,14 +94,19 @@ void    ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex)
 {
 	int 	pid;
 	char	*cmd_path;
-	char	buf[2];
+	char	buf[4096];
 
-    (void)buf;
     (void)ex;
 	pid = fork();
 	if (pid == -1)
 		return ;
-	if (!pid)
+    if (pid > 0)
+    {
+        ft_export(garbage, s_cmd->line, 1);
+        ft_define_var(garbage, s_cmd->line);
+	    ft_unset(garbage, s_cmd->line);
+    }
+	else
 	{
 		if (ex->infile && ex->infile[ex->i] > 0)
 		{
@@ -112,29 +118,21 @@ void    ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex)
 			else
 				dup2(ex->infile[ex->i], STDIN_FILENO);
 		}
-    // printf("D\n");
-    // printf("%s\n", s_cmd->line[0]);
 		if (ex->outfile && ex->outfile[ex->o] > 0)
 		{
 			if (ex->r)
 			{
-				dup2(ex->outfile[ex->o], ex->res_pipex);
+                read(ex->res_pipex, buf, 4096);
+                write(ex->outfile[ex->o], buf, ft_strlen(buf));
 				ex->r = 0;
 			}
 			else
 				dup2(ex->outfile[ex->o], STDOUT_FILENO);
         }
         if (is_builtins(garbage, s_cmd->line) == 2)
-        {
-            printf("exit\n");
 			exit(0);
-        }
-        // printf("avant execve line[0] = %s sep = %s\n", s_cmd->line[0], s_cmd->sep);
         if (s_cmd->line[0][0] == ' ')
-        {
-            // printf("exit\n");   
             exit(0);
-        }
 		cmd_path = get_cmd(paths, s_cmd->line, garbage->blts->env);
 		if (!cmd_path)
 			ft_cmd_not_find(paths, s_cmd->line[0], garbage);
@@ -170,13 +168,13 @@ int init_t_exec(t_exec *ex, t_arg *s_cmd, t_gc *garbage)
     return (0);
 }
 
-int init_open(t_exec *ex, t_arg *s_cmd, int typeofsep, t_gc *garbage)
+int init_open(t_exec *ex, t_arg *s_cmd, int typeofsep)
 {
     if (typeofsep && typeofsep % 2 == 0)
     {
         printf("outfile open\n");
         ex->o++;
-        ex->outfile[ex->o] = ft_open(s_cmd->next->line[0], typeofsep, garbage);
+        ex->outfile[ex->o] = ft_open(s_cmd->next->line[0], typeofsep);
         if (ex->outfile[ex->o] == -1)
         {
             printf("error access file or open %s ", s_cmd->next->line[0]);
@@ -187,7 +185,7 @@ int init_open(t_exec *ex, t_arg *s_cmd, int typeofsep, t_gc *garbage)
     if (typeofsep && typeofsep % 2 == 1 && typeofsep != 5)
     {
         ex->i++;
-        ex->infile[ex->i] = ft_open(s_cmd->next->line[0], typeofsep, garbage);
+        ex->infile[ex->i] = ft_open(s_cmd->next->line[0], typeofsep);
         if (ex->infile[ex->i] == -1)
         {
             printf("error access file or open %s\n", s_cmd->next->line[0]);
@@ -242,9 +240,8 @@ int	init_pipex(t_exec *ex, t_arg *s_cmd, char **env)
     char    *str_cmd;
     int     i;
 
-    // printf("init_pipex\n");
     i = 0;
-	nb_cmd = count_pipex_cmds(s_cmd);
+    nb_cmd = count_pipex_cmds(s_cmd);
     ex->res_pipex = open(".res_pipex", O_CREAT | O_TRUNC | O_RDWR, 0000644);
     cmds_pipex = malloc(sizeof(char *) * (nb_cmd + 1));
     if (!cmds_pipex)
@@ -256,13 +253,11 @@ int	init_pipex(t_exec *ex, t_arg *s_cmd, char **env)
             return (-1);
         cmds_pipex[i] = str_cmd;
         i++;
-		if (s_cmd->next)
-    		s_cmd = s_cmd->next;
+        if (s_cmd->next)
+            s_cmd = s_cmd->next;
     }
     cmds_pipex[i] = NULL;
-    // printf("avant pipex\n");
-	pipex(nb_cmd, cmds_pipex, ex, env);
-    // printf("apres pipex\n");
+    pipex(nb_cmd, cmds_pipex, ex, env);
     dup2(STDOUT_FILENO, ex->res_pipex);
 	return (nb_cmd);
 }
@@ -273,28 +268,29 @@ void    ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
     int i;
 
     typeofsep = 0;
-    // printf("A\n");
-    typeofsep = check_sep_exec(s_cmd);
-    if (init_open(ex, s_cmd, typeofsep, garbage))
+    if (!s_cmd)
         return ;
+    typeofsep = check_sep_exec(s_cmd);
+    if (init_open(ex, s_cmd, typeofsep))
+    {
+        garbage->go = 0;
+        return ;
+    }
     if (typeofsep == 5)
 	{
         i = init_pipex(ex, s_cmd, garbage->blts->env);
         if (i < 0)
             return ;
-        // printf("AAAAAAAAAAAAAAAAAAAAAA\n");
         while (i-- && s_cmd->next)
         {
             s_cmd = s_cmd->next;
             garbage->nb_exec--;
         }
+	// printf("s_cmd->line[0], = %s i = %d\n", s_cmd->line[0], i);
 		ex->r = 1;
-        // printf("BBBBBBBBBBBBBBBBBBb\n");
         if (!s_cmd->next)
             return ;
 	}
-    // printf("CCCCCCCCCCCCCCCCCCCCCCC\n");
 	if (s_cmd->line[0])
         ft_exec(s_cmd, ex->paths, garbage, ex);
-    // printf("DDDDDDDDDDDDDDDDDDDDD\n");
 }

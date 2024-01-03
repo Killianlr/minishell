@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:06 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/21 18:25:30 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/03 14:46:14 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ int	ft_cd(t_gc *garbage, char **args)
 		{
 			printf("minishell: cd: %s: No such file or directory\n", args[1]);
 			garbage->ret = 1;
+			garbage->go = 0;
 			return (0);
 		}
 		else
@@ -162,7 +163,7 @@ int	ft_unset(t_gc *garbage, char **args)
 	return (0);
 }
 
-int	ft_export(t_gc *garbage, char **args)
+int	ft_export(t_gc *garbage, char **args, int porc)
 {
 	int		i;
 
@@ -172,7 +173,7 @@ int	ft_export(t_gc *garbage, char **args)
 	if (!ft_strncmp(args[0], "export", 7))
 	{
 		garbage->ret = 0;
-		if (!args[1])
+		if (!args[1] && !porc)
 		{
 			while (garbage->blts->exp[i])
 			{
@@ -181,7 +182,7 @@ int	ft_export(t_gc *garbage, char **args)
 			}
 			return (2);
 		}
-		if (update_export(garbage, args))
+		if (update_export(garbage, args) && porc)
 		{
 			garbage->ret = 1;
 			return (1);

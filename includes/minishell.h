@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/03 14:24:54 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/03 16:44:51 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct garbage_colector
 	int			nb_exec;
 	int			ret;
 	int			fd_hdoc;
+	int			go;
 }					t_gc;
 
 typedef struct s_copy_str
@@ -150,7 +151,7 @@ t_gc	*in_minishell(void);
 t_bui	*set_builtins(void);
 int		ft_env(t_gc *garbage, char **args);
 int		ft_pwd(t_gc *garbage, char **args);
-int		ft_export(t_gc *garbage, char **args);
+int		ft_export(t_gc *garbage, char **args, int porc);
 int		ft_unset(t_gc *garbage, char **args);
 int		ft_cd(t_gc *garbage, char **args);
 int		ft_echo(t_gc *garbage, char **args);
@@ -258,5 +259,6 @@ char	*find_path(char **envp);
 char	*get_cmd(char **paths, char	**cmd, char **envp);
 int		ft_lstsize_targ(t_arg *lst);
 void	reset_line(char **tabl);
+
 
 #endif

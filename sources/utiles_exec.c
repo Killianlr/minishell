@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 11:38:35 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/21 18:07:15 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/03 16:55:56 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ void	reset_line(char **tabl)
 		tabl[i] = tabl[i + 1];
 		i++;
 	}
+	printf("save = %s\n", save);
 	free(save);
 	tabl[i] = NULL;
 }
