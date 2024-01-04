@@ -3,14 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:04 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/03 14:08:38 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/04 11:26:30 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+char	*copy_sep(char *src, int len)
+{
+	int		i;
+	char	*ret;
+
+	ret = malloc(sizeof(char) * (len + 1));
+	if (!ret)
+		return (NULL);
+	i = -1;
+	while (src[++i])
+		ret[i] = src[i];
+	ret[i] = 0;
+	return (ret);
+}
+
+void	create_prev_sep(t_arg *first)
+{
+	t_arg	*next;
+
+	next = first->next;
+	if (!next)
+		return ;
+	while (next)
+	{
+		// printf("IN LOOP\n");
+		if (first->sep)
+			next->prev_sep = copy_sep(first->sep, ft_strlen(first->sep));
+		first = next;
+		next = first->next;
+	}
+	if (first->sep)
+			next->prev_sep = copy_sep(first->sep, ft_strlen(first->sep));
+}
 
 t_arg	*create_arg(t_pars *pars)
 {
@@ -20,6 +54,7 @@ t_arg	*create_arg(t_pars *pars)
 	if (!arg)
 		return (NULL);
 	arg->line = get_line(pars);
+	// printf("IN CREATE ARG : line[0] = %s\n", arg->line[0]);
 	if (!arg->line)
 	{
 		free(arg);
@@ -33,6 +68,7 @@ t_arg	*create_arg(t_pars *pars)
 		free(arg);
 		return (NULL);
 	}
+	arg->prev_sep = NULL;
 	return (arg);
 }
 
@@ -58,6 +94,9 @@ t_arg	*parsing(t_pars *pars, t_gc *garbage)
 		sep_count--;
 	}
 	arg->next = NULL;
+	// printf("IN PARSING\n");
+	// print_cmd(first);
+	// printf("-----------------------------------------\n");
 	return (first);
 }
 
@@ -85,6 +124,7 @@ t_arg	*main_pars(char *str, t_bui *blts, t_gc *garbage)
 	arg = parsing(pars, garbage);
 	if (!arg)
 		ft_printf("Error in parsing\n");
+	create_prev_sep(arg);
 	free(pars);
 	print_cmd(arg);
 	return (arg);

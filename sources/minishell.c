@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:43 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/03 16:50:59 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/04 11:27:23 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,8 +200,8 @@ int	main(void)
 {
 	t_gc	*garbage;
 
-	// if (clear_terminal())
-	// 	return (1);
+	if (clear_terminal())
+		return (1);
 	if (signal_init())
 		return (1);
 	garbage = in_minishell();
