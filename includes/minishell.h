@@ -196,6 +196,13 @@ int		go_to_find_var_and_del(t_bui *blts, char *str);
 
 int		cd_set_pwd(t_bui *blts);
 
+int 	ft_open(char *file, int typeofsep, int fd_hdoc);
+
+void    exit_child(t_gc *garbage);
+void    ft_cmd_not_find(char **paths, char *cmd, t_gc *garbage);
+
+int 	init_open(t_exec *ex, t_arg *s_cmd, int typeofsep, int fd_hdoc);
+
 t_arg	*main_pars(char *str, t_bui *blts, t_gc *garbage);		//pars.c
 t_arg	*parsing(t_pars *pars, t_gc *garbage);
 t_arg	*create_arg(t_pars *pars);
@@ -253,6 +260,8 @@ int		scan_av_for_hdoc(t_pars *pars, int fd_hdoc);
 char	*handle_quotes_hdoc(t_pars *pars, int l);
 
 int		pipex(int ac, char **av, t_exec *ex, char **envp);
+int		init_pipex(t_exec *ex, t_arg *s_cmd, char **env);
+
 void	ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex);
 void	ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex);
 int 	init_t_exec(t_exec *ex, t_arg *s_cmd, t_gc *garbage);
@@ -260,6 +269,6 @@ char	*find_path(char **envp);
 char	*get_cmd(char **paths, char	**cmd, char **envp);
 int		ft_lstsize_targ(t_arg *lst);
 void	reset_line(char **tabl);
-
+int 	count_sep_exec(t_arg *s_cmd, char *sep1, char *sep2);
 
 #endif
