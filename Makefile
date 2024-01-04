@@ -36,6 +36,9 @@ MY_SOURCES = 	minishell.c \
 				ft_exec.c \
 				pipex.c \
 				utiles_exec.c \
+				error.c \
+				setup_exec.c \
+				ft_open.c \
 
 SOURCES_DIR = sources
 SOURCES = $(addprefix $(SOURCES_DIR)/, $(MY_SOURCES))

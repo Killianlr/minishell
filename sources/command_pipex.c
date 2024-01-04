@@ -13,7 +13,7 @@
 #include "../includes/minishell.h"
 #include "../includes/pipex.h"
 
-void	set_fd(int in, int out)
+void	set_fd_pipex(int in, int out)
 {
 	dup2(in, 0);
 	dup2(out, 1);
@@ -67,17 +67,17 @@ void	child(t_p pip, char **av, char **envp)
 	{
 		if (pip.idx == 0)
 		{
-			set_fd(pip.infile, pip.pipe[1]);
+			set_fd_pipex(pip.infile, pip.pipe[1]);
 			close(pip.outfile);
 		}
 		else if (pip.idx == pip.cmd_nbr - 1)
 		{
-			set_fd(pip.pipe[2 * pip.idx - 2], pip.outfile);
+			set_fd_pipex(pip.pipe[2 * pip.idx - 2], pip.outfile);
 			close(pip.infile);
 		}
 		else
 		{
-			set_fd(pip.pipe[2 * pip.idx - 2], pip.pipe[2 * pip.idx + 1]);
+			set_fd_pipex(pip.pipe[2 * pip.idx - 2], pip.pipe[2 * pip.idx + 1]);
 			close(pip.infile);
 			close(pip.outfile);
 		}

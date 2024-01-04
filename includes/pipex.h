@@ -42,7 +42,7 @@ void	close_pipes(t_p *pip);
 void	free_child(t_p *pip);
 void	free_parent(t_p *pip);
 void	free_main(t_p *pip);
-int		msg_error(char *str, t_p *pip);
+int		msg_error(char *str, t_p *pip, t_exec *ex);
 int		pi_strcmp(char *s1, char *s2, int n);
 char	*get_cmd(char **paths, char	**cmd, char **envp);
 void	child(t_p pip, char **av, char **envp);
