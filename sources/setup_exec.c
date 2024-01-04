@@ -2,18 +2,23 @@
 #include "../includes/minishell.h"
 #include "../includes/pipex.h"
 
-int check_sep_exec(t_arg *s_cmd)
+int check_sep_exec(char *sep, t_exec *ex)
 {
-    if (!s_cmd->sep)
+    if (!sep)
         return (0);
-    if (!ft_strncmp(s_cmd->sep, "<", 2))
+    if (!ft_strncmp(sep, "<", 2))
         return (1);
-    if (!ft_strncmp(s_cmd->sep, ">", 2))
+    if (!ft_strncmp(sep, ">", 2))
         return (2);
-    if (!ft_strncmp(s_cmd->sep, "<<", 3))
+    if (!ft_strncmp(sep, "<<", 3))
         return (3);
-    if (!ft_strncmp(s_cmd->sep, ">>", 3))
-        return (4);
+    if (!ft_strncmp(sep, ">>", 3))
+	{
+		return (4);
+	}
+	printf("ex->r = %d\n", ex->r);
+	if (ex->r)
+		printf("il faut prendre en compte prev_sep\n");
     return (5);
 }
 
@@ -52,12 +57,14 @@ int init_open(t_exec *ex, t_arg *s_cmd, int typeofsep, int fd_hdoc)
         printf("outfile open\n");
         ex->o++;
         ex->outfile[ex->o] = ft_open(s_cmd->next->line[0], typeofsep, fd_hdoc);
+		printf("ok\n");
         if (ex->outfile[ex->o] == -1)
         {
             printf("error access file or open %s ", s_cmd->next->line[0]);
             return (1);
         }
-        reset_line(s_cmd->next->line);
+		if (s_cmd->line[1])
+        	reset_line(s_cmd->next->line);
     }
     if (typeofsep && typeofsep % 2 == 1 && typeofsep != 5)
     {
@@ -68,9 +75,31 @@ int init_open(t_exec *ex, t_arg *s_cmd, int typeofsep, int fd_hdoc)
             printf("error access file or open %s\n", s_cmd->next->line[0]);
             return (1);
         }
-        reset_line(s_cmd->next->line);
+        if (s_cmd->line[1])
+        	reset_line(s_cmd->next->line);
     }
     return (0);
+}
+
+void	end_of_pipex(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
+{
+	int	typeofsep;
+
+    typeofsep = check_sep_exec(s_cmd->prev_sep, ex);
+	printf("s_cmd->line[0], = %s\n", s_cmd->line[0]);
+	printf("s_cmd->prev_sep %s\n", s_cmd->prev_sep);
+	if (ft_strncmp(s_cmd->prev_sep, "|", 2))
+	{
+		printf("ici1\n");
+		if (init_open(ex, s_cmd, typeofsep, garbage->fd_hdoc))
+    	{
+        	garbage->go = 0;
+        	return ;
+    	}
+		printf("ici2\n");
+		set_fd(ex);
+		put_respipex();
+	}
 }
 
 void    ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
@@ -78,10 +107,14 @@ void    ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
     int typeofsep;
     int i;
 
+
+	probleme de ft_open;
+
+
     typeofsep = 0;
     if (!s_cmd)
         return ;
-    typeofsep = check_sep_exec(s_cmd);
+    typeofsep = check_sep_exec(s_cmd->sep, ex);
     if (init_open(ex, s_cmd, typeofsep, garbage->fd_hdoc))
     {
         garbage->go = 0;
@@ -89,6 +122,7 @@ void    ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
     }
     if (typeofsep == 5)
 	{
+		ex->r = 0;
         i = init_pipex(ex, s_cmd, garbage->blts->env);
         if (i < 0)
             return ;
@@ -97,10 +131,9 @@ void    ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
             s_cmd = s_cmd->next;
             garbage->nb_exec--;
         }
-	// printf("s_cmd->line[0], = %s i = %d\n", s_cmd->line[0], i);
 		ex->r = 1;
-        if (!s_cmd->next)
-            return ;
+		end_of_pipex(s_cmd, garbage, ex);
+        return ;
 	}
 	if (s_cmd->line[0])
         ft_exec(s_cmd, ex->paths, garbage, ex);

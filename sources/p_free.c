@@ -69,28 +69,23 @@ void	free_parsing(t_arg *cmd)
 	if (!cmd)
 		return ;
 	tmp = cmd->next;
-	// printf("------A-----\n");
-	// printf("cmd->line[0] = %s\n", cmd->line[0]);
 	while (tmp)
 	{
-	// printf("tmp->line[0] = %s\n", tmp->line[0]);
 		if (cmd->line)
 			free_pars_tab(cmd->line);
-	// printf("------B-----\n");
 		if (cmd->sep)
 			free(cmd->sep);
-	// printf("------C-----\n");
+		if (cmd->prev_sep)
+			free(cmd->prev_sep);
 		free(cmd);
-	// printf("------D-----\n");
 		cmd = tmp;
 		tmp = cmd->next;
 	}
 	if (cmd->line)
 		free_pars_tab(cmd->line);
-	// printf("------E-----\n");
 	if (cmd->sep)
 		free(cmd->sep);
-	// printf("------F-----\n");
+	if (cmd->prev_sep)
+		free(cmd->prev_sep);
 	free(cmd);
-	// printf("------G-----\n");
 }

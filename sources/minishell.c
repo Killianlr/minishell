@@ -81,57 +81,6 @@ int	is_builtins(t_gc *garbage, char **args)
 	return (0);
 }
 
-int	test(t_arg *s_cmd)
-{
-	t_arg	*tmp;
-	int		i;
-
-	if (!s_cmd->sep && !s_cmd->next)
-		return (0);
-	if (s_cmd->sep && !s_cmd->next)
-	{
-		printf("bash: syntax error near unexpected token `newline'\n");
-		return (1);
-	}
-	tmp = s_cmd->next;
-	while (tmp->next)
-	{
-		i = 0;
-		if (tmp->sep && !tmp->next)
-		{
-			printf("bash: syntax error near unexpected token `newline'\n");
-			return (1);
-		}
-		while (tmp->line[0] && tmp->line[0][i])
-		{
-			if (!ft_isalnum(tmp->line[0][i]))
-			{
-				printf("minishell: syntax error near unexpected token `%c'\n", tmp->line[0][i]);
-				return (1);
-			}
-			i++;
-		}
-		tmp = tmp->next;
-	}
-	i = 0;
-	if (tmp->sep && !tmp->next)
-	{
-		printf("bash: syntax error near unexpected token `newline'\n");
-		return (1);
-	}
-	while (tmp->line[0] && tmp->line[0][i])
-	{
-		printf("tmp->line[0][%d] %c\n", i, tmp->line[0][i]);
-		if (!ft_isalnum(tmp->line[0][i]))
-		{
-			printf("minishell: syntax error near unexpected token `%c'\n", tmp->line[0][i]);
-			return (1);
-		}
-		i++;
-	}
-	return (0);
-}
-
 int	loop_lst(char *str, t_arg *s_cm, t_gc *garbage)
 {
 	t_exec	ex;
@@ -152,15 +101,12 @@ int	loop_lst(char *str, t_arg *s_cm, t_gc *garbage)
 		}
 		if (!garbage->go)
 			break ;
-		// printf("s_cmd->line[0] = %s\n", s_cmd->line[0]);
-		// printf("garbage->go = %d\n", garbage->go);
 		ft_init_exec(s_cmd, garbage, &ex);
 		waitpid(-1, NULL, 0);
 		s_cmd = s_cmd->next;
 		garbage->nb_exec--;
 	}
 	free_tab(ex.paths);
-	// printf("garbage->arg->line[0] = %s\n", garbage->arg->line[0]);
 	garbage->arg = s_cm;
 	free_parsing(garbage->arg);
 	return (0);

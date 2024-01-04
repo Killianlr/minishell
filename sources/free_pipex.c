@@ -13,13 +13,16 @@
 #include "../includes/minishell.h"
 #include "../includes/pipex.h"
 
-void	free_pipe(t_p *pip)
+void	free_pipe(t_p *pip, t_exec *ex)
 {
 	if (pip->infile)
 		close(pip->infile);
 	close(pip->outfile);
 	free(pip->pipe);
 	write(2, "error envp\n", 12);
+	unlink(".res_pipex");
+	if (!ex->infile)
+		unlink(".infile_tmp");
 	exit(1);
 }
 
@@ -83,7 +86,7 @@ void	free_parent(t_p *pip)
 		free(pip->pipe);
 }
 
-void	free_main(t_p *pip)
+void	free_main(t_p *pip, t_exec *ex, char **av)
 {
 	int	i;
 
@@ -96,8 +99,17 @@ void	free_main(t_p *pip)
 		free(pip->path[i]);
 		i++;
 	}
+	i = 0;
+	while (av[i])
+	{
+		free(av[i]);
+		i++;
+	}
+	free(av);
 	if (pip->path)
 		free(pip->path);
 	if (pip->pipe)
 		free(pip->pipe);
+	if (!ex->infile)
+		unlink(".infile_tmp");
 }

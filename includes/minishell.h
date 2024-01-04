@@ -261,8 +261,10 @@ char	*handle_quotes_hdoc(t_pars *pars, int l);
 
 int		pipex(int ac, char **av, t_exec *ex, char **envp);
 int		init_pipex(t_exec *ex, t_arg *s_cmd, char **env);
+void    put_respipex();
 
 void	ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex);
+void    set_fd(t_exec *ex);
 void	ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex);
 int 	init_t_exec(t_exec *ex, t_arg *s_cmd, t_gc *garbage);
 char	*find_path(char **envp);

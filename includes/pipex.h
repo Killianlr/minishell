@@ -37,11 +37,11 @@ typedef struct s_p
 }t_p;
 
 char	*find_path(char **envp);
-void	free_pipe(t_p *pip);
+void	free_pipe(t_p *pip, t_exec *ex);
 void	close_pipes(t_p *pip);
 void	free_child(t_p *pip);
 void	free_parent(t_p *pip);
-void	free_main(t_p *pip);
+void	free_main(t_p *pip, t_exec *ex, char **av);
 int		msg_error(char *str, t_p *pip, t_exec *ex);
 int		msg_error_2(char *str, t_p *pip);
 int		pi_strcmp(char *s1, char *s2, int n);

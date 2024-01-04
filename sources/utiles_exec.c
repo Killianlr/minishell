@@ -144,7 +144,6 @@ void	reset_line(char **tabl)
 		tabl[i] = tabl[i + 1];
 		i++;
 	}
-	printf("save = %s\n", save);
 	free(save);
 	tabl[i] = NULL;
 }
