@@ -48,8 +48,7 @@ int open_outfile_append(char *file)
 int ft_open(char *file, int typeofsep, int fd_hdoc)
 {
     int fd;
-
-	printf("file = %s\n", file);
+    
     if (typeofsep == 1)
     {
         fd = open_infile(file);

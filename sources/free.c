@@ -46,12 +46,12 @@ void	exit_error(t_gc *garbage)
 
 void	free_all(t_gc *garbage)
 {
-	printf("DEBUT DU FREE\n");
+	// printf("DEBUT DU FREE\n");
 	if (!garbage)
 		return ;
 	free_parsing(garbage->arg);
 	free_blts(garbage->blts);
 	free(garbage->blts);
 	free(garbage);
-	printf("FIN DU PROGRAMME\n");
+	// printf("FIN DU PROGRAMME\n");
 }

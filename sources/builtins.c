@@ -60,8 +60,8 @@ int	ft_put_ret_value(t_gc *garbage, char **args)
 			cmd = get_cmd(paths, cmd_tab, garbage->blts->env);
 			if (!cmd)
 			{
-				write(2, ": command not found\n", 21);
 				write(2, cmd_tab[0], ft_strlen(cmd_tab[0]));
+				write(2, ": command not found\n", 21);
 				write(2, "\n", 1);
 				free_tab(paths);
 				garbage->ret = 127;

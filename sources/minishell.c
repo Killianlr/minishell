@@ -103,7 +103,8 @@ int	loop_lst(char *str, t_arg *s_cm, t_gc *garbage)
 			break ;
 		ft_init_exec(s_cmd, garbage, &ex);
 		waitpid(-1, NULL, 0);
-		s_cmd = s_cmd->next;
+		if (s_cmd->next)
+			s_cmd = s_cmd->next;
 		garbage->nb_exec--;
 	}
 	free_tab(ex.paths);

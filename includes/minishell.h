@@ -138,6 +138,7 @@ typedef struct exec
     char **paths;
     int res_pipex;
     int r;
+	int	tube[2];
 }           t_exec;
 
 
@@ -199,7 +200,7 @@ int		cd_set_pwd(t_bui *blts);
 int 	ft_open(char *file, int typeofsep, int fd_hdoc);
 
 void    exit_child(t_gc *garbage);
-void    ft_cmd_not_find(char **paths, char *cmd, t_gc *garbage);
+void    ft_cmd_not_find(char **paths, char *cmd, t_gc *garbage, t_exec *ex);
 
 int 	init_open(t_exec *ex, t_arg *s_cmd, int typeofsep, int fd_hdoc);
 
