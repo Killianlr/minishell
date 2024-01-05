@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utiles_exec.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 11:38:35 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/03 16:55:56 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/05 17:30:57 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,14 +132,18 @@ int	ft_lstsize_targ(t_arg *lst)
 	return (size);
 }
 
-void	reset_line(char **tabl)
+void	reset_line(char **tabl, t_gc *garbage)
 {
 	int		i;
 	char	*save;
 
+	if (!tabl[1])
+		garbage->go = 0;
 	i = 0;
 	save = tabl[0];
-	while (i < ft_strlen_tab(tabl))
+	if (ft_strlen_tab(tabl) <= 1)
+		return ;
+	while (tabl[i])
 	{
 		tabl[i] = tabl[i + 1];
 		i++;

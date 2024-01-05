@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/04 10:38:44 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/05 17:44:24 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,6 +166,7 @@ int		set_env(t_bui *blts);
 
 void	free_all(t_gc *garbage);
 void	free_blts(t_bui *blts);
+void	free_t_exec(t_exec *ex);
 void	free_tab(char **env);
 void	exit_error(t_gc *garbage);
 
@@ -197,12 +198,12 @@ int		go_to_find_var_and_del(t_bui *blts, char *str);
 
 int		cd_set_pwd(t_bui *blts);
 
-int 	ft_open(char *file, int typeofsep, int fd_hdoc);
+int 	ft_open(char *file, int typeofsep);
 
 void    exit_child(t_gc *garbage);
 void    ft_cmd_not_find(char **paths, char *cmd, t_gc *garbage, t_exec *ex);
 
-int 	init_open(t_exec *ex, t_arg *s_cmd, int typeofsep, int fd_hdoc);
+int 	init_open(t_exec *ex, t_arg *s_cmd, int typeofsep, t_gc *garbage);
 
 t_arg	*main_pars(char *str, t_bui *blts, t_gc *garbage);		//pars.c
 t_arg	*parsing(t_pars *pars, t_gc *garbage);
@@ -271,7 +272,7 @@ int 	init_t_exec(t_exec *ex, t_arg *s_cmd, t_gc *garbage);
 char	*find_path(char **envp);
 char	*get_cmd(char **paths, char	**cmd, char **envp);
 int		ft_lstsize_targ(t_arg *lst);
-void	reset_line(char **tabl);
+void	reset_line(char **tabl, t_gc * garbage);
 int 	count_sep_exec(t_arg *s_cmd, char *sep1, char *sep2);
 
 #endif

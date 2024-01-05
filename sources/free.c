@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:21 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/03 15:56:19 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/05 17:46:49 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,19 @@ void	free_tab(char **tableau)
 		i++;
 	}
 	free(tableau);
+}
+
+void	free_t_exec(t_exec *ex)
+{
+	int	i;
+
+	i = 0;
+	(void) i;
+	free_tab(ex->paths);
+	if (ex->outfile)
+		free(ex->outfile);
+	if (ex->infile)
+		free(ex->infile);
 }
 
 void	free_blts(t_bui *blts)

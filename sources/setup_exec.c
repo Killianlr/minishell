@@ -46,58 +46,58 @@ int init_t_exec(t_exec *ex, t_arg *s_cmd, t_gc *garbage)
     return (0);
 }
 
-int init_open(t_exec *ex, t_arg *s_cmd, int typeofsep, int fd_hdoc)
+int init_open(t_exec *ex, t_arg *s_cmd, int typeofsep, t_gc *garbage)
 {
     if (typeofsep && typeofsep % 2 == 0)
     {
         ex->o++;
-        ex->outfile[ex->o] = ft_open(s_cmd->next->line[0], typeofsep, fd_hdoc);
+        ex->outfile[ex->o] = ft_open(s_cmd->next->line[0], typeofsep);
         if (ex->outfile[ex->o] == -1)
         {
             printf("error access file or open %s ", s_cmd->next->line[0]);
             return (1);
         }
-        reset_line(s_cmd->next->line);
+        reset_line(s_cmd->next->line, garbage);
     }
     if (typeofsep && typeofsep % 2 == 1 && typeofsep != 5)
     {
         ex->i++;
-        ex->infile[ex->i] = ft_open(s_cmd->next->line[0], typeofsep, fd_hdoc);
+        ex->infile[ex->i] = ft_open(s_cmd->next->line[0], typeofsep);
         if (ex->infile[ex->i] == -1)
         {
             printf("error access file or open %s\n", s_cmd->next->line[0]);
             return (1);
         }
-        reset_line(s_cmd->next->line);
+        reset_line(s_cmd->next->line, garbage);
     }
     return (0);
 }
 
-int init_open_2(t_exec *ex, t_arg *s_cmd, int typeofsep, int fd_hdoc)
+int init_open_2(t_exec *ex, t_arg *s_cmd, int typeofsep, t_gc *garbage)
 {
     if (typeofsep && typeofsep % 2 == 0)
     {
         ex->o++;
-        ex->outfile[ex->o] = ft_open(s_cmd->line[0], typeofsep, fd_hdoc);
+        ex->outfile[ex->o] = ft_open(s_cmd->line[0], typeofsep);
         if (ex->outfile[ex->o] == -1)
         {
             printf("error access file or open %s ", s_cmd->next->line[0]);
             return (1);
         }
-		// if (s_cmd->line[1])
-        	reset_line(s_cmd->next->line);
+		if (s_cmd->line[1])
+            reset_line(s_cmd->next->line, garbage);
     }
     if (typeofsep && typeofsep % 2 == 1 && typeofsep != 5)
     {
         ex->i++;
-        ex->infile[ex->i] = ft_open(s_cmd->line[0], typeofsep, fd_hdoc);
+        ex->infile[ex->i] = ft_open(s_cmd->line[0], typeofsep);
         if (ex->infile[ex->i] == -1)
         {
             printf("error access file or open %s\n", s_cmd->next->line[0]);
             return (1);
         }
-        // if (s_cmd->line[1])
-        	reset_line(s_cmd->next->line);
+        if (s_cmd->line[1])
+            reset_line(s_cmd->next->line, garbage);
     }
     return (0);
 }
@@ -113,11 +113,12 @@ void	end_of_pipex(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
         typeofsep = check_sep_exec(s_cmd->prev_sep, ex);
         if (ft_strncmp(s_cmd->prev_sep, "|", 2))
         {
-            if (init_open_2(ex, s_cmd, typeofsep, garbage->fd_hdoc))
+            if (init_open_2(ex, s_cmd, typeofsep, garbage))
             {
                 garbage->go = 0;
                 return ;
             }
+            printf("outfile in end of pipex = %d\n", ex->outfile[ex->o]);
             set_fd(ex);
             put_respipex();
         }
@@ -133,12 +134,14 @@ void    ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
 {
     int typeofsep;
     int i;
+    int check;
 
     typeofsep = 0;
+    check = garbage->go;
     if (!s_cmd)
         return ;
     typeofsep = check_sep_exec(s_cmd->sep, ex);
-    if (init_open(ex, s_cmd, typeofsep, garbage->fd_hdoc))
+    if (init_open(ex, s_cmd, typeofsep, garbage))
     {
         garbage->go = 0;
         return ;
@@ -158,6 +161,6 @@ void    ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
 		end_of_pipex(s_cmd, garbage, ex);
         return ;
 	}
-	if (s_cmd->line[0])
+	if (s_cmd->line[0] && check)
         ft_exec(s_cmd, ex->paths, garbage, ex);
 }

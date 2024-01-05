@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exec.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 11:38:09 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/03 16:44:45 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/05 18:41:53 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void    put_respipex()
 
 void    set_fd(t_exec *ex)
 {
+    // write(2, "in set_fd\n", 11);
     if (ex->infile && ex->infile[ex->i] > 0)
 	{
 		if (ex->r)
@@ -50,29 +51,34 @@ void    set_fd(t_exec *ex)
 		}
 		else
         {
+	        // printf("fd in set fd= %d\n", ex->infile[ex->i]);
+
 			dup2(ex->infile[ex->i], STDIN_FILENO);
         }
 	}
 	if (ex->outfile && ex->outfile[ex->o] > 0)
 	{
+        printf("outfile = %d\n", ex->outfile[ex->o]);
 	    dup2(ex->outfile[ex->o], STDOUT_FILENO);
     }
 }
 
 void    parent_process(t_gc *garbage, t_arg *s_cmd, t_exec *ex)
 {
-    char    buf[4096];
-    int ret;
-    ret = 879;
+    (void) ex;
+    // char    buf[4096];
+    // int ret;
+    // ret = 879;
     ft_export(garbage, s_cmd->line, 1);
     ft_define_var(garbage, s_cmd->line);
 	ft_unset(garbage, s_cmd->line);
-    close(ex->tube[1]);
-    ret = read(ex->tube[0], buf, 4096);
-    printf("buf = %s\n", buf);
-    close(ex->tube[0]);
-    printf("ret = %d\n", ret);
-    garbage->ret = ft_atoi(buf);
+    ft_cd(garbage, s_cmd->line);
+    // close(ex->tube[1]);
+    // ret = read(ex->tube[0], buf, 4096);
+    // printf("buf = %s\n", buf);
+    // close(ex->tube[0]);
+    // printf("ret = %d\n", ret);
+    // garbage->ret = ft_atoi(buf);
 }
 
 void    child_process(t_gc *garbage, t_arg *s_cmd, t_exec *ex, char **paths)
@@ -89,7 +95,7 @@ void    child_process(t_gc *garbage, t_arg *s_cmd, t_exec *ex, char **paths)
 	cmd_path = get_cmd(paths, s_cmd->line, garbage->blts->env);
 	if (!cmd_path)
     {
-        printf("ici cmd not find\n");
+        // printf("ici cmd not find\n");
         ft_cmd_not_find(paths, s_cmd->line[0], garbage, ex);
     }
 	execve(cmd_path, s_cmd->line, garbage->blts->env);

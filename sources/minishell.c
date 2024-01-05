@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:43 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/04 11:27:23 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/05 18:29:51 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,15 +99,17 @@ int	loop_lst(char *str, t_arg *s_cm, t_gc *garbage)
 			free_tab(ex.paths);
 			return (1);
 		}
-		if (!garbage->go)
-			break ;
-		ft_init_exec(s_cmd, garbage, &ex);
+		if (garbage->go)
+			ft_init_exec(s_cmd, garbage, &ex);
+		else if (!garbage->go)
+			garbage->go = 1;
 		waitpid(-1, NULL, 0);
 		if (s_cmd->next)
 			s_cmd = s_cmd->next;
 		garbage->nb_exec--;
 	}
-	free_tab(ex.paths);
+	free_t_exec(&ex);
+	// free_tab(ex.paths);
 	garbage->arg = s_cm;
 	free_parsing(garbage->arg);
 	return (0);
@@ -128,10 +130,10 @@ t_gc	*in_minishell(void)
 	}
 	garbage->nb_exec = 0;
 	garbage->ret = 0;
-	garbage->go = 1;
 	garbage->fd_hdoc = 0;
 	while (1)
 	{
+		garbage->go = 1;
 		garbage->arg = NULL;
 		garbage->line = ft_prompt();
 		if ((int)ft_strlen(garbage->line))
