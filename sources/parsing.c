@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:04 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/04 11:26:30 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/05 19:15:32 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,31 @@ t_arg	*parsing(t_pars *pars, t_gc *garbage)
 	return (first);
 }
 
+t_arg	*post_parsing(t_arg *arg)
+{
+	t_arg	*first;
+	t_arg	*tmp;
+
+	first = arg;
+	tmp = arg->next;
+	while (tmp)
+	{
+		if (arg->sep && !arg->next)
+		{
+			ft_printf("minishell: syntax error near unexpected token `newline'\n");
+			return (NULL);
+		}
+		arg = arg->next;
+		tmp = arg;
+	}
+	if (arg->sep && !arg->next)
+	{
+		ft_printf("minishell: syntax error near unexpected token `newline'\n");
+		return (NULL);
+	}
+	return (first);
+}
+
 t_arg	*main_pars(char *str, t_bui *blts, t_gc *garbage)
 {
 	t_arg	*arg;
@@ -125,6 +150,7 @@ t_arg	*main_pars(char *str, t_bui *blts, t_gc *garbage)
 	if (!arg)
 		ft_printf("Error in parsing\n");
 	create_prev_sep(arg);
+	arg = post_parsing(arg);
 	free(pars);
 	print_cmd(arg);
 	return (arg);

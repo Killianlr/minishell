@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:43 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/05 18:29:51 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/05 19:14:59 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,11 @@ int	loop_lst(char *str, t_arg *s_cm, t_gc *garbage)
 	t_exec	ex;
 	t_arg	*s_cmd;
 
-	s_cmd = s_cm;
 	if (!str || !s_cm)
 		return (0);
+	printf("here\n");
+	
+	s_cmd = s_cm;
 	garbage->nb_exec = ft_lstsize_targ(s_cmd);
 	if (init_t_exec(&ex, s_cmd, garbage))
         return (1);
@@ -154,6 +156,7 @@ int	main(void)
 	if (signal_init())
 		return (1);
 	garbage = in_minishell();
+	printf("END\n");
 	free_all(garbage);
 	return (0);
 }
