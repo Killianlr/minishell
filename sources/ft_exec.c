@@ -116,6 +116,7 @@ void    ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex)
     {
         waitpid(pid, &status, 0);
         garbage->ret = status / 256;
+        printf("in ft_exec -> garbage->ret = %d\n", garbage->ret);
         parent_process(garbage, s_cmd, ex);
     }
 	else

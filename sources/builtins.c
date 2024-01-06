@@ -38,41 +38,41 @@ int	ft_define_var(t_gc *garbage, char **args)
 	return (0);
 }
 
-int	ft_put_ret_value(t_gc *garbage, char **args)
-{
-	int		pid;
-	char	**paths;
-	char	*cmd_tab[2];
-	char	*cmd;
+// int	ft_put_ret_value(t_gc *garbage, char **args)
+// {
+// 	int		pid;
+// 	char	**paths;
+// 	char	*cmd_tab[2];
+// 	char	*cmd;
 
-	if (!garbage->line)
-		return (0);
-	if (!ft_strncmp(args[0], "$?", 4))
-	{
-		pid = fork();
-		if (pid == -1)
-			return (1);
-		if (pid == 0)
-		{
-			cmd_tab[0] = ft_itoa(garbage->ret);
-			cmd_tab[1] = NULL;
-			paths = ft_split(find_path(garbage->blts->env), ':');
-			cmd = get_cmd(paths, cmd_tab, garbage->blts->env);
-			if (!cmd)
-			{
-				write(2, cmd_tab[0], ft_strlen(cmd_tab[0]));
-				write(2, ": command not found\n", 21);
-				write(2, "\n", 1);
-				free_tab(paths);
-				garbage->ret = 127;
-				exit(0);
-			}
-			execve(cmd, cmd_tab, garbage->blts->env);
-		}
-		return (2);
-	}
-	return (0);
-}
+// 	if (!garbage->line)
+// 		return (0);
+// 	if (!ft_strncmp(args[0], "$?", 4))
+// 	{
+// 		pid = fork();
+// 		if (pid == -1)
+// 			return (1);
+// 		if (pid == 0)
+// 		{
+// 			cmd_tab[0] = ft_itoa(garbage->ret);
+// 			cmd_tab[1] = NULL;
+// 			paths = ft_split(find_path(garbage->blts->env), ':');
+// 			cmd = get_cmd(paths, cmd_tab, garbage->blts->env);
+// 			if (!cmd)
+// 			{
+// 				write(2, cmd_tab[0], ft_strlen(cmd_tab[0]));
+// 				write(2, ": command not found\n", 21);
+// 				write(2, "\n", 1);
+// 				free_tab(paths);
+// 				garbage->ret = 127;
+// 				exit(0);
+// 			}
+// 			execve(cmd, cmd_tab, garbage->blts->env);
+// 		}
+// 		return (2);
+// 	}
+// 	return (0);
+// }
 
 int	ft_echo(t_gc *garbage, char **args)
 {

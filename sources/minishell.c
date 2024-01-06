@@ -75,11 +75,11 @@ int	is_builtins(t_gc *garbage, char **args)
 		exit_error(garbage);
 	else if (i == 2)
 		return (2);
-	i = ft_put_ret_value(garbage, args);
-	if (i == 1)
-		exit_error(garbage);
-	else if (i == 2)
-		return (2);
+	// i = ft_put_ret_value(garbage, args);
+	// if (i == 1)
+	// 	exit_error(garbage);
+	// else if (i == 2)
+	// 	return (2);
 	return (0);
 }
 
@@ -139,10 +139,7 @@ t_gc	*in_minishell(void)
 		garbage->arg = NULL;
 		garbage->line = ft_prompt();
 		if (!garbage->line)
-		{
-			printf("coucou cassandre\n");
 			return (NULL);
-		}
 		if ((int)ft_strlen(garbage->line))
 			garbage->arg = main_pars(garbage->line, garbage->blts, garbage);
 		free(garbage->line);
@@ -208,19 +205,15 @@ int	main(void)
 			{
 				garbage = in_minishell();
 				if (!garbage)
-				{
-					printf("ici\n");
 					exit(1);
-				}
+				free_all(garbage);
 			}
 			else
 				signal_init(pid_minishell);
 			waitpid(pid_minishell, &status, 0);
-			printf("status = %d\n", status);
-			if (status > 0)
+			if (status > 255)
 				break ;
 		}
 	}
-	// free_all(garbage);
 	return (0);
 }

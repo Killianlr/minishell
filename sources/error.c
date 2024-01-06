@@ -10,7 +10,8 @@ void    ft_cmd_not_find(char **paths, char *cmd, t_gc *garbage, t_exec *ex)
     // close(ex->tube[0]);
     // write(ex->tube[1], "42", 3);
     // close(ex->tube[1]);
-    exit_child(garbage);
+    free_all(garbage);
+    exit(127);
 }
 
 void    exit_child(t_gc *garbage)
