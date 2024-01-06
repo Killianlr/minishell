@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 16:17:12 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/05 16:36:45 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/06 20:05:45 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,21 @@ void	print_cmd(t_arg *cmd)
 	(void) i;
 	if (!cmd)
 		return ;
-	// while (cmd->next)
-	// {
-	// 	i = 0;
-	// 	while (cmd->line[i])
-	// 		ft_printf("line = %s\n", cmd->line[i++]);
-	// 	ft_printf("sep = %s\n", cmd->sep);
-	// 	ft_printf("prev_sep = %s\n====================================\n", cmd->prev_sep);
-	// 	if (cmd->next)
-	// 		cmd = cmd->next;
-	// }
-	// i = 0;
-	// while (cmd->line[i])
-	// 	ft_printf("line = %s\n", cmd->line[i++]);
-	// ft_printf("sep = %s\n", cmd->sep);
-	// ft_printf("prev_sep = %s\n====================================\n", cmd->prev_sep);
+	while (cmd->next)
+	{
+		i = 0;
+		while (cmd->line[i])
+			ft_printf("line = %s\n", cmd->line[i++]);
+		ft_printf("sep = %s\n", cmd->sep);
+		ft_printf("prev_sep = %s\n====================================\n", cmd->prev_sep);
+		if (cmd->next)
+			cmd = cmd->next;
+	}
+	i = 0;
+	while (cmd->line[i])
+		ft_printf("line = %s\n", cmd->line[i++]);
+	ft_printf("sep = %s\n", cmd->sep);
+	ft_printf("prev_sep = %s\n====================================\n", cmd->prev_sep);
 }
 
 void	free_pars_tab(char **arr)

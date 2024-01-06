@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:04 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/05 19:15:32 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/06 20:57:30 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,15 +46,14 @@ void	create_prev_sep(t_arg *first)
 			next->prev_sep = copy_sep(first->sep, ft_strlen(first->sep));
 }
 
-t_arg	*create_arg(t_pars *pars)
+t_arg	*create_arg(t_pars *pars, int ret_val)
 {
 	t_arg	*arg;
 
 	arg = malloc(sizeof(t_arg));
 	if (!arg)
 		return (NULL);
-	arg->line = get_line(pars);
-	// printf("IN CREATE ARG : line[0] = %s\n", arg->line[0]);
+	arg->line = get_line(pars, ret_val);
 	if (!arg->line)
 	{
 		free(arg);
@@ -81,13 +80,13 @@ t_arg	*parsing(t_pars *pars, t_gc *garbage)
 	sep_count = count_sep(pars);
 	if (sep_count > 0)
 		garbage->fd_hdoc = scan_av_for_hdoc(pars, garbage->fd_hdoc);
-	arg = create_arg(pars);
+	arg = create_arg(pars, garbage->ret);
 	if (!arg)
 		return (NULL);
 	first = arg;
 	while (sep_count && pars->av[pars->i])
 	{
-		arg->next = create_arg(pars);
+		arg->next = create_arg(pars, garbage->ret);
 		if (!arg->next)
 			break ;
 		arg = arg->next;
@@ -149,8 +148,6 @@ t_arg	*main_pars(char *str, t_bui *blts, t_gc *garbage)
 		return (NULL);
 	}
 	arg = parsing(pars, garbage);
-	if (!arg)
-		ft_printf("Error in parsing\n");
 	create_prev_sep(arg);
 	arg = post_parsing(arg);
 	free(pars);

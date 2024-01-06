@@ -3,45 +3,55 @@
 /*                                                        :::      ::::::::   */
 /*   p_quote.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:06:01 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/03 14:43:10 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/06 20:20:08 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+int	count_quote_2(t_pars *pars, t_sq *data)
+{
+	int	ret;
+
+	ret = 0;
+	while (pars->av[data->i])
+	{
+		if (is_quote(pars->av[data->i]) == 1 && data->set != 2)
+		{
+			data->s_count++;
+			data->set = 1;
+		}
+		else if (is_quote(pars->av[data->i]) == 2 && data->set != 1)
+		{
+			data->d_count++;
+			data->set = 2;
+		}
+		if (data->s_count % 2 == 0 && data->d_count % 2 == 0)
+			data->set = 0;
+		data->i++;
+	}
+	if (data->s_count % 2 != 0 || data->d_count % 2 != 0)
+		return (1);
+	ret = data->s_count + data->d_count;
+	free(data);
+	return (ret);
+}
+
 int	count_quote(t_pars *pars)
 {
-	int	i;
-	int	set;
-	int	s_count;
-	int	d_count;
+	t_sq	*data;
 
-	i = 0;
-	s_count = 0;
-	d_count = 0;
-	set = 0;
-	while (pars->av[i])
-	{
-		if (is_quote(pars->av[i]) == 1 && set != 2)
-		{
-			s_count++;
-			set = 1;
-		}
-		else if (is_quote(pars->av[i]) == 2 && set != 1)
-		{
-			d_count++;
-			set = 2;
-		}
-		if (s_count % 2 == 0 && d_count % 2 == 0)
-			set = 0;
-		i++;
-	}
-	if (s_count % 2 != 0 || d_count % 2 != 0)
-		return (1);
-	return (s_count + d_count);
+	data = malloc(sizeof(t_sq) * 1);
+	if (!data)
+		return (0);
+	data->i = 0;
+	data->set = 0;
+	data->s_count = 0;
+	data->d_count = 0;
+	return (count_quote_2(pars, data));
 }
 
 int	quote_is_closed(t_pars *pars, int l)

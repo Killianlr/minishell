@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/05 17:44:24 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/06 21:03:45 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,21 @@ typedef struct 	s_handle_quotes
 	int		i;
 }			t_hq;
 
+typedef struct s_get_line
+{
+	int	y;
+	int	word_count;
+}				t_sl;
+
+
+typedef struct s_count_quote
+{
+	int	i;
+	int	set;
+	int	s_count;
+	int	d_count;
+}				t_sq;
+
 
 typedef struct 	s_get_in_env
 {
@@ -208,7 +223,7 @@ int 	init_open(t_exec *ex, t_arg *s_cmd, int typeofsep, t_gc *garbage);
 
 t_arg	*main_pars(char *str, t_bui *blts, t_gc *garbage);		//pars.c
 t_arg	*parsing(t_pars *pars, t_gc *garbage);
-t_arg	*create_arg(t_pars *pars);
+t_arg	*create_arg(t_pars *pars, int ret_val);
 
 void	free_parsing(t_arg *cmd);		//p_free.c
 void	print_cmd(t_arg *cmd);
@@ -225,7 +240,7 @@ char	**strduptab(t_pars *pars);;			//p_utils.c
 char	*ms_strjoin(char *s1, char *s2, int status);
 int		ms_strjoin_size(char *s1, char *s2, int size);
 int		ms_strcmp(char *s1, char *s2, int n);
-char	*no_quote(t_pars *pars);
+// char	*no_quote(t_pars *pars);
 
 int		env_strncmp(char *s1, char *s2, int n);
 
@@ -238,8 +253,8 @@ int		count_char(t_pars *pars);		//p_count.c
 int		count_word(t_pars *pars);
 int		count_sep(t_pars *pars);
 
-char	*get_in_env(char **env, char *str);		//p_env.c
-char	*get_var_env(t_pars *pars, int i);
+char	*get_in_env(char **env, char *str, int ret_val);		//p_env.c
+char	*get_var_env(t_pars *pars, int i, int ret_val);
 int		after_var_env(t_pars *pars, int i);
 
 
@@ -248,9 +263,9 @@ int		get_sep_size(t_pars *pars);
 void	too_many_sep(t_pars *pars);
 int		check_sep(char *sep);
 
-char	**get_line(t_pars *pars);		//p_line.c
-char	*copy_str(t_pars *pars);
-int		size_for_line(t_pars *pars);
+char	**get_line(t_pars *pars, int ret_val);		//p_line.c
+char	*copy_str(t_pars *pars, int ret_val);
+int		size_for_line(t_pars *pars, int ret_val);
 
 int		quote_is_closed(t_pars *pars, int l);		//p_quote.c
 char	*handle_quotes(t_pars *pars, int l);

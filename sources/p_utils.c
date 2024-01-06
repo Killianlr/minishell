@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_utils.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:02:50 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/03 14:37:52 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/06 20:43:48 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	ms_strcmp(char *s1, char *s2, int n)
 
 	i = 0;
 	if (n == 0)
-		return (0);
+		return (-1);
 	if (n != (int)ft_strlen(s2) - 1)
 		return (1);
 	if (!s1 || !s2)
@@ -82,32 +82,42 @@ void	ms_strjoin_free(char *s1, char *s2, int status)
 	}
 }
 
-char	*ms_strjoin(char *s1, char *s2, int status)
+char	*ms_strjoin_2(char *s1, char *s2)
 {
 	char	*str;
-	int		i;
-	int		y;
+	int		len_s1 = ft_strlen(s1);
+	int		len_s2 = ft_strlen(s2);
 
-	if (!s1)
-		return (s2);
-	if (!s2)
-		return (s1);
-	str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	str = malloc(sizeof(char) * (len_s1 + len_s2 + 1));
 	if (!str)
-		return (0);
-	i = 0;
+		return (NULL);
+	int i = 0;
 	while (s1[i])
 	{
 		str[i] = s1[i];
 		i++;
 	}
-	y = 0;
+	int y = 0;
 	while (s2[y])
 	{
 		str[i + y] = s2[y];
 		y++;
 	}
-	str[i + y] = 0;
+	str[i + y] = '\0';
+	return (str);
+}
+
+char	*ms_strjoin(char *s1, char *s2, int status)
+{
+	char	*str;
+
+	if (!s1)
+		return (ft_strdup(s2));
+	if (!s2)
+		return (ft_strdup(s1));
+	str = ms_strjoin_2(s1, s2);
+	if (!str)
+		return (NULL);
 	ms_strjoin_free(s1, s2, status);
 	return (str);
 }
