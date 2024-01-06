@@ -46,7 +46,7 @@ int	clear_string(t_prompt *prpt)
 	{
 		printf("exit");
 		free(prpt->inpt);
-		exit(0);
+		return (1);
 	}
 	while (prpt->inpt[start] && (!ft_isprint(prpt->inpt[start])
 			|| prpt->inpt[start] == 32) && start <= end)

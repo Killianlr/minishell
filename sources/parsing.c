@@ -109,17 +109,19 @@ t_arg	*post_parsing(t_arg *arg)
 	tmp = arg->next;
 	while (tmp)
 	{
-		if (arg->sep && !arg->next)
+		if (arg && arg->sep && !arg->next)
 		{
 			ft_printf("minishell: syntax error near unexpected token `newline'\n");
+			free_parsing(first);
 			return (NULL);
 		}
 		arg = arg->next;
 		tmp = arg;
 	}
-	if (arg->sep && !arg->next)
+	if (arg && arg->sep && !arg->next)
 	{
 		ft_printf("minishell: syntax error near unexpected token `newline'\n");
+		free_parsing(first);
 		return (NULL);
 	}
 	return (first);

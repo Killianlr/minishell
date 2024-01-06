@@ -12,6 +12,8 @@
 
 #include "../includes/minishell.h"
 
+int running = 0;
+
 int	clear_or_exit(char **str)
 {
 	
@@ -88,8 +90,6 @@ int	loop_lst(char *str, t_arg *s_cm, t_gc *garbage)
 
 	if (!str || !s_cm)
 		return (0);
-	printf("here\n");
-	
 	s_cmd = s_cm;
 	garbage->nb_exec = ft_lstsize_targ(s_cmd);
 	if (init_t_exec(&ex, s_cmd, garbage))
@@ -138,25 +138,89 @@ t_gc	*in_minishell(void)
 		garbage->go = 1;
 		garbage->arg = NULL;
 		garbage->line = ft_prompt();
+		if (!garbage->line)
+		{
+			printf("coucou cassandre\n");
+			return (NULL);
+		}
 		if ((int)ft_strlen(garbage->line))
 			garbage->arg = main_pars(garbage->line, garbage->blts, garbage);
 		free(garbage->line);
 		if (loop_lst(garbage->line, garbage->arg, garbage))
-			break ;
+			return (NULL);
 	}
 	return (garbage);
+}
+
+void	signal_handler(int signum)
+{
+	if (signum == SIGINT)
+	{
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+		running = 1;
+	}
+	else if (signum == SIGQUIT)
+	{
+		write(1, "\b\b  \b\b", 7);
+	}
+}
+
+int	signal_init(int	pid_minishell)
+{
+	while (!running)
+	{
+		if (signal(SIGINT, signal_handler))
+			return (1);
+		if (signal(SIGQUIT, signal_handler))
+			return (1);
+	}
+	running = 0;
+	kill(pid_minishell, SIGTERM);
+	return (0);
 }
 
 int	main(void)
 {
 	t_gc	*garbage;
+	int		pid_main;
+	int		pid_minishell;
+	int		status;
 
 	if (clear_terminal())
 		return (1);
-	if (signal_init())
-		return (1);
-	garbage = in_minishell();
-	printf("END\n");
-	free_all(garbage);
+	status = 0;
+	pid_main = fork();
+	if (pid_main < 0)
+		return (printf("error\n"));
+	else if (pid_main == 0)
+		exit(0);
+	else
+	{
+		while (1)
+		{
+			pid_minishell = fork();
+			if (pid_minishell < 0)
+				break ;
+			else if (pid_minishell == 0)
+			{
+				garbage = in_minishell();
+				if (!garbage)
+				{
+					printf("ici\n");
+					exit(1);
+				}
+			}
+			else
+				signal_init(pid_minishell);
+			waitpid(pid_minishell, &status, 0);
+			printf("status = %d\n", status);
+			if (status > 0)
+				break ;
+		}
+	}
+	// free_all(garbage);
 	return (0);
 }

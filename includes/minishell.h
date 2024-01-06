@@ -64,6 +64,7 @@ typedef struct garbage_colector
 	int			ret;
 	int			fd_hdoc;
 	int			go;
+	int			end;
 }					t_gc;
 
 typedef struct s_copy_str
@@ -170,7 +171,7 @@ void	free_t_exec(t_exec *ex);
 void	free_tab(char **env);
 void	exit_error(t_gc *garbage);
 
-int		signal_init(void);
+int		signal_init(int	pid_minishell);
 
 int		ft_strlen_tab(char **env);
 char	*get_pwd(void);

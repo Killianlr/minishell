@@ -104,6 +104,7 @@ void    child_process(t_gc *garbage, t_arg *s_cmd, t_exec *ex, char **paths)
 void    ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex)
 {
 	int 	pid;
+    int     status;
 
     (void)ex;
 	pid = fork();
@@ -113,7 +114,8 @@ void    ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex)
         return ;
     if (pid > 0)
     {
-        waitpid(pid, NULL, 0);
+        waitpid(pid, &status, 0);
+        garbage->ret = status / 256;
         parent_process(garbage, s_cmd, ex);
     }
 	else

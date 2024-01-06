@@ -1,45 +1,13 @@
 #include "includes/minishell.h"
 
-void	girl_hanlder(int sig)
-{
-	printf("in girl handler\n");
-	if (sig == SIGCHLD)
-	{
-		printf("GIRL got bullied\n");
-		exit(0);
-	}
-}
-
-void	boy_hanlder(int sig)
-{
-	printf("in boy handler\n");
-	if (sig == SIGCHLD)
-	{
-		printf("BOY got bullied\n");
-		exit(0);
-	}
-}
-
-void	mom_handler(int sig)
-{
-	if (sig == SIGINT)
-	{
-		printf("\nMOMY got a call\n");
-		kill(0, SIGCHLD);
-	}
-	else if (sig == SIGQUIT)
-	{
-		printf("QUIT\n");
-		exit(0);
-	}
-}
+int	i = 0;
 
 void	dad_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
-		printf("\nDADY got a call\n");
-		kill(0, SIGCHLD);
+		printf("signal recu\n");
+		i = 1;
 	}
 	else if (sig == SIGQUIT)
 	{
@@ -50,59 +18,42 @@ void	dad_handler(int sig)
 
 int	main(void)
 {
-	int	pid;
-	int	id;
-	// int	pid2;
+	int	pid_main;
+	int	pid_minishell;
 
-	id = getpid();
-	printf("MY ID = %d\n", id);
-	pid = fork();
-	// pid2 = fork();
-	if (pid < 0)
+	pid_main = fork();
+	if (pid_main < 0)
 		return (printf("error fork\n"));
-	if (pid == 0)
+	if (pid_main == 0)
+		exit(0);
+	if (pid_main > 0)
 	{
-		signal(SIGCHLD, boy_hanlder);
-		while(1)
-		{
-			printf("BOY is at school\n");
-			sleep(1);
-		}
-	}
-	else if (pid > 0)
-	{
-		printf("DAD pid is = %d\n", pid);
-		if (signal(SIGINT, dad_handler))
-			printf("got SIGINT\n");
-		signal(SIGQUIT, dad_handler);
+		printf("main processus = %d\n", pid_main);
 		while (1)
 		{
-			printf("DAD is at work\n");
+			printf("creation de fork\n");
+			pid_minishell = fork();
+			if (pid_minishell == 0)
+			{
+				printf("child\n");
+				while(1)
+				{
+					printf("in minishell\n\n");
+					sleep(1);
+				}
+			}
+			printf("parent\n");
+			while (!i)
+				signal(SIGINT, dad_handler);
+			if (i == 1)
+			{
+				i = 0;
+				printf("minishell is killed\n");
+				kill(pid_minishell, SIGTERM);
+			}
+			waitpid(pid_minishell, NULL, 0);
 			sleep(2);
 		}
 	}
-	// if (pid2 == 0)
-	// {
-	// 	signal(SIGCHLD, girl_hanlder);
-	// 	while (1)
-	// 	{
-	// 		printf("GIRL is at school\n");
-	// 		sleep(1);
-	// 	}
-	// }
-	// else if (pid2 > 0)
-	// {
-	// 	printf("MOM pid is = %d\n", pid2);
-	// 	signal(SIGINT, mom_handler);
-	// 	signal(SIGQUIT, mom_handler);
-	// 	while (1)
-	// 	{
-	// 		printf("MOM is in the kitchen\n");
-	// 		sleep(2);
-	// 	}
-	// 	// return (2);
-	// }
-	waitpid(pid, NULL, 0);
-	// waitpid(pid2, NULL, 0);
 	printf("END OF PROGRAME\n");
 }
