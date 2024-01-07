@@ -63,7 +63,7 @@ void	get_pipes(t_p *pip)
 	}
 }
 
-int	pipex(int ac, char **av, t_exec *ex, char **envp)
+int	pipex(int ac, char **av, t_exec *ex, t_gc *garbage)
 {
 	t_p	pip;
 
@@ -79,20 +79,20 @@ int	pipex(int ac, char **av, t_exec *ex, char **envp)
 	pip.pipe = malloc(sizeof(int) * pip.pipe_nbr);
 	if (!pip.pipe)
 		msg_error("error pipe\n", &pip, ex);
-	pip.path = ft_split(find_path(envp), ':');
+	pip.path = ft_split(find_path(garbage->blts->env), ':');
 	if (!pip.path)
 		free_pipe(&pip, ex);
 	get_pipes(&pip);
 	pip.idx = -1;
 	while (++(pip.idx) < pip.cmd_nbr)
-		child(pip, av, envp);
+		child(pip, av, garbage);
 	close_pipes(&pip);
 	free_main(&pip, ex, av);
 	waitpid(-1, NULL, 0);
 	return (0);
 }
 
-int	init_pipex(t_exec *ex, t_arg *s_cmd, char **env)
+int	init_pipex(t_exec *ex, t_arg *s_cmd, t_gc *garbage)
 {
     int     nb_cmd;
     char    **cmds_pipex;
@@ -116,6 +116,6 @@ int	init_pipex(t_exec *ex, t_arg *s_cmd, char **env)
             s_cmd = s_cmd->next;
     }
     cmds_pipex[i] = NULL;
-    pipex(nb_cmd, cmds_pipex, ex, env);
+    pipex(nb_cmd, cmds_pipex, ex, garbage);
 	return (nb_cmd);
 }

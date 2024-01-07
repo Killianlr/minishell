@@ -172,7 +172,9 @@ int		ft_pwd(t_gc *garbage, char **args);
 int		ft_export(t_gc *garbage, char **args, int porc);
 int		ft_unset(t_gc *garbage, char **args);
 int		ft_cd(t_gc *garbage, char **args);
+int		ft_cd_2(t_gc *garbage, char **args);
 int		ft_echo(t_gc *garbage, char **args);
+int		ft_echo_2(t_gc *garbage, char **args);
 int		ft_put_ret_value(t_gc *garbage, char **args);
 int		ft_define_var(t_gc *garbage, char **args);
 
@@ -277,8 +279,8 @@ int		size_for_del(t_pars *pars, int l);
 int		scan_av_for_hdoc(t_pars *pars, int fd_hdoc);
 char	*handle_quotes_hdoc(t_pars *pars, int l);
 
-int		pipex(int ac, char **av, t_exec *ex, char **envp);
-int		init_pipex(t_exec *ex, t_arg *s_cmd, char **env);
+int		pipex(int ac, char **av, t_exec *ex, t_gc *garbage);
+int		init_pipex(t_exec *ex, t_arg *s_cmd, t_gc *garbage);
 void    put_respipex();
 
 void	ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex);
@@ -286,7 +288,7 @@ void    set_fd(t_exec *ex);
 void	ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex);
 int 	init_t_exec(t_exec *ex, t_arg *s_cmd, t_gc *garbage);
 char	*find_path(char **envp);
-char	*get_cmd(char **paths, char	**cmd, char **envp);
+char	*get_cmd(char **paths, char	**cmd, t_gc *garbage);
 int		ft_lstsize_targ(t_arg *lst);
 void	reset_line(char **tabl, t_gc * garbage);
 int 	count_sep_exec(t_arg *s_cmd, char *sep1, char *sep2);

@@ -111,10 +111,26 @@ int	loop_lst(char *str, t_arg *s_cm, t_gc *garbage)
 		garbage->nb_exec--;
 	}
 	free_t_exec(&ex);
-	// free_tab(ex.paths);
 	garbage->arg = s_cm;
 	free_parsing(garbage->arg);
 	return (0);
+}
+
+void	signal_handler(int signum)
+{
+	if (signum == SIGINT)
+	{
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+		running = 1;
+	}
+	else if (signum == SIGQUIT)
+	{
+		printf("signal recu\n");
+		write(1, "", 7);
+	}
 }
 
 t_gc	*in_minishell(void)
@@ -139,31 +155,22 @@ t_gc	*in_minishell(void)
 		garbage->arg = NULL;
 		garbage->line = ft_prompt();
 		if (!garbage->line)
+		{
+			free_all(garbage);
 			return (NULL);
+		}
 		if ((int)ft_strlen(garbage->line))
 			garbage->arg = main_pars(garbage->line, garbage->blts, garbage);
 		free(garbage->line);
 		if (loop_lst(garbage->line, garbage->arg, garbage))
+		{
+			free_all(garbage);
 			return (NULL);
+		}
 	}
 	return (garbage);
 }
 
-void	signal_handler(int signum)
-{
-	if (signum == SIGINT)
-	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-		running = 1;
-	}
-	else if (signum == SIGQUIT)
-	{
-		write(1, "\b\b  \b\b", 7);
-	}
-}
 
 int	signal_init(int	pid_minishell)
 {
@@ -191,7 +198,7 @@ int	main(void)
 	status = 0;
 	pid_main = fork();
 	if (pid_main < 0)
-		return (printf("error\n"));
+		return (1);
 	else if (pid_main == 0)
 		exit(0);
 	else
@@ -205,11 +212,15 @@ int	main(void)
 			{
 				garbage = in_minishell();
 				if (!garbage)
+				{
 					exit(1);
+				}
 				free_all(garbage);
 			}
 			else
+			{
 				signal_init(pid_minishell);
+			}
 			waitpid(pid_minishell, &status, 0);
 			if (status > 255)
 				break ;

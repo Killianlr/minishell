@@ -21,7 +21,7 @@ void	set_fd_pipex(int in, int out)
 	close(out);
 }
 
-char	*get_cmd(char **paths, char	**cmd, char **envp)
+char	*get_cmd(char **paths, char	**cmd, t_gc *garbage)
 {
 	char	*tmp;
 	char	*command;
@@ -29,8 +29,10 @@ char	*get_cmd(char **paths, char	**cmd, char **envp)
 	if (cmd[0][0] == '/' || (cmd[0][0] == '.' && cmd[0][1] == '/'))
 	{
 		if (access(cmd[0], 0) == 0)
-			execve(cmd[0], cmd, envp);
+			execve(cmd[0], cmd, garbage->blts->env);
 	}
+	else if (is_builtins(garbage, cmd) == 2)
+		exit_child(0);
 	while (*paths)
 	{
 		tmp = ft_strjoin(*paths, "/");
@@ -44,11 +46,11 @@ char	*get_cmd(char **paths, char	**cmd, char **envp)
 	return (NULL);
 }
 
-void	next(t_p pip, char **av, char **envp)
+void	next(t_p pip, char **av, t_gc *garbage)
 {
 	close_pipes(&pip);
 	pip.args = ft_split(av[pip.idx], ' ');
-	pip.cmd = get_cmd(pip.path, pip.args, envp);
+	pip.cmd = get_cmd(pip.path, pip.args, garbage);
 	if (!pip.cmd)
 	{
 		write(2, "command not found: ", 20);
@@ -57,10 +59,10 @@ void	next(t_p pip, char **av, char **envp)
 		free_child(&pip);
 		exit(1);
 	}
-	execve(pip.cmd, pip.args, envp);
+	execve(pip.cmd, pip.args, garbage->blts->env);
 }
 
-void	child(t_p pip, char **av, char **envp)
+void	child(t_p pip, char **av, t_gc *garbage)
 {
 	pip.pid = fork();
 	if (!pip.pid)
@@ -81,6 +83,6 @@ void	child(t_p pip, char **av, char **envp)
 			close(pip.infile);
 			close(pip.outfile);
 		}
-		next(pip, av, envp);
+		next(pip, av, garbage);
 	}	
 }

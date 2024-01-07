@@ -41,7 +41,6 @@ void    put_respipex()
 
 void    set_fd(t_exec *ex)
 {
-    // write(2, "in set_fd\n", 11);
     if (ex->infile && ex->infile[ex->i] > 0)
 	{
 		if (ex->r)
@@ -51,14 +50,11 @@ void    set_fd(t_exec *ex)
 		}
 		else
         {
-	        // printf("fd in set fd= %d\n", ex->infile[ex->i]);
-
 			dup2(ex->infile[ex->i], STDIN_FILENO);
         }
 	}
 	if (ex->outfile && ex->outfile[ex->o] > 0)
 	{
-        printf("outfile = %d\n", ex->outfile[ex->o]);
 	    dup2(ex->outfile[ex->o], STDOUT_FILENO);
     }
 }
@@ -66,19 +62,11 @@ void    set_fd(t_exec *ex)
 void    parent_process(t_gc *garbage, t_arg *s_cmd, t_exec *ex)
 {
     (void) ex;
-    // char    buf[4096];
-    // int ret;
-    // ret = 879;
     ft_export(garbage, s_cmd->line, 1);
     ft_define_var(garbage, s_cmd->line);
 	ft_unset(garbage, s_cmd->line);
-    ft_cd(garbage, s_cmd->line);
-    // close(ex->tube[1]);
-    // ret = read(ex->tube[0], buf, 4096);
-    // printf("buf = %s\n", buf);
-    // close(ex->tube[0]);
-    // printf("ret = %d\n", ret);
-    // garbage->ret = ft_atoi(buf);
+    ft_cd_2(garbage, s_cmd->line);
+    ft_echo_2(garbage, s_cmd->line);
 }
 
 void    child_process(t_gc *garbage, t_arg *s_cmd, t_exec *ex, char **paths)
@@ -95,7 +83,6 @@ void    child_process(t_gc *garbage, t_arg *s_cmd, t_exec *ex, char **paths)
 	cmd_path = get_cmd(paths, s_cmd->line, garbage->blts->env);
 	if (!cmd_path)
     {
-        // printf("ici cmd not find\n");
         ft_cmd_not_find(paths, s_cmd->line[0], garbage, ex);
     }
 	execve(cmd_path, s_cmd->line, garbage->blts->env);
@@ -116,7 +103,6 @@ void    ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex)
     {
         waitpid(pid, &status, 0);
         garbage->ret = status / 256;
-        printf("in ft_exec -> garbage->ret = %d\n", garbage->ret);
         parent_process(garbage, s_cmd, ex);
     }
 	else

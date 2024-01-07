@@ -52,7 +52,7 @@ int	clear_string(t_prompt *prpt)
 			|| prpt->inpt[start] == 32) && start <= end)
 		start++;
 	if ((size_t)start >= ft_strlen(prpt->inpt))
-		return (1);
+		return (2);
 	while (prpt->inpt[end] && (!ft_isprint(prpt->inpt[end])
 			|| prpt->inpt[end] == 32))
 		end--;
@@ -94,15 +94,22 @@ char	*ft_prompt(void)
 {
 	t_prompt	prpt;
 	char		*prompt;
+	int			i;
 
 	prpt.inpt = NULL;
 	prompt = pre_prompt();
 	prpt.inpt = readline(prompt);
 	free(prompt);
-	if (clear_string(&prpt))
+	i = clear_string(&prpt);
+	if (i == 1)
 	{
 		free(prpt.inpt);
 		return (NULL);
+	}
+	else if (i == 2)
+	{
+		free(prpt.inpt);
+		return (ft_strdup(" "));
 	}
 	add_history(prpt.inpt);
 	free(prpt.inpt);

@@ -45,7 +45,7 @@ void	free_main(t_p *pip, t_exec *ex, char **av);
 int		msg_error(char *str, t_p *pip, t_exec *ex);
 int		msg_error_2(char *str, t_p *pip);
 int		pi_strcmp(char *s1, char *s2, int n);
-char	*get_cmd(char **paths, char	**cmd, char **envp);
-void	child(t_p pip, char **av, char **envp);
+char	*get_cmd(char **paths, char	**cmd, t_gc *garbage);
+void	child(t_p pip, char **av, t_gc *garbage);
 
 #endif

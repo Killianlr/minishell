@@ -118,7 +118,6 @@ void	end_of_pipex(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
                 garbage->go = 0;
                 return ;
             }
-            printf("outfile in end of pipex = %d\n", ex->outfile[ex->o]);
             set_fd(ex);
             put_respipex();
         }
@@ -149,7 +148,7 @@ void    ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
     if (typeofsep == 5)
 	{
 		ex->r = 0;
-        i = init_pipex(ex, s_cmd, garbage->blts->env);
+        i = init_pipex(ex, s_cmd, garbage);
         if (i < 0)
             return ;
         while (i-- && s_cmd->next)

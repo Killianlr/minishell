@@ -59,7 +59,6 @@ int ft_open(char *file, int typeofsep)
     else if (typeofsep == 2)
     {
         fd = open_outfile_otrunc(file);
-        printf("fd in ft_open = %d\n", fd);
         return (fd);
     }
     else if (typeofsep == 3)

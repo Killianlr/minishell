@@ -88,7 +88,7 @@ void	handle_quote_3(t_pars *pars, t_hq *data)
 	{
 		if (is_var_env(pars->av[data->i]))
 		{
-			data->buf = ms_strjoin(data->buf, get_var_env(pars, data->i), 3);
+			data->buf = ms_strjoin(data->buf, get_var_env(pars, data->i, 0), 3);
 			if (!data->buf)
 				return ;
 			data->y = ft_strlen(data->buf);

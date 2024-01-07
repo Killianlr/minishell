@@ -30,7 +30,6 @@ int	get_here_doc_2(char *av, int fd, char *buf)
 		free(buf);
 	}
 	free(av);
-	printf("fd in hdoc = %d\n", fd);
 	close(fd);
 	return (1);
 }

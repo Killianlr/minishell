@@ -36,7 +36,6 @@ void	create_prev_sep(t_arg *first)
 		return ;
 	while (next)
 	{
-		// printf("IN LOOP\n");
 		if (first->sep)
 			next->prev_sep = copy_sep(first->sep, ft_strlen(first->sep));
 		first = next;
@@ -93,9 +92,6 @@ t_arg	*parsing(t_pars *pars, t_gc *garbage)
 		sep_count--;
 	}
 	arg->next = NULL;
-	// printf("IN PARSING\n");
-	// print_cmd(first);
-	// printf("-----------------------------------------\n");
 	return (first);
 }
 

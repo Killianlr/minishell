@@ -47,24 +47,22 @@ void	free_blts(t_bui *blts)
 
 void	exit_error(t_gc *garbage)
 {
-	printf("debut free error\n");
 	free_blts(garbage->blts);
 	free(garbage->blts);
 	free(garbage->line);
 	free_parsing(garbage->arg);
 	free(garbage);
-	printf("fin free error\n");
 	exit(0);
 }
 
 void	free_all(t_gc *garbage)
 {
-	// printf("DEBUT DU FREE\n");
 	if (!garbage)
 		return ;
 	free_parsing(garbage->arg);
 	free_blts(garbage->blts);
 	free(garbage->blts);
+	if (garbage->fd_hdoc)
+		unlink(".heredoc_tmp");
 	free(garbage);
-	// printf("FIN DU PROGRAMME\n");
 }
