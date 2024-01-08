@@ -37,7 +37,7 @@ void    put_respipex(t_exec *ex)
     free(bufret);
     close(res_pipex);
     if (ex->infile || ex->outfile)
-            close_files(ex);
+        close_files(ex);
     unlink(".res_pipex");
 }
 
@@ -82,7 +82,7 @@ void    child_process(t_gc *garbage, t_arg *s_cmd, t_exec *ex, char **paths)
     set_fd(ex);
     if (is_builtins(garbage, s_cmd->line) == 2)
 		exit_child(garbage, ex);
-	cmd_path = get_cmd(paths, s_cmd->line, garbage);
+	cmd_path = get_cmd(paths, s_cmd->line, garbage, ex);
 	if (!cmd_path)
     {
         ft_cmd_not_find(paths, s_cmd->line[0], garbage, ex);
@@ -122,7 +122,6 @@ void    ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex)
 	int 	pid;
     int     status;
 
-    // (void)ex;
     if (ft_is_empty(s_cmd->line[0]) && !s_cmd->sep)
     {
         return ;
@@ -136,17 +135,13 @@ void    ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex)
         waitpid(pid, &status, 0);
         garbage->ret = status / 256;
         parent_process(garbage, s_cmd, ex);
-        // if (ex->infile || ex->outfile)
-        //     close_files(ex);
         if ((s_cmd->prev_sep && ex->infile) || (s_cmd->prev_sep && ex->outfile))
         {
-            printf("ok\n");
             close_files(ex);
         }
     }
 	else
 	{
-        printf("s_cmd->line[0] = %s\n", s_cmd->line[0]);
         child_process(garbage, s_cmd, ex, paths);
 	}
 }

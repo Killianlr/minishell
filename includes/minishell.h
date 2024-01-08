@@ -293,7 +293,7 @@ void    close_files(t_exec *ex);
 void	ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex);
 int 	init_t_exec(t_exec *ex, t_arg *s_cmd, t_gc *garbage);
 char	*find_path(char **envp);
-char	*get_cmd(char **paths, char	**cmd, t_gc *garbage);
+char	*get_cmd(char **paths, char	**cmd, t_gc *garbage, t_exec *ex);
 int		ft_lstsize_targ(t_arg *lst);
 void	reset_line(char **tabl, t_gc * garbage);
 int 	count_sep_exec(t_arg *s_cmd, char *sep1, char *sep2);

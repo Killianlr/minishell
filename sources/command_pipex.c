@@ -21,7 +21,7 @@ void	set_fd_pipex(int in, int out)
 	close(out);
 }
 
-char	*get_cmd(char **paths, char	**cmd, t_gc *garbage)
+char	*get_cmd(char **paths, char	**cmd, t_gc *garbage, t_exec *ex)
 {
 	char	*tmp;
 	char	*command;
@@ -32,7 +32,7 @@ char	*get_cmd(char **paths, char	**cmd, t_gc *garbage)
 			execve(cmd[0], cmd, garbage->blts->env);
 	}
 	else if (is_builtins(garbage, cmd) == 2)
-		exit_child(0);
+		exit_child(garbage, ex);
 	if (!paths)
 		return (NULL);
 	while (*paths)
@@ -48,11 +48,11 @@ char	*get_cmd(char **paths, char	**cmd, t_gc *garbage)
 	return (NULL);
 }
 
-void	next(t_p pip, char **av, t_gc *garbage)
+void	next(t_p pip, char **av, t_gc *garbage, t_exec *ex)
 {
 	close_pipes(&pip);
 	pip.args = ft_split(av[pip.idx], ' ');
-	pip.cmd = get_cmd(pip.path, pip.args, garbage);
+	pip.cmd = get_cmd(pip.path, pip.args, garbage, ex);
 	if (!pip.cmd)
 	{
 		write(2, "command not found: ", 20);
@@ -64,7 +64,7 @@ void	next(t_p pip, char **av, t_gc *garbage)
 	execve(pip.cmd, pip.args, garbage->blts->env);
 }
 
-void	child(t_p pip, char **av, t_gc *garbage)
+void	child(t_p pip, char **av, t_gc *garbage, t_exec *ex)
 {
 	pip.pid = fork();
 	if (!pip.pid)
@@ -85,6 +85,6 @@ void	child(t_p pip, char **av, t_gc *garbage)
 			close(pip.infile);
 			close(pip.outfile);
 		}
-		next(pip, av, garbage);
-	}	
+		next(pip, av, garbage, ex);
+	}
 }

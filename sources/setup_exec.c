@@ -123,10 +123,13 @@ void	end_of_pipex(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
         }
         else
             put_respipex(ex);
+		close_standard_fd();
         exit(0);
     }
     else
+    {
         waitpid(pid, NULL, 0);
+    }
 }
 
 void    ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex)

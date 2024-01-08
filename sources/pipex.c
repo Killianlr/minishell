@@ -85,7 +85,7 @@ int	pipex(int ac, char **av, t_exec *ex, t_gc *garbage)
 	get_pipes(&pip);
 	pip.idx = -1;
 	while (++(pip.idx) < pip.cmd_nbr)
-		child(pip, av, garbage);
+		child(pip, av, garbage, ex);
 	close_pipes(&pip);
 	free_main(&pip, ex, av);
 	waitpid(-1, NULL, 0);
