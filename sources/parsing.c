@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:04 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/06 20:57:30 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/09 00:37:14 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ void	create_prev_sep(t_arg *first)
 {
 	t_arg	*next;
 
+	if (!first)
+		return ;
 	next = first->next;
 	if (!next)
 		return ;
@@ -100,6 +102,8 @@ t_arg	*post_parsing(t_arg *arg)
 	t_arg	*first;
 	t_arg	*tmp;
 
+	if (!arg)
+		return (NULL);
 	first = arg;
 	tmp = arg->next;
 	while (tmp)
