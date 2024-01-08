@@ -6,14 +6,14 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 11:38:09 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/05 18:41:53 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/08 15:39:31 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 #include "../includes/pipex.h"
 
-void    put_respipex()
+void    put_respipex(t_exec *ex)
 {
     char    *bufrun;
     char    *bufret;
@@ -36,6 +36,8 @@ void    put_respipex()
     write(1, bufret, ft_strlen(bufret));
     free(bufret);
     close(res_pipex);
+    if (ex->infile || ex->outfile)
+            close_files(ex);
     unlink(".res_pipex");
 }
 
@@ -73,19 +75,20 @@ void    child_process(t_gc *garbage, t_arg *s_cmd, t_exec *ex, char **paths)
 {
 	char	*cmd_path;
 
-    set_fd(ex);
-    if (is_builtins(garbage, s_cmd->line) == 2)
-		exit_child(garbage);
     if (s_cmd->line[0][0] == ' ')
     {
-        exit_child(garbage);
+        exit_child(garbage, ex);
     }
+    set_fd(ex);
+    if (is_builtins(garbage, s_cmd->line) == 2)
+		exit_child(garbage, ex);
 	cmd_path = get_cmd(paths, s_cmd->line, garbage);
 	if (!cmd_path)
     {
-        close_standard_fd();
         ft_cmd_not_find(paths, s_cmd->line[0], garbage, ex);
     }
+    if (ex->infile || ex->outfile)
+            close_files(ex);
 	execve(cmd_path, s_cmd->line, garbage->blts->env);
 }
 
@@ -100,7 +103,6 @@ void    close_files(t_exec *ex)
     {
         while(i >= 0)
         {
-            printf("i %d\n", i);
             close(ex->infile[i]);
             i--;
         }
@@ -120,7 +122,7 @@ void    ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex)
 	int 	pid;
     int     status;
 
-    (void)ex;
+    // (void)ex;
     if (ft_is_empty(s_cmd->line[0]) && !s_cmd->sep)
     {
         return ;
@@ -133,13 +135,18 @@ void    ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex)
         printf("pid de l'exec command = %d\n", pid);
         waitpid(pid, &status, 0);
         garbage->ret = status / 256;
+        parent_process(garbage, s_cmd, ex);
         // if (ex->infile || ex->outfile)
         //     close_files(ex);
-        printf("ici\n");
-        parent_process(garbage, s_cmd, ex);
+        if ((s_cmd->prev_sep && ex->infile) || (s_cmd->prev_sep && ex->outfile))
+        {
+            printf("ok\n");
+            close_files(ex);
+        }
     }
 	else
 	{
+        printf("s_cmd->line[0] = %s\n", s_cmd->line[0]);
         child_process(garbage, s_cmd, ex, paths);
 	}
 }

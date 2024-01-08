@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 11:49:41 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/06 21:00:45 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/08 14:28:10 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ char	*is_ret_val(char *str, int ret_val)
 	if (str[0] == '?' && !str[1])
 	{
 		ret = ft_itoa(ret_val);
+		free(str);
 		return (ret);
 	}
 	else
@@ -76,7 +77,10 @@ char	*get_in_env(char **env, char *str, int ret_val)
 	data->buf = NULL;
 	ret = is_ret_val(str, ret_val);
 	if (ret)
+	{
+		free(data);
 		return (ret);
+	}
 	while (env[data->i])
 	{
 		data->y = 0;

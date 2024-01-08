@@ -119,10 +119,10 @@ void	end_of_pipex(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
                 return ;
             }
             set_fd(ex);
-            put_respipex();
+            put_respipex(ex);
         }
         else
-            put_respipex();
+            put_respipex(ex);
         exit(0);
     }
     else

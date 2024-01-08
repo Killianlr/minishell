@@ -51,6 +51,7 @@ int ft_open(char *file, int typeofsep)
 {
     int fd;
     
+    printf("file open = %s\n", file);
     if (typeofsep == 1)
     {
         fd = open_infile(file);

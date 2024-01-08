@@ -1,0 +1,12 @@
+        ft_calloc
+        ft_split
+        ft_get_next_line_utile
+        ft_get_next_line
+        ft_itoa
+        ft_lstnew
+        ft_strdup
+        ft_strjoin_fs1
+        ft_strjoin_fs2
+        ft_strjoin
+        ft_sort_tab_n_add_dbq
+        ft_strndup

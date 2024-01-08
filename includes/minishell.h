@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/06 21:03:45 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/08 14:48:27 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,7 +222,7 @@ int		cd_set_pwd(t_bui *blts);
 
 int 	ft_open(char *file, int typeofsep);
 
-void    exit_child(t_gc *garbage);
+void    exit_child(t_gc *garbage, t_exec *ex);
 void    ft_cmd_not_find(char **paths, char *cmd, t_gc *garbage, t_exec *ex);
 
 int 	init_open(t_exec *ex, t_arg *s_cmd, int typeofsep, t_gc *garbage);
@@ -285,10 +285,11 @@ char	*handle_quotes_hdoc(t_pars *pars, int l);
 
 int		pipex(int ac, char **av, t_exec *ex, t_gc *garbage);
 int		init_pipex(t_exec *ex, t_arg *s_cmd, t_gc *garbage);
-void    put_respipex();
+void    put_respipex(t_exec *ex);
 
 void	ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex);
 void    set_fd(t_exec *ex);
+void    close_files(t_exec *ex);
 void	ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex);
 int 	init_t_exec(t_exec *ex, t_arg *s_cmd, t_gc *garbage);
 char	*find_path(char **envp);
