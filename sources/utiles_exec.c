@@ -53,10 +53,10 @@ char	*find_path(char **envp)
 
 	r = 0;
 	max = find_max_int_tab(envp);
-	while (ft_strncmp("PATH", envp[r], 4) && r < max)
+	while (r < max && ft_strncmp("PATH", envp[r], 4))
 		r++;
 	if (r == max)
-		printf("pas de path dans env\n");
+		return (NULL);
 	else
 		return (find_path_2(envp));
 	return (NULL);

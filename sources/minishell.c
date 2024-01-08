@@ -75,11 +75,6 @@ int	is_builtins(t_gc *garbage, char **args)
 		exit_error(garbage);
 	else if (i == 2)
 		return (2);
-	// i = ft_put_ret_value(garbage, args);
-	// if (i == 1)
-	// 	exit_error(garbage);
-	// else if (i == 2)
-	// 	return (2);
 	return (0);
 }
 
@@ -116,7 +111,7 @@ int	loop_lst(char *str, t_arg *s_cm, t_gc *garbage)
 	return (0);
 }
 
-void	signal_handler(int signum)
+void	signal_handler_main(int signum)
 {
 	if (signum == SIGINT)
 	{
@@ -128,9 +123,32 @@ void	signal_handler(int signum)
 	}
 	else if (signum == SIGQUIT)
 	{
-		printf("signal recu\n");
-		write(1, "", 7);
 	}
+}
+
+void	signal_handler_child(int signum)
+{
+	if (signum == SIGINT)
+	{
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+		running = 1;
+	}
+	else if (signum == SIGQUIT)
+	{
+		write(1, "\b\b  \b\b", 6);
+	}
+}
+
+int	signal_init_child(void)
+{
+	if (signal(SIGINT, signal_handler_child))
+		return (1);
+	if (signal(SIGQUIT, signal_handler_child))
+		return (1);
+	return (0);
 }
 
 t_gc	*in_minishell(void)
@@ -146,6 +164,7 @@ t_gc	*in_minishell(void)
 		free(garbage);
 		return (NULL);
 	}
+	signal_init_child();
 	garbage->nb_exec = 0;
 	garbage->ret = 0;
 	garbage->fd_hdoc = 0;
@@ -172,13 +191,13 @@ t_gc	*in_minishell(void)
 }
 
 
-int	signal_init(int	pid_minishell)
+int	signal_init_main(int	pid_minishell)
 {
 	while (!running)
 	{
-		if (signal(SIGINT, signal_handler))
+		if (signal(SIGINT, signal_handler_main))
 			return (1);
-		if (signal(SIGQUIT, signal_handler))
+		if (signal(SIGQUIT, signal_handler_main))
 			return (1);
 	}
 	running = 0;
@@ -219,7 +238,7 @@ int	main(void)
 			}
 			else
 			{
-				signal_init(pid_minishell);
+				signal_init_main(pid_minishell);
 			}
 			waitpid(pid_minishell, &status, 0);
 			if (status > 255)

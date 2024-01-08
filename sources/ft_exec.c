@@ -80,7 +80,7 @@ void    child_process(t_gc *garbage, t_arg *s_cmd, t_exec *ex, char **paths)
     {
         exit_child(garbage);
     }
-	cmd_path = get_cmd(paths, s_cmd->line, garbage->blts->env);
+	cmd_path = get_cmd(paths, s_cmd->line, garbage);
 	if (!cmd_path)
     {
         ft_cmd_not_find(paths, s_cmd->line[0], garbage, ex);

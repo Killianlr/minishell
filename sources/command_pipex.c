@@ -33,6 +33,8 @@ char	*get_cmd(char **paths, char	**cmd, t_gc *garbage)
 	}
 	else if (is_builtins(garbage, cmd) == 2)
 		exit_child(0);
+	if (!paths)
+		return (NULL);
 	while (*paths)
 	{
 		tmp = ft_strjoin(*paths, "/");
