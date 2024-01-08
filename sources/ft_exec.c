@@ -89,12 +89,42 @@ void    child_process(t_gc *garbage, t_arg *s_cmd, t_exec *ex, char **paths)
 	execve(cmd_path, s_cmd->line, garbage->blts->env);
 }
 
+void    close_files(t_exec *ex)
+{
+    int i;
+    int o;
+
+    i = ex->i;
+    o = ex->o;
+    if (ex->infile)
+    {
+        while(i >= 0)
+        {
+            printf("i %d\n", i);
+            close(ex->infile[i]);
+            i--;
+        }
+    }
+    if (ex->outfile)
+    {
+        while(o >= 0)
+        {
+            close(ex->outfile[o]);
+            o--;
+        }
+    }
+}
+
 void    ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex)
 {
 	int 	pid;
     int     status;
 
     (void)ex;
+    if (ft_is_empty(s_cmd->line[0]) && !s_cmd->sep)
+    {
+        return ;
+    }
 	pid = fork();
 	if (pid == -1)
 		return ;
@@ -103,6 +133,9 @@ void    ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex)
         printf("pid de l'exec command = %d\n", pid);
         waitpid(pid, &status, 0);
         garbage->ret = status / 256;
+        // if (ex->infile || ex->outfile)
+        //     close_files(ex);
+        printf("ici\n");
         parent_process(garbage, s_cmd, ex);
     }
 	else
