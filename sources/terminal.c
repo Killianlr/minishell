@@ -41,12 +41,13 @@ int	clear_terminal(void)
 			return (1);
 		if (access(clear, X_OK) == 0)
 			execve(clear, args, environ);
-		return (1);
+		exit(1);
 	}
 	else if (pid > 0)
 	{
 		waitpid(pid, NULL, 0);
 		display_minishell();
+		printf("pid du parent display minishell = %d\n", pid);
 	}
 	return (0);
 }

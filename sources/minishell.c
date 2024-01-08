@@ -212,14 +212,17 @@ int	main(void)
 	int		pid_minishell;
 	int		status;
 
-	if (clear_terminal())
-		return (1);
+	// if (clear_terminal())
+	// 	return (1);
 	status = 0;
 	pid_main = fork();
 	if (pid_main < 0)
 		return (1);
 	else if (pid_main == 0)
+	{
+		close_standard_fd();
 		exit(0);
+	}
 	else
 	{
 		while (1)
@@ -232,12 +235,15 @@ int	main(void)
 				garbage = in_minishell();
 				if (!garbage)
 				{
+					close_standard_fd();
 					exit(1);
 				}
 				free_all(garbage);
 			}
 			else
 			{
+				printf("pid main = %d\n", pid_main);
+				printf("pid_minishell = %d\n", pid_minishell);
 				signal_init_main(pid_minishell);
 			}
 			waitpid(pid_minishell, &status, 0);
@@ -245,5 +251,6 @@ int	main(void)
 				break ;
 		}
 	}
+	close_standard_fd();
 	return (0);
 }

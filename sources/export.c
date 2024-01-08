@@ -37,37 +37,6 @@ int	replace_old_exp(t_bui *blts, char *arg_w_db_q)
 	return (0);
 }
 
-int	new_var_w_value(t_bui *blts, char *arg)
-{
-	char	*var_w_db_q;
-
-	var_w_db_q = add_db_quote(arg);
-	if (add_var_env(blts, var_w_db_q))
-		return (1);
-	if (replace_old_exp(blts, var_w_db_q))
-		return (1);
-	return (0);
-}
-
-int	new_name_var(t_bui *blts, char *arg)
-{
-	char	*var_name;
-
-	var_name = ft_strdup(arg);
-	if (replace_old_exp(blts, var_name))
-		return (1);
-	return (0);
-}
-
-int	check_arg_should_be_define(char *arg)
-{
-	if (!ft_strncmp(arg, "PWD", ft_strlen(arg)))
-		return (1);
-	if (!ft_strncmp(arg, "OLDPWD", ft_strlen(arg)))
-		return (1);
-	return (0);
-}
-
 int	add_var_export(t_gc *garbage, char *arg)
 {
 	int		val;

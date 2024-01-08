@@ -12,11 +12,14 @@ MY_SOURCES = 	minishell.c \
 				signal.c \
 				env.c \
 				export.c \
+				utiles_export.c \
 				unset.c \
 				free.c \
 				cd.c \
 				builtins.c \
+				builtins_2.c \
 				utiles_builtins.c \
+				utiles_env.c \
 				ft_sort_tab_n_add_dbq.c \
 				parsing.c \
 				p_line.c \
@@ -34,11 +37,12 @@ MY_SOURCES = 	minishell.c \
 				command_pipex.c \
 				free_pipex.c \
 				ft_exec.c \
-				pipex.c \
 				utiles_exec.c \
+				pipex.c \
 				error.c \
 				setup_exec.c \
 				ft_open.c \
+				utiles_path.c \
 
 SOURCES_DIR = sources
 SOURCES = $(addprefix $(SOURCES_DIR)/, $(MY_SOURCES))

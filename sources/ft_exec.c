@@ -83,6 +83,7 @@ void    child_process(t_gc *garbage, t_arg *s_cmd, t_exec *ex, char **paths)
 	cmd_path = get_cmd(paths, s_cmd->line, garbage);
 	if (!cmd_path)
     {
+        close_standard_fd();
         ft_cmd_not_find(paths, s_cmd->line[0], garbage, ex);
     }
 	execve(cmd_path, s_cmd->line, garbage->blts->env);
@@ -97,10 +98,9 @@ void    ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex)
 	pid = fork();
 	if (pid == -1)
 		return ;
-    if(pipe(ex->tube) < 0)
-        return ;
     if (pid > 0)
     {
+        printf("pid de l'exec command = %d\n", pid);
         waitpid(pid, &status, 0);
         garbage->ret = status / 256;
         parent_process(garbage, s_cmd, ex);

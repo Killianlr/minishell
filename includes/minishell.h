@@ -154,10 +154,9 @@ typedef struct exec
     char **paths;
     int res_pipex;
     int r;
-	int	tube[2];
 }           t_exec;
 
-
+void    close_standard_fd(void);
 
 char	*ft_prompt(void);
 
@@ -208,8 +207,13 @@ char	*add_db_quote(char *src);
 void	ft_swap(char **a, char **b);
 int		ft_strcmp(char *s1, char *s2);
 
-int		set_export(t_bui *blts);
+int		set_export(t_bui *blts);	//export.c
 int		update_export(t_gc *garbage, char **args);
+int		replace_old_exp(t_bui *blts, char *arg_w_db_q);
+
+int		new_var_w_value(t_bui *blts, char *arg);	//utiles_export.c
+int		new_name_var(t_bui *blts, char *arg);
+int		check_arg_should_be_define(char *arg);
 
 int		del_var_unset(t_gc *garbage, char **args);
 int		go_to_find_var_and_del(t_bui *blts, char *str);

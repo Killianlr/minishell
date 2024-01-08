@@ -77,34 +77,3 @@ int	check_var_exist(char **tableau, char *arg)
 	}
 	return (i + 1);
 }
-
-int	it_is_an_equal(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '=')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-char	**ft_sort_tab(char **tabl)
-{
-	int	i;
-
-	i = 0;
-	while (i < ft_strlen_tab(tabl) - 1)
-	{
-		if (ft_strcmp(tabl[i], tabl[i + 1]) > 0)
-		{
-			ft_swap(&tabl[i], &tabl[i + 1]);
-			i = 0;
-		}
-		i++;
-	}
-	return (tabl);
-}

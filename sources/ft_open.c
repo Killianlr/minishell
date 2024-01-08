@@ -73,3 +73,10 @@ int ft_open(char *file, int typeofsep)
     }
 	return (-1);
 }
+
+void    close_standard_fd(void)
+{
+    close(0);
+    close(1);
+    close(2);
+}
