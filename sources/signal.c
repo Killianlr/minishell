@@ -12,4 +12,11 @@
 
 #include "../includes/minishell.h"
 
-
+int	signal_init_child(void)
+{
+	if (signal(SIGINT, signal_handler_child))
+		return (1);
+	if (signal(SIGQUIT, signal_handler_child))
+		return (1);
+	return (0);
+}

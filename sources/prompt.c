@@ -12,6 +12,25 @@
 
 #include "../includes/minishell.h"
 
+int	clear_or_exit(char **str)
+{
+	
+	if (!str || !str[0])
+		return (0);
+	if (!ft_strncmp("clear", str[0], ft_strlen(str[0])))
+	{
+		if (str[1])
+		{
+			if (!ft_strncmp("history", str[1], ft_strlen(str[1])))
+				rl_clear_history();
+		}
+	}
+	if (!ft_strncmp("exit", str[0], 4) && ft_strlen(str[0]) == 4)
+		return (1);
+	else
+		return (0);
+}
+
 char	*ft_strndup(char *src, int size)
 {
 	int		i;
@@ -30,17 +49,26 @@ char	*ft_strndup(char *src, int size)
 	return (dest);
 }
 
+int	clear_string_next(t_prompt *prpt, int start, int end)
+{
+	int		i_start;
+	int		i_end;
+
+	i_start = ft_strlen(prpt->inpt) - start;
+	i_end = ft_strlen(prpt->inpt) - (end + 1);
+	prpt->str = ft_strndup(&prpt->inpt[start], i_start - i_end);
+	if (!prpt->str)
+		return (1);
+	return (0);
+}
+
 int	clear_string(t_prompt *prpt)
 {
 	int		start;
 	int		end;
-	int		i_start;
-	int		i_end;
-
+	
 	start = 0;
 	end = ft_strlen(prpt->inpt) - 1;
-	i_start = 0;
-	i_end = 0;
 	prpt->str = NULL;
 	if (!prpt->inpt)
 	{
@@ -56,9 +84,8 @@ int	clear_string(t_prompt *prpt)
 	while (prpt->inpt[end] && (!ft_isprint(prpt->inpt[end])
 			|| prpt->inpt[end] == 32))
 		end--;
-	i_start = ft_strlen(prpt->inpt) - start;
-	i_end = ft_strlen(prpt->inpt) - (end + 1);
-	prpt->str = ft_strndup(&prpt->inpt[start], i_start - i_end);
+	if (clear_string_next(prpt, start, end))
+		return (3);
 	return (0);
 }
 
@@ -111,6 +138,8 @@ char	*ft_prompt(void)
 		free(prpt.inpt);
 		return (ft_strdup(" "));
 	}
+	else if (i == 3)
+		return (NULL);
 	add_history(prpt.inpt);
 	free(prpt.inpt);
 	return (prpt.str);

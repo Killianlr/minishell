@@ -141,7 +141,5 @@ void    ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex)
         }
     }
 	else
-	{
         child_process(garbage, s_cmd, ex, paths);
-	}
 }

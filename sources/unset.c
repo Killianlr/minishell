@@ -25,19 +25,14 @@ int	find_var_in_tab_and_del(char **tabl, char *str)
 	{
 		len1 = ft_size_var_env(str);
 		len2 = ft_size_var_env(tabl[i]);
-		if ((len1 - len2) == 0)
+		if ((len1 - len2) == 0 && !ft_strncmp(str, tabl[i], len1))
 		{
-			if (!ft_strncmp(str, tabl[i], len1))
-			{
-				j++;
-				free(tabl[i]);
-			}
+			j++;
+			free(tabl[i]);
 		}
 		if (!tabl[j])
 			break ;
-		tabl[i] = tabl[j];
-		i++;
-		j++;
+		tabl[i++] = tabl[j++];
 	}
 	tabl[i] = 0;
 	return (0);

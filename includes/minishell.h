@@ -159,6 +159,7 @@ typedef struct exec
 void    close_standard_fd(void);
 
 char	*ft_prompt(void);
+int		clear_or_exit(char **str);
 
 int		clear_terminal(void);
 
@@ -177,6 +178,7 @@ int		ft_echo_2(t_gc *garbage, char **args);
 int		ft_put_ret_value(t_gc *garbage, char **args);
 int		ft_define_var(t_gc *garbage, char **args);
 
+int		is_builtins(t_gc *garbage, char **args);
 
 int		print_env(t_gc *garbage);
 int		set_env(t_bui *blts);
@@ -188,6 +190,8 @@ void	free_tab(char **env);
 void	exit_error(t_gc *garbage);
 
 int		signal_init(int	pid_minishell);
+int		signal_init_child(void);
+void	signal_handler_child(int signum);
 
 int		ft_strlen_tab(char **env);
 char	*get_pwd(void);
@@ -242,7 +246,7 @@ int		is_sep(char c);
 int		is_var_env(char c);
 int		is_quote(char c);
 
-char	**strduptab(t_pars *pars);;			//p_utils.c
+char	**strduptab(t_pars *pars);		//p_utils.c
 char	*ms_strjoin(char *s1, char *s2, int status);
 int		ms_strjoin_size(char *s1, char *s2, int size);
 int		ms_strcmp(char *s1, char *s2, int n);

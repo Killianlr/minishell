@@ -12,73 +12,25 @@
 
 #include "../includes/minishell.h"
 
-int running = 0;
-
-int	clear_or_exit(char **str)
+int	loop_lst(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
 {
-	
-	if (!str || !str[0])
-		return (0);
-	if (!ft_strncmp("clear", str[0], ft_strlen(str[0])))
+	if (clear_or_exit(s_cmd->line))
 	{
-		if (str[1])
-		{
-			if (!ft_strncmp("history", str[1], ft_strlen(str[1])))
-				rl_clear_history();
-		}
-	}
-	if (!ft_strncmp("exit", str[0], 4) && ft_strlen(str[0]) == 4)
+		free_tab(ex->paths);
 		return (1);
-	else
-		return (0);
-}
-
-int	is_builtins(t_gc *garbage, char **args)
-{
-	int	i;
-
-	i = 0;
-	if (!args)
-		return (0);
-	i = ft_env(garbage, args);
-	if (i == 1)
-		exit_error(garbage);
-	else if (i == 2)
-		return (2);
-	i = ft_pwd(garbage, args);
-	if (i == 1)
-		exit_error(garbage);
-	else if (i == 2)
-		return (2);
-	i = ft_export(garbage, args, 0);
-	if (i == 1)
-		exit_error(garbage);
-	else if (i == 2)
-		return (2);
-	i = ft_unset(garbage, args);
-	if (i == 1)
-		exit_error(garbage);
-	else if (i == 2)
-		return (2);
-	i = ft_cd(garbage, args);
-	if (i == 1)
-		exit_error(garbage);
-	else if (i == 2)
-		return (2);
-	i = ft_echo(garbage, args);
-	if (i == 1)
-		exit_error(garbage);
-	else if (i == 2)
-		return (2);
-	i = ft_define_var(garbage, args);
-	if (i == 1)
-		exit_error(garbage);
-	else if (i == 2)
-		return (2);
+	}
+	if (garbage->go)
+		ft_init_exec(s_cmd, garbage, ex);
+	else if (!garbage->go)
+		garbage->go = 1;
+	waitpid(-1, NULL, 0);
+	if (s_cmd->next)
+		s_cmd = s_cmd->next;
+	garbage->nb_exec--;
 	return (0);
 }
 
-int	loop_lst(char *str, t_arg *s_cm, t_gc *garbage)
+int	init_and_loop_lst(char *str, t_arg *s_cm, t_gc *garbage)
 {
 	t_exec	ex;
 	t_arg	*s_cmd;
@@ -91,19 +43,8 @@ int	loop_lst(char *str, t_arg *s_cm, t_gc *garbage)
         return (1);
 	while (garbage->nb_exec)
 	{
-		if (clear_or_exit(s_cmd->line))
-		{
-			free_tab(ex.paths);
+		if (loop_lst(s_cmd, garbage, &ex))
 			return (1);
-		}
-		if (garbage->go)
-			ft_init_exec(s_cmd, garbage, &ex);
-		else if (!garbage->go)
-			garbage->go = 1;
-		waitpid(-1, NULL, 0);
-		if (s_cmd->next)
-			s_cmd = s_cmd->next;
-		garbage->nb_exec--;
 	}
 	free_t_exec(&ex);
 	garbage->arg = s_cm;
@@ -111,43 +52,25 @@ int	loop_lst(char *str, t_arg *s_cm, t_gc *garbage)
 	return (0);
 }
 
-void	signal_handler_main(int signum)
+int	loop_in_minishell(t_gc *garbage)
 {
-	if (signum == SIGINT)
+	garbage->fd_hdoc = 0;
+	garbage->go = 1;
+	garbage->arg = NULL;
+	garbage->line = ft_prompt();
+	if (!garbage->line)
 	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-		running = 1;
-	}
-	else if (signum == SIGQUIT)
-	{
-	}
-}
-
-void	signal_handler_child(int signum)
-{
-	if (signum == SIGINT)
-	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-		running = 1;
-	}
-	else if (signum == SIGQUIT)
-	{
-		write(1, "\b\b  \b\b", 6);
-	}
-}
-
-int	signal_init_child(void)
-{
-	if (signal(SIGINT, signal_handler_child))
+		free_all(garbage);
 		return (1);
-	if (signal(SIGQUIT, signal_handler_child))
+	}
+	if ((int)ft_strlen(garbage->line))
+		garbage->arg = main_pars(garbage->line, garbage->blts, garbage);
+	free(garbage->line);
+	if (init_and_loop_lst(garbage->line, garbage->arg, garbage))
+	{
+		free_all(garbage);
 		return (1);
+	}
 	return (0);
 }
 
@@ -167,90 +90,10 @@ t_gc	*in_minishell(void)
 	signal_init_child();
 	garbage->nb_exec = 0;
 	garbage->ret = 0;
-	garbage->fd_hdoc = 0;
 	while (1)
 	{
-		garbage->go = 1;
-		garbage->arg = NULL;
-		garbage->line = ft_prompt();
-		if (!garbage->line)
-		{
-			free_all(garbage);
+		if (loop_in_minishell(garbage))
 			return (NULL);
-		}
-		if ((int)ft_strlen(garbage->line))
-			garbage->arg = main_pars(garbage->line, garbage->blts, garbage);
-		free(garbage->line);
-		if (loop_lst(garbage->line, garbage->arg, garbage))
-		{
-			free_all(garbage);
-			return (NULL);
-		}
 	}
 	return (garbage);
-}
-
-
-int	signal_init_main(int	pid_minishell)
-{
-	while (!running)
-	{
-		if (signal(SIGINT, signal_handler_main))
-			return (1);
-		if (signal(SIGQUIT, signal_handler_main))
-			return (1);
-	}
-	running = 0;
-	kill(pid_minishell, SIGTERM);
-	return (0);
-}
-
-int	main(void)
-{
-	t_gc	*garbage;
-	int		pid_main;
-	int		pid_minishell;
-	int		status;
-
-	// if (clear_terminal())
-	// 	return (1);
-	status = 0;
-	pid_main = fork();
-	if (pid_main < 0)
-		return (1);
-	else if (pid_main == 0)
-	{
-		close_standard_fd();
-		exit(0);
-	}
-	else
-	{
-		while (1)
-		{
-			pid_minishell = fork();
-			if (pid_minishell < 0)
-				break ;
-			else if (pid_minishell == 0)
-			{
-				garbage = in_minishell();
-				if (!garbage)
-				{
-					close_standard_fd();
-					exit(1);
-				}
-				free_all(garbage);
-			}
-			else
-			{
-				printf("pid main = %d\n", pid_main);
-				printf("pid_minishell = %d\n", pid_minishell);
-				signal_init_main(pid_minishell);
-			}
-			waitpid(pid_minishell, &status, 0);
-			if (status > 255)
-				break ;
-		}
-	}
-	close_standard_fd();
-	return (0);
 }

@@ -127,15 +127,31 @@ void	end_of_pipex(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
         exit(0);
     }
     else
-    {
         waitpid(pid, NULL, 0);
+}
+
+void    set_pipex(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
+{
+    int i;
+
+    i = 0;
+    ex->r = 0;
+    i = init_pipex(ex, s_cmd, garbage);
+    if (i < 0)
+        return ;
+    while (i-- && s_cmd->next)
+    {
+        s_cmd = s_cmd->next;
+        garbage->nb_exec--;
     }
+	ex->r = 1;
+	end_of_pipex(s_cmd, garbage, ex);
+    return ;
 }
 
 void    ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
 {
     int typeofsep;
-    int i;
     int check;
 
     typeofsep = 0;
@@ -150,18 +166,7 @@ void    ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
     }
     if (typeofsep == 5)
 	{
-		ex->r = 0;
-        i = init_pipex(ex, s_cmd, garbage);
-        if (i < 0)
-            return ;
-        while (i-- && s_cmd->next)
-        {
-            s_cmd = s_cmd->next;
-            garbage->nb_exec--;
-        }
-		ex->r = 1;
-		end_of_pipex(s_cmd, garbage, ex);
-        return ;
+		set_pipex(s_cmd, garbage, ex);
 	}
 	if (s_cmd->line[0] && check)
         ft_exec(s_cmd, ex->paths, garbage, ex);

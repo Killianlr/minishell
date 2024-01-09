@@ -87,6 +87,32 @@ int	set_unexist_env(t_bui *blts)
 	return (0);
 }
 
+int	set_exi_env(char **environ, t_bui *blts)
+{
+	blts->env = create_env(environ);
+	if (!blts->env)
+		return (1);
+	blts->pwd = get_pwd();
+	if (!blts->pwd)
+	{
+		free(blts->env);
+		return (1);
+	}
+	return (0);
+}
+
+int	set_env_oldpwd(t_bui *blts, int i)
+{
+	if (!ft_strncmp("OLDPWD", blts->env[i], 6))
+	{
+		free(blts->env[i]);
+		blts->env[i] = ft_strjoin("OLDPWD=", blts->pwd);
+		if (!blts->env[i])
+			return (1);
+	}
+	return (0);
+}
+
 int	set_env(t_bui *blts)
 {
 	extern char	**environ;
@@ -100,25 +126,13 @@ int	set_env(t_bui *blts)
 	}
 	else
 	{
-		blts->env = create_env(environ);
-		if (!blts->env)
+		if (set_exi_env(environ, blts))
 			return (1);
-		blts->pwd = get_pwd();
-		if (!blts->pwd)
-		{
-			free(blts->env);
-			return (1);
-		}
 	}
 	while (blts->env[i])
 	{
-		if (!ft_strncmp("OLDPWD", blts->env[i], 6))
-		{
-			free(blts->env[i]);
-			blts->env[i] = ft_strjoin("OLDPWD=", blts->pwd);
-			if (!blts->env[i])
-				return (1);
-		}
+		if (set_env_oldpwd(blts, i))
+			return (1);
 		i++;
 	}
 	return (0);

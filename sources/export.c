@@ -37,10 +37,35 @@ int	replace_old_exp(t_bui *blts, char *arg_w_db_q)
 	return (0);
 }
 
+int	add_val_export_next(t_gc *garbage, char *arg)
+{
+	char	*tmp;
+
+	if (check_arg_should_be_define(arg))
+	{
+		tmp = ft_strjoin(arg, "=");
+		if (!tmp)
+			return (1);
+		if (new_var_w_value(garbage->blts, tmp))
+			return (1);
+		free(tmp);
+	}
+	else if (it_is_an_equal(arg))
+	{
+		if (new_var_w_value(garbage->blts, arg))
+			return (1);
+	}
+	else
+	{
+		if (new_name_var(garbage->blts, arg))
+			return (1);
+	}
+	return (0);
+}
+
 int	add_var_export(t_gc *garbage, char *arg)
 {
 	int		val;
-	char	*tmp;
 
 	if (!ft_strncmp("PWD", arg, ft_size_var_env(arg)))
 		garbage->blts->upwd = 0;
@@ -56,27 +81,23 @@ int	add_var_export(t_gc *garbage, char *arg)
 	}
 	else
 	{
-		if (check_arg_should_be_define(arg))
-		{
-			tmp = ft_strjoin(arg, "=");
-			if (!tmp)
-				return (1);
-			if (new_var_w_value(garbage->blts, tmp))
-				return (1);
-			free(tmp);
-		}
-		else if (it_is_an_equal(arg))
-		{
-			if (new_var_w_value(garbage->blts, arg))
-				return (1);
-		}
-		else
-		{
-			if (new_name_var(garbage->blts, arg))
-				return (1);
-		}
+		if (add_val_export_next(garbage, arg))
+			return (1);
 	}
 	garbage->blts->exp = ft_sort_tab(garbage->blts->exp);
+	return (0);
+}
+
+int	update_export_next(char c, int j)
+{
+	if ((!ft_isalpha(c) && c != '=')
+		|| (!j && c == '='))
+	{
+		printf("minishell: export: `%c': not a valid identifier\n", c);
+		return (1);
+	}
+	if (c == '=')
+		return (1);
 	return (0);
 }
 
@@ -91,13 +112,7 @@ int	update_export(t_gc *garbage, char **args)
 		j = 0;
 		while (args[i][j])
 		{
-			if ((!ft_isalpha(args[i][j]) && args[i][j] != '=')
-				|| (!j && args[i][j] == '='))
-			{
-				printf("minishell: export: `%c': not a valid identifier\n", args[i][j]);
-				break ;
-			}
-			if (args[i][j] == '=')
+			if (update_export_next(args[i][j], j))
 				break ;
 			j++;
 		}

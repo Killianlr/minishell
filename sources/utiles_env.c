@@ -1,11 +1,10 @@
 
 #include "../includes/minishell.h"
 
-char	*remove_quote(char *str)
+int	remove_quote_next(char *str)
 {
-	int		i;
-	int		q;
-	char	*dest;
+	int	i;
+	int	q;
 
 	i = 0;
 	q = 0;
@@ -15,10 +14,20 @@ char	*remove_quote(char *str)
 			q++;
 		i++;
 	}
+	return (q);
+}
+
+char	*remove_quote(char *str)
+{
+	int		i;
+	int		q;
+	char	*dest;
+
+	i = 0;
+	q = remove_quote_next(str);
 	dest = malloc(sizeof(char) * (ft_strlen(str) - q + 1));
 	if (!dest)
 		return (NULL);
-	i = 0;
 	q = 0;
 	while (str[i + q])
 	{
@@ -46,31 +55,12 @@ int	print_env(t_gc *garbage)
 	return (0);
 }
 
-int	update_env(t_bui *blts)
+int	update_env_next(t_bui *blts, char *oldpwd)
 {
-	int		i;
-	int		e;
-	char	*oldpwd;
+	int	e;
+	int	i;
 
-	i = 0;
 	e = 0;
-	oldpwd = NULL;
-	while (blts->env[i])
-	{
-		if (!ft_strncmp("PWD", blts->env[i], ft_size_var_env(blts->env[i])))
-		{
-			oldpwd = ft_strdup(blts->env[i] + 4);
-			free(blts->env[i]);
-			free(blts->pwd);
-			blts->pwd = get_pwd();
-			if (!blts->pwd)
-				return (1);
-			blts->env[i] = ft_strjoin("PWD=", blts->pwd);
-			if (!blts->env[i])
-				return (1);
-		}
-		i++;
-	}
 	if (!oldpwd)
 	{
 		go_to_find_var_and_del(blts, "OLDPWD");
@@ -90,6 +80,34 @@ int	update_env(t_bui *blts)
 		}
 		i++;
 	}
+	return (0);
+}
+
+int	update_env(t_bui *blts)
+{
+	int		i;
+	char	*oldpwd;
+
+	i = 0;
+	oldpwd = NULL;
+	while (blts->env[i])
+	{
+		if (!ft_strncmp("PWD", blts->env[i], ft_size_var_env(blts->env[i])))
+		{
+			oldpwd = ft_strdup(blts->env[i] + 4);
+			free(blts->env[i]);
+			free(blts->pwd);
+			blts->pwd = get_pwd();
+			if (!blts->pwd)
+				return (1);
+			blts->env[i] = ft_strjoin("PWD=", blts->pwd);
+			if (!blts->env[i])
+				return (1);
+		}
+		i++;
+	}
+	if (update_env_next(blts, oldpwd))
+		return (1);
 	return (0);
 }
 

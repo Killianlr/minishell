@@ -59,7 +59,7 @@ int	ft_unset(t_gc *garbage, char **args)
 
 int	ft_export(t_gc *garbage, char **args, int porc)
 {
-	int		i;
+	int	i;
 
 	if (!garbage->line)
 		return (0);
