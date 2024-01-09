@@ -167,6 +167,7 @@ void    ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
     if (typeofsep == 5)
 	{
 		set_pipex(s_cmd, garbage, ex);
+        return ;
 	}
 	if (s_cmd->line[0] && check)
         ft_exec(s_cmd, ex->paths, garbage, ex);
