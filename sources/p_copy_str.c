@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_copy_str.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 10:32:14 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/06 21:03:42 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/09 14:05:59 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*copy_str_4(t_pars *pars, t_cs *data, char *buf, int ret_val)
 		return (NULL);
 	data->y = ft_strlen(buf);
 	while (pars->av[pars->i] && (!is_whitespace(pars->av[pars->i])
-		|| !is_sep(pars->av[pars->i])))
+			|| !is_sep(pars->av[pars->i])))
 		pars->i++;
 	return (buf);
 }
@@ -52,7 +52,6 @@ char	*copy_str_3(t_pars *pars, t_cs *data, char *buf)
 		return (ft_strdup(""));
 	return (buf);
 }
-
 
 char	*copy_str_2(t_pars *pars, t_cs *data, char *buf, int ret_val)
 {

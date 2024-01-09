@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:04 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/09 00:37:14 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/09 15:29:46 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,35 +94,6 @@ t_arg	*parsing(t_pars *pars, t_gc *garbage)
 		sep_count--;
 	}
 	arg->next = NULL;
-	return (first);
-}
-
-t_arg	*post_parsing(t_arg *arg)
-{
-	t_arg	*first;
-	t_arg	*tmp;
-
-	if (!arg)
-		return (NULL);
-	first = arg;
-	tmp = arg->next;
-	while (tmp)
-	{
-		if (arg && arg->sep && !arg->next)
-		{
-			ft_printf("minishell: syntax error near unexpected token `newline'\n");
-			free_parsing(first);
-			return (NULL);
-		}
-		arg = arg->next;
-		tmp = arg;
-	}
-	if (arg && arg->sep && !arg->next)
-	{
-		ft_printf("minishell: syntax error near unexpected token `newline'\n");
-		free_parsing(first);
-		return (NULL);
-	}
 	return (first);
 }
 

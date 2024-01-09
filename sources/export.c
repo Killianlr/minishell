@@ -6,36 +6,11 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:16 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/03 13:47:42 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/09 15:03:30 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	replace_old_exp(t_bui *blts, char *arg_w_db_q)
-{
-	int		i;
-	char	**new_export;
-	int		size_tab;
-
-	i = 0;
-	if (!arg_w_db_q)
-		return (1);
-	size_tab = ft_strlen_tab(blts->exp);
-	new_export = malloc(sizeof(char *) * (size_tab + 2));
-	if (!new_export)
-		return (1);
-	while (blts->exp[i])
-	{
-		new_export[i] = blts->exp[i];
-		i++;
-	}
-	new_export[i] = arg_w_db_q;
-	new_export[i + 1] = NULL;
-	free(blts->exp);
-	blts->exp = new_export;
-	return (0);
-}
 
 int	add_val_export_next(t_gc *garbage, char *arg)
 {

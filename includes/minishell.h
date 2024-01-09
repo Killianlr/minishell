@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/08 14:48:27 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/09 16:07:02 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ typedef struct s_builtins
 
 typedef struct arg
 {
-	char	**line;
-	char	*sep;
-	char	*prev_sep;
+	char		**line;
+	char		*sep;
+	char		*prev_sep;
 	struct arg	*next;
 }			t_arg;
 
@@ -81,7 +81,7 @@ typedef struct pars
 	int		i;
 }			t_pars;
 
-typedef struct 	s_size_for_line
+typedef struct s_size_for_line
 {
 	int		i;
 	char	*tmp;
@@ -89,15 +89,14 @@ typedef struct 	s_size_for_line
 	int		count;
 }			t_sfl;
 
-typedef struct 	s_size_for_malloc_del
+typedef struct s_size_for_malloc_del
 {
 	char	*tmp;
 	int		set;
 	int		i;
 }			t_sfmd;
 
-
-typedef struct 	s_get_del_hdoc
+typedef struct s_get_del_hdoc
 {
 	int		i;
 	int		y;
@@ -105,7 +104,7 @@ typedef struct 	s_get_del_hdoc
 	int		size;
 }			t_gdh;
 
-typedef struct 	s_handle_quotes
+typedef struct s_handle_quotes
 {
 	char	*buf;
 	int		end;
@@ -119,7 +118,6 @@ typedef struct s_get_line
 	int	word_count;
 }				t_sl;
 
-
 typedef struct s_count_quote
 {
 	int	i;
@@ -128,8 +126,7 @@ typedef struct s_count_quote
 	int	d_count;
 }				t_sq;
 
-
-typedef struct 	s_get_in_env
+typedef struct s_get_in_env
 {
 	char	*buf;
 	int		i;
@@ -147,23 +144,21 @@ typedef struct count_word
 
 typedef struct exec
 {
-    int *infile;
-    int i;
-    int *outfile;
-    int o;
-    char **paths;
-    int res_pipex;
-    int r;
-}           t_exec;
+	int		*infile;
+	int		i;
+	int		*outfile;
+	int		o;
+	char	**paths;
+	int		res_pipex;
+	int		r;
+}			t_exec;
 
-void    close_standard_fd(void);
+void	close_standard_fd(void);
 
 char	*ft_prompt(void);
 int		clear_or_exit(char **str);
 
-int		clear_terminal(void);
-
-int	is_builtins(t_gc *garbage, char **args);
+int		is_builtins(t_gc *garbage, char **args);
 t_gc	*in_minishell(void);
 
 t_bui	*set_builtins(void);
@@ -182,6 +177,7 @@ int		is_builtins(t_gc *garbage, char **args);
 
 int		print_env(t_gc *garbage);
 int		set_env(t_bui *blts);
+char	**create_env(char **existing_env);
 
 void	free_all(t_gc *garbage);
 void	free_blts(t_bui *blts);
@@ -189,7 +185,7 @@ void	free_t_exec(t_exec *ex);
 void	free_tab(char **env);
 void	exit_error(t_gc *garbage);
 
-int		signal_init(int	pid_minishell);
+int		signal_init(int pid_minishell);
 int		signal_init_child(void);
 void	signal_handler_child(int signum);
 
@@ -224,12 +220,12 @@ int		go_to_find_var_and_del(t_bui *blts, char *str);
 
 int		cd_set_pwd(t_bui *blts);
 
-int 	ft_open(char *file, int typeofsep);
+int		ft_open(char *file, int typeofsep);
 
-void    exit_child(t_gc *garbage, t_exec *ex);
-void    ft_cmd_not_find(char **paths, char *cmd, t_gc *garbage, t_exec *ex);
+void	exit_child(t_gc *garbage, t_exec *ex);
+void	ft_cmd_not_find(char **paths, char *cmd, t_gc *garbage, t_exec *ex);
 
-int 	init_open(t_exec *ex, t_arg *s_cmd, int typeofsep, t_gc *garbage);
+int		init_open(t_exec *ex, t_arg *s_cmd, int typeofsep, t_gc *garbage);
 
 t_arg	*main_pars(char *str, t_bui *blts, t_gc *garbage);		//pars.c
 t_arg	*parsing(t_pars *pars, t_gc *garbage);
@@ -254,19 +250,20 @@ int		ms_strcmp(char *s1, char *s2, int n);
 
 int		env_strncmp(char *s1, char *s2, int n);
 
+int		ft_strcmp(char *s1, char *s2);
 
 int		get_var_env_2(t_pars *pars, int i);			//p_utils_2.c
-int		ft_strncmp_ms(char *s1,  char *s2, int size, int l);
-
+int		ft_strncmp_ms(char *s1, char *s2, int size, int l);
+t_arg	*post_parsing(t_arg *arg);
 
 int		count_char(t_pars *pars);		//p_count.c
 int		count_word(t_pars *pars);
 int		count_sep(t_pars *pars);
 
-char	*get_in_env(char **env, char *str, int ret_val);		//p_env.c
+char	*get_in_env(char **env, char *str, int ret_val);	//p_env.c
 char	*get_var_env(t_pars *pars, int i, int ret_val);
 int		after_var_env(t_pars *pars, int i);
-
+char	*is_ret_val(char *str, int ret_val);
 
 char	*get_sep(t_pars *pars);			//p_sep.c
 int		get_sep_size(t_pars *pars);
@@ -289,17 +286,19 @@ char	*handle_quotes_hdoc(t_pars *pars, int l);
 
 int		pipex(int ac, char **av, t_exec *ex, t_gc *garbage);
 int		init_pipex(t_exec *ex, t_arg *s_cmd, t_gc *garbage);
-void    put_respipex(t_exec *ex);
+void	put_respipex(t_exec *ex);
 
 void	ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex);
-void    set_fd(t_exec *ex);
-void    close_files(t_exec *ex);
+void	set_fd(t_exec *ex);
+void	close_files(t_exec *ex);
 void	ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex);
-int 	init_t_exec(t_exec *ex, t_arg *s_cmd, t_gc *garbage);
+int		init_t_exec(t_exec *ex, t_arg *s_cmd, t_gc *garbage);
 char	*find_path(char **envp);
 char	*get_cmd(char **paths, char	**cmd, t_gc *garbage, t_exec *ex);
 int		ft_lstsize_targ(t_arg *lst);
-void	reset_line(char **tabl, t_gc * garbage);
-int 	count_sep_exec(t_arg *s_cmd, char *sep1, char *sep2);
+void	reset_line(char **tabl, t_gc *garbage);
+int		count_sep_exec(t_arg *s_cmd, char *sep1, char *sep2);
+void	set_pipex(t_arg *s_cmd, t_gc *garbage, t_exec *ex);
+int		check_sep_exec(char *sep, t_exec *ex);
 
 #endif

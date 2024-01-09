@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:19:17 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/15 14:31:45 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/09 13:46:44 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ int	del_var_unset(t_gc *garbage, char **args)
 		{
 			if (!ft_isalpha(args[i][j]))
 			{
-				printf("minishell: unset: `%s': not a valid identifier\n", args[i]);
+				printf("minishell: unset: `%s'", args[i]);
+				printf(": not a valid identifier\n");
 				e = 1;
 				break ;
 			}

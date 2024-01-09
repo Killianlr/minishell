@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_hdoc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/20 17:35:39 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/05 16:30:19 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/09 15:30:10 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int	get_here_doc_2(char *av, int fd, char *buf)
 			break ;
 		}
 		write(fd, buf, ft_strlen(buf));
-		// write(fd, "\n", 1);
 		free(buf);
 	}
 	free(av);

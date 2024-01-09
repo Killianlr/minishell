@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_line.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 11:44:50 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/06 21:02:54 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/09 14:55:15 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ char	**get_line(t_pars *pars, int ret_val)
 		buf[data.y] = copy_str(pars, ret_val);
 		if (!buf[data.y])
 		{
-			free_pars_tab(buf);	
+			free_pars_tab(buf);
 			return (NULL);
 		}
 		data.y++;

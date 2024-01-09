@@ -3,46 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   p_utils.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:02:50 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/06 20:43:48 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/09 15:29:15 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	env_strncmp(char *s1, char *s2, int n)
-{
-	int	i;
-
-	i = 0;
-	if (n <= 0)
-		return (-1);
-	if (!s1 || !s2)
-		return (1);
-	while (s1[i] == s2[i] && i < n - 1 && s1[i] && s2[i])
-		++i;
-	if (s1[i + 1] && s1[i + 1] != '=')
-		return (1);
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-}
-
-int	ms_strcmp(char *s1, char *s2, int n)
-{
-	int	i;
-
-	i = 0;
-	if (n == 0)
-		return (-1);
-	if (n != (int)ft_strlen(s2) - 1)
-		return (1);
-	if (!s1 || !s2)
-		return (1);
-	while (s1[i] == s2[i] && i < n - 1 && s1[i] && s2[i])
-		++i;
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-}
 
 int	ms_strjoin_size(char *s1, char *s2, int size)
 {
@@ -85,19 +53,23 @@ void	ms_strjoin_free(char *s1, char *s2, int status)
 char	*ms_strjoin_2(char *s1, char *s2)
 {
 	char	*str;
-	int		len_s1 = ft_strlen(s1);
-	int		len_s2 = ft_strlen(s2);
+	int		len_s1;
+	int		len_s2;
+	int		i;
+	int		y;
 
+	len_s1 = ft_strlen(s1);
+	len_s2 = ft_strlen(s2);
+	i = 0;
+	y = 0;
 	str = malloc(sizeof(char) * (len_s1 + len_s2 + 1));
 	if (!str)
 		return (NULL);
-	int i = 0;
 	while (s1[i])
 	{
 		str[i] = s1[i];
 		i++;
 	}
-	int y = 0;
 	while (s2[y])
 	{
 		str[i + y] = s2[y];

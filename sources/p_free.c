@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_free.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 16:17:12 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/08 16:03:49 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/09 14:07:21 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,6 @@ void	print_cmd(t_arg *cmd)
 	(void) i;
 	if (!cmd)
 		return ;
-	// while (cmd->next)
-	// {
-	// 	i = 0;
-	// 	while (cmd->line[i])
-	// 		ft_printf("line = %s\n", cmd->line[i++]);
-	// 	ft_printf("sep = %s\n", cmd->sep);
-	// 	ft_printf("prev_sep = %s\n====================================\n", cmd->prev_sep);
-	// 	if (cmd->next)
-	// 		cmd = cmd->next;
-	// }
-	// i = 0;
-	// while (cmd->line[i])
-	// 	ft_printf("line = %s\n", cmd->line[i++]);
-	// ft_printf("sep = %s\n", cmd->sep);
-	// ft_printf("prev_sep = %s\n====================================\n", cmd->prev_sep);
 }
 
 void	free_pars_tab(char **arr)
@@ -46,13 +31,11 @@ void	free_pars_tab(char **arr)
 		return ;
 	while (arr[i])
 	{
-		// printf("arr[%d] %s\n", i, arr[i]);
 		free(arr[i]);
 		i++;
 	}
 	if (arr)
 		free(arr);
-	// printf("---------H-------\n");
 }
 
 int	ft_error(char *msg, int ret)

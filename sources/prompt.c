@@ -6,30 +6,11 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:46 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/15 14:29:17 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/09 14:57:45 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	clear_or_exit(char **str)
-{
-	
-	if (!str || !str[0])
-		return (0);
-	if (!ft_strncmp("clear", str[0], ft_strlen(str[0])))
-	{
-		if (str[1])
-		{
-			if (!ft_strncmp("history", str[1], ft_strlen(str[1])))
-				rl_clear_history();
-		}
-	}
-	if (!ft_strncmp("exit", str[0], 4) && ft_strlen(str[0]) == 4)
-		return (1);
-	else
-		return (0);
-}
 
 char	*ft_strndup(char *src, int size)
 {
@@ -66,7 +47,7 @@ int	clear_string(t_prompt *prpt)
 {
 	int		start;
 	int		end;
-	
+
 	start = 0;
 	end = ft_strlen(prpt->inpt) - 1;
 	prpt->str = NULL;

@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utiles_env.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/09 13:53:35 by kle-rest          #+#    #+#             */
+/*   Updated: 2024/01/09 14:57:03 by kle-rest         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
@@ -108,19 +119,5 @@ int	update_env(t_bui *blts)
 	}
 	if (update_env_next(blts, oldpwd))
 		return (1);
-	return (0);
-}
-
-int	it_is_an_equal(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '=')
-			return (1);
-		i++;
-	}
 	return (0);
 }

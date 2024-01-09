@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/09 13:47:05 by kle-rest          #+#    #+#             */
+/*   Updated: 2024/01/09 14:29:26 by kle-rest         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int running = 0;
+int	g_running = 0;
 
 void	signal_handler_main(int signum)
 {
@@ -11,7 +22,7 @@ void	signal_handler_main(int signum)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		running = 1;
+		g_running = 1;
 	}
 	else if (signum == SIGQUIT)
 	{
@@ -26,7 +37,7 @@ void	signal_handler_child(int signum)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		running = 1;
+		g_running = 1;
 	}
 	else if (signum == SIGQUIT)
 	{
@@ -34,27 +45,27 @@ void	signal_handler_child(int signum)
 	}
 }
 
-int	signal_init_main(int	pid_minishell)
+int	signal_init_main(int pid_minishell)
 {
-	while (!running)
+	while (!g_running)
 	{
 		if (signal(SIGINT, signal_handler_main))
 			return (1);
 		if (signal(SIGQUIT, signal_handler_main))
 			return (1);
 	}
-	running = 0;
+	g_running = 0;
 	kill(pid_minishell, SIGTERM);
 	return (0);
 }
 
-void    main_parent(void)
+void	main_parent(void)
 {
 	t_gc	*garbage;
-    int		pid_minishell;
+	int		pid_minishell;
 	int		status;
 
-    while (1)
+	while (1)
 	{
 		pid_minishell = fork();
 		if (pid_minishell < 0)
@@ -80,7 +91,6 @@ void    main_parent(void)
 int	main(void)
 {
 	int		pid_main;
-	
 
 	pid_main = fork();
 	if (pid_main < 0)

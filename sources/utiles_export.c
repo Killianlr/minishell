@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utiles_export.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/09 14:20:01 by kle-rest          #+#    #+#             */
+/*   Updated: 2024/01/09 15:03:35 by kle-rest         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
@@ -47,4 +58,29 @@ char	**ft_sort_tab(char **tabl)
 		i++;
 	}
 	return (tabl);
+}
+
+int	replace_old_exp(t_bui *blts, char *arg_w_db_q)
+{
+	int		i;
+	char	**new_export;
+	int		size_tab;
+
+	i = 0;
+	if (!arg_w_db_q)
+		return (1);
+	size_tab = ft_strlen_tab(blts->exp);
+	new_export = malloc(sizeof(char *) * (size_tab + 2));
+	if (!new_export)
+		return (1);
+	while (blts->exp[i])
+	{
+		new_export[i] = blts->exp[i];
+		i++;
+	}
+	new_export[i] = arg_w_db_q;
+	new_export[i + 1] = NULL;
+	free(blts->exp);
+	blts->exp = new_export;
+	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_quote.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:06:01 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/06 20:20:08 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/09 15:38:58 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,15 @@ int	count_quote_2(t_pars *pars, t_sq *data)
 	if (data->s_count % 2 != 0 || data->d_count % 2 != 0)
 		return (1);
 	ret = data->s_count + data->d_count;
-	free(data);
 	return (ret);
 }
 
 int	count_quote(t_pars *pars)
 {
 	t_sq	*data;
+	int		ret;
 
+	ret = 0;
 	data = malloc(sizeof(t_sq) * 1);
 	if (!data)
 		return (0);
@@ -51,33 +52,9 @@ int	count_quote(t_pars *pars)
 	data->set = 0;
 	data->s_count = 0;
 	data->d_count = 0;
-	return (count_quote_2(pars, data));
-}
-
-int	quote_is_closed(t_pars *pars, int l)
-{
-	int		target;
-	int		i;
-
-	target = 0;
-	i = l;
-	if (count_quote(pars) % 2 != 0)
-		return (ft_error("Error 1, quote unclosed", 0));
-	else
-	{
-		while (pars->av[i])
-		{
-			if (target == 0 && is_quote(pars->av[i]) > 0)
-			{
-				target = is_quote(pars->av[i]);
-				i++;
-			}
-			if (target > 0 && target == is_quote(pars->av[i]))
-				return (i);
-			i++;
-		}
-	}
-	return (0);
+	ret = count_quote_2(pars, data);
+	free(data);
+	return (ret);
 }
 
 void	handle_quote_3(t_pars *pars, t_hq *data)

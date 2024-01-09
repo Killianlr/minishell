@@ -8,7 +8,6 @@ LIB = $(addprefix $(LIBFT_DIR)/, $(LIBFT))
 
 MY_SOURCES = 	minishell.c \
 				prompt.c \
-				terminal.c \
 				signal.c \
 				env.c \
 				export.c \
@@ -30,6 +29,7 @@ MY_SOURCES = 	minishell.c \
 				p_hdoc.c \
 				p_hdoc_2.c \
 				p_env.c \
+				p_get_in_env.c \
 				p_quote.c \
 				p_utils.c \
 				p_utils_2.c \
@@ -46,6 +46,7 @@ MY_SOURCES = 	minishell.c \
 				main.c \
 				builtins_exec.c \
 				utiles_env_2.c \
+				utiles_pipex.c \
 
 SOURCES_DIR = sources
 SOURCES = $(addprefix $(SOURCES_DIR)/, $(MY_SOURCES))
