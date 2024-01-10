@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 11:38:09 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/09 15:24:16 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/10 11:27:09 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,8 @@ void	ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex)
 		waitpid(pid, &status, 0);
 		garbage->ret = status / 256;
 		parent_process(garbage, s_cmd, ex);
-		close_files(ex);
+		if (!s_cmd->next)
+			close_files(ex);
 	}
 	else
 		child_process(garbage, s_cmd, ex, paths);

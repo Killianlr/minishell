@@ -6,21 +6,11 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 16:17:12 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/09 14:07:21 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/10 11:27:26 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	print_cmd(t_arg *cmd)
-{
-	int	i;
-
-	i = 0;
-	(void) i;
-	if (!cmd)
-		return ;
-}
 
 void	free_pars_tab(char **arr)
 {

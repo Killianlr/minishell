@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 13:57:05 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/09 13:57:37 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/10 11:26:39 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ int	ft_open(char *file, int typeofsep)
 {
 	int	fd;
 
-	printf("file open = %s\n", file);
 	if (typeofsep == 1)
 	{
 		fd = open_infile(file);

@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:43 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/09 13:57:58 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/10 10:48:44 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,6 @@ int	loop_lst(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
 	else if (!garbage->go)
 		garbage->go = 1;
 	waitpid(-1, NULL, 0);
-	if (s_cmd->next)
-		s_cmd = s_cmd->next;
-	garbage->nb_exec--;
 	return (0);
 }
 
@@ -45,6 +42,9 @@ int	init_and_loop_lst(char *str, t_arg *s_cm, t_gc *garbage)
 	{
 		if (loop_lst(s_cmd, garbage, &ex))
 			return (1);
+		if (s_cmd->next)
+			s_cmd = s_cmd->next;
+		garbage->nb_exec--;
 	}
 	free_t_exec(&ex);
 	garbage->arg = s_cm;
