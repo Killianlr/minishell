@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/20 23:28:28 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/21 10:33:12 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/12 14:21:11 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,68 +89,3 @@ char	*get_del_hdoc(t_pars *pars, int l)
 	data->y = 0;
 	return (get_del_hdoc_2(pars, data, ret));
 }
-
-// int	size_for_malloc_del_3(t_pars *pars, t_sfmd *data, int size)
-// {
-// 	if (is_quote(pars->av[data->i]) && data->set == 0)
-// 	{
-// 		data->set = is_quote(pars->av[data->i]);
-// 		data->tmp = handle_quotes(pars, data->i);
-// 		size += (int) ft_strlen(data->tmp);
-// 		data->i++;
-// 		while (is_quote(pars->av[data->i]) && data->set > 0)
-// 			data->i++;
-// 	}
-// 	return (size);
-// }
-
-// int	size_for_malloc_del_2(t_pars *pars, t_sfmd *data, int size)
-// {
-// 	while (pars->av[data->i])
-// 	{
-// 		if (data->set == is_quote(pars->av[data->i]) && data->set > 0)
-// 		{
-// 			data->set = 0;
-// 			data->i++;
-// 		}
-// 		size = size_for_malloc_del_3(pars, data, size);
-// 		if (is_whitespace(pars->av[data->i]))
-// 			data->i++;
-// 		if (is_printable(pars->av[data->i]) && !is_sep(pars->av[data->i])
-// 			&& !is_quote(pars->av[data->i]))
-// 		{
-// 			size++;
-// 			data->i++;
-// 		}
-// 		if (is_sep(pars->av[data->i]))
-// 		{
-// 			free(data->tmp);
-// 			return (size);
-// 		}
-// 	}
-// 	return (size);
-// }
-
-// int	size_for_malloc_del(t_pars *pars)
-// {
-// 	t_sfmd	*data;
-// 	int		size;
-
-// 	data = malloc(sizeof(t_sfmd));
-// 	if (!data)
-// 		return (-1);
-// 	size = 0;
-// 	data->set = 0;
-// 	data->tmp = NULL;
-// 	data->i = pars->i;
-// 	while (pars->av[data->i] && is_whitespace(pars->av[data->i]))
-// 		data->i++;
-// 	if (pars->av[data->i] == '<' && pars->av[data->i + 1] == '<')
-// 		data->i += 2;
-// 	else
-// 		return (0);
-// 	if (data->tmp)
-// 		free(data->tmp);
-// 	size = size_for_malloc_del_2(pars, data, size);
-// 	return (size);
-// }

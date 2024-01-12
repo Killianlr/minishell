@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_hdoc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/20 17:35:39 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/09 15:30:10 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/12 15:36:05 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,14 @@ int	get_here_doc_2(char *av, int fd, char *buf)
 		write(1, "> ", 3);
 		buf = get_next_line(0, 0);
 		if (!buf)
-			return (-1);
+		{
+			printf("Minishell: warning: here-document delimited by end-of-file (wanted `%s')\n", av);
+			break ;
+		}
 		if (!ms_strcmp(av, buf, ft_strlen(av)))
 		{
 			free(buf);
+			// free(buf);
 			break ;
 		}
 		write(fd, buf, ft_strlen(buf));
@@ -42,9 +46,9 @@ int	get_here_doc(char *av, int fd)
 		fd = open(".heredoc_tmp", O_CREAT | O_WRONLY | O_TRUNC, 0000644);
 	else
 	{
-		close(fd);
 		unlink(".heredoc_tmp");
 		fd = open(".heredoc_tmp", O_CREAT | O_WRONLY | O_TRUNC, 0000644);
+		return (get_here_doc_2(av, fd, buf));
 	}
 	if (fd < 0)
 		return (0);
@@ -111,5 +115,7 @@ int	scan_av_for_hdoc(t_pars *pars, int fd_hdoc)
 			fd_hdoc = scan_av_for_hdoc_2(pars, fd_hdoc, i);
 		i++;
 	}
+	if (fd_hdoc)
+		get_next_line(0, 1);
 	return (fd_hdoc);
 }

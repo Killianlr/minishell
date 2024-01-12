@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:04 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/10 11:28:03 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/12 16:08:06 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,5 +122,6 @@ t_arg	*main_pars(char *str, t_bui *blts, t_gc *garbage)
 	create_prev_sep(arg);
 	arg = post_parsing(arg);
 	free(pars);
+	// print_arg(arg);
 	return (arg);
 }

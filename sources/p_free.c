@@ -3,14 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   p_free.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 16:17:12 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/10 11:27:26 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/12 16:05:11 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	print_arg(t_arg *arg)
+{
+	t_arg	*tmp;
+
+	if (!arg)
+		return ;
+	tmp = arg->next;
+	while (tmp)
+	{
+		if (arg->line)
+		{
+			for (int i = 0; arg->line[i]; i++)
+				printf("line[i] = %s[%i]\n", arg->line[i], i);			
+		}
+		if (arg->sep)
+			printf("sep = %s\n", arg->sep);
+		if (arg->prev_sep)
+			printf("sep = %s\n", arg->prev_sep);
+	}
+	if (arg->line)
+	{
+		for (int i = 0; arg->line[i]; i++)
+			printf("line[i] = %s[%i]\n", arg->line[i], i);			
+	}
+	if (arg->sep)
+		printf("sep = %s\n", arg->sep);
+	if (arg->prev_sep)
+		printf("sep = %s\n", arg->prev_sep);
+}
 
 void	free_pars_tab(char **arr)
 {

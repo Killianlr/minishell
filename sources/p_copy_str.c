@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_copy_str.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 10:32:14 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/09 14:05:59 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/12 16:07:50 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*copy_str_3(t_pars *pars, t_cs *data, char *buf)
 		return (NULL);
 	data->y = ft_strlen(buf);
 	if (quote_is_closed(pars, pars->i) > 0)
-		pars->i = quote_is_closed(pars, pars->i);
+		pars->i = quote_is_closed(pars, pars->i) + 1;
 	else
 		return (ft_strdup(""));
 	return (buf);
