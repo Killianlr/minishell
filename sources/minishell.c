@@ -6,17 +6,69 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:43 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/10 10:48:44 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/12 16:15:48 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	ret_value_exit(char *nbr, int i, int ret_value, t_gc *garbage)
+{
+	while (nbr[i])
+	{
+		if (!ft_isdigit(nbr[i]))
+		{
+			printf("minishell: exit: %s: numeric argument required\n", nbr);
+			free_all(garbage);
+			exit(2);
+		}
+		i++;
+	}
+	ret_value = ft_atoi(nbr);
+	if (ret_value > 0)
+	{
+		while (ret_value > 256)
+			ret_value -= 256;
+	}
+	else if (ret_value < 0)
+	{
+		ret_value *= -1;
+		while (ret_value > 256)
+			ret_value -= 256;
+		ret_value = 256 - ret_value;
+	}
+	exit(ret_value);
+}
+
+void	ft_exit(t_gc *garbage, char **args)
+{
+	int	i;
+	int	ret_value;
+
+	i = 0;
+	ret_value = 0;
+	if (!args[1])
+	{
+		free_all(garbage);
+		exit(0);
+	}
+	if (args[2])
+	{
+		free_all(garbage);
+		printf("minishell: exit: too many arguments\n");
+		exit(1);
+	}
+	if (args[1][i] == '-')
+		i++;
+	ret_value_exit(args[1], i, ret_value, garbage);
+}
 
 int	loop_lst(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
 {
 	if (clear_or_exit(s_cmd->line))
 	{
 		free_tab(ex->paths);
+		ft_exit(garbage, s_cmd->line);
 		return (1);
 	}
 	if (garbage->go)

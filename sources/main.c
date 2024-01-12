@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 13:47:05 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/12 11:35:47 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/12 16:17:23 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	signal_init_main(int pid_minishell)
 	return (0);
 }
 
-void	main_parent(void)
+int	main_parent(void)
 {
 	t_gc	*garbage;
 	int		pid_minishell;
@@ -82,19 +82,21 @@ void	main_parent(void)
 		}
 		else
 		{
-			printf("pid minishell = %d\n", pid_minishell);
 			signal_init_main(pid_minishell);
 		}
 		waitpid(pid_minishell, &status, 0);
-		if (status > 255)
+		if (status > 255 || status == 0)
 			break ;
 	}
+	return (status / 256);
 }
 
 int	main(void)
 {
 	int		pid_main;
+	int		ret;
 
+	
 	pid_main = fork();
 	if (pid_main < 0)
 		return (1);
@@ -105,8 +107,8 @@ int	main(void)
 	}
 	else
 	{
-		main_parent();
+		ret = main_parent();
 	}
 	close_standard_fd();
-	return (0);
+	return (ret);
 }
