@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/12 16:05:20 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/12 20:15:02 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -302,6 +302,6 @@ void	set_pipex(t_arg *s_cmd, t_gc *garbage, t_exec *ex);
 int		check_sep_exec(char *sep, t_exec *ex);
 
 void	print_arg(t_arg *arg);
-
+char	*new_str(t_pars *pars, int ret_val);
 
 #endif

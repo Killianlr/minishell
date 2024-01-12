@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_utils.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:02:50 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/09 15:29:15 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/12 20:58:11 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,7 @@ int	ms_strjoin_size(char *s1, char *s2, int size)
 	int		i;
 	int		y;
 
-	if (size < 0)
-		return (0);
-	if (!s1)
-		return (0);
-	if (!s2)
+	if (size < 0 || !s1 || !s2)
 		return (0);
 	i = 0;
 	while (s1[i])

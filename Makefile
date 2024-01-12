@@ -34,6 +34,7 @@ MY_SOURCES = 	minishell.c \
 				p_utils.c \
 				p_utils_2.c \
 				p_free.c \
+				p_new_str.c \
 				command_pipex.c \
 				free_pipex.c \
 				ft_exec.c \

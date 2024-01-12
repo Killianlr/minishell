@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:04 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/12 16:08:06 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/12 20:57:46 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ t_arg	*main_pars(char *str, t_bui *blts, t_gc *garbage)
 	pars->av = str;
 	pars->env = blts->env;
 	pars->i = 0;
+	new_str(pars, garbage->ret);
 	if (count_quote(pars) % 2 != 0)
 	{
 		free(pars);
@@ -121,6 +122,7 @@ t_arg	*main_pars(char *str, t_bui *blts, t_gc *garbage)
 	arg = parsing(pars, garbage);
 	create_prev_sep(arg);
 	arg = post_parsing(arg);
+	free(pars->av);
 	free(pars);
 	// print_arg(arg);
 	return (arg);
