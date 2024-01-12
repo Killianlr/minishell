@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:43 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/12 16:15:48 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/12 16:39:14 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	ret_value_exit(char *nbr, int i, int ret_value, t_gc *garbage)
 			ret_value -= 256;
 		ret_value = 256 - ret_value;
 	}
+	free_all(garbage);
 	exit(ret_value);
 }
 
