@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 13:47:05 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/10 11:29:43 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/12 11:35:47 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	signal_handler_main(int signum)
 	}
 	else if (signum == SIGQUIT)
 	{
+		write(1, "\b\b  \b\b", 6);
 	}
 }
 
@@ -41,7 +42,6 @@ void	signal_handler_child(int signum)
 	}
 	else if (signum == SIGQUIT)
 	{
-		write(1, "\b\b  \b\b", 6);
 	}
 }
 
@@ -81,7 +81,10 @@ void	main_parent(void)
 			free_all(garbage);
 		}
 		else
+		{
+			printf("pid minishell = %d\n", pid_minishell);
 			signal_init_main(pid_minishell);
+		}
 		waitpid(pid_minishell, &status, 0);
 		if (status > 255)
 			break ;

@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 13:58:11 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/10 11:14:50 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/12 11:39:46 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	ft_cmd_not_find(char **paths, char *cmd, t_gc *garbage, t_exec *ex)
 void	exit_child(t_gc *garbage, t_exec *ex)
 {
 	close_files(ex);
+	free_tab(ex->paths);
 	close_standard_fd();
 	free_all(garbage);
 	exit(1);

@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 13:42:15 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/09 14:56:07 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/12 12:05:00 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	is_builtins(t_gc *garbage, char **args)
 	int	i;
 
 	i = 0;
-	if (!args)
+	if (!args || !garbage->line)
 		return (0);
 	i = ft_env(garbage, args);
 	if (i == 1)

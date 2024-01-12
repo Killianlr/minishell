@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 11:38:09 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/10 11:27:09 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/12 11:38:50 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,9 @@ void	child_process(t_gc *garbage, t_arg *s_cmd, t_exec *ex, char **paths)
 	}
 	set_fd(ex);
 	if (is_builtins(garbage, s_cmd->line) == 2)
+	{
 		exit_child(garbage, ex);
+	}
 	cmd_path = get_cmd(paths, s_cmd->line, garbage, ex);
 	if (!cmd_path)
 	{
@@ -103,11 +105,14 @@ void	ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex)
 		return ;
 	if (pid > 0)
 	{
+		printf("pid exec = %d\n", pid);
 		waitpid(pid, &status, 0);
 		garbage->ret = status / 256;
 		parent_process(garbage, s_cmd, ex);
 		if (!s_cmd->next)
+		{
 			close_files(ex);
+		}
 	}
 	else
 		child_process(garbage, s_cmd, ex, paths);

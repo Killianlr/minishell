@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 13:50:08 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/09 14:56:02 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/12 12:07:17 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	ft_echo_2(t_gc *garbage, char **args)
 	return (0);
 }
 
-void	loop_echo_write(char **args, int i, t_gc *garbage)
+int	loop_echo_write(char **args, int i, t_gc *garbage)
 {
 	while (args[i] && args[i + 1])
 	{
@@ -37,6 +37,25 @@ void	loop_echo_write(char **args, int i, t_gc *garbage)
 			i++;
 		}
 	}
+	return (i);
+}
+
+int	option_echo(char *tiret_n)
+{
+	int	i;
+
+	i = 0;
+	if (!tiret_n[i])
+		return (1);
+	if (tiret_n[i] != '-')
+		return (1);
+	i++;
+	while (tiret_n[i] && tiret_n[i] == 'n')
+		i++;
+	if (i == (int)ft_strlen(tiret_n))
+		return (0);
+	else
+		return (1);
 }
 
 int	ft_echo(t_gc *garbage, char **args)
@@ -50,12 +69,13 @@ int	ft_echo(t_gc *garbage, char **args)
 		return (0);
 	if (!ft_strncmp(args[0], "echo", ft_strlen(args[0])))
 	{
-		if (!ft_strncmp(args[1], "-n", ft_strlen(args[0])))
-			e = 1;
-		if (e && args[i] && !ft_strncmp(args[i], "-n", ft_strlen(args[i])))
+		while (args[i] && !option_echo(args[i]))
+		{
 			i++;
-		loop_echo_write(args, i, garbage);
-		if (!ft_strncmp(args[i], "$?", 4))
+			e = 1;
+		}
+		i = loop_echo_write(args, i, garbage);
+		if (args[i] && !ft_strncmp(args[i], "$?", 4))
 			ft_putnbr_fd(garbage->ret, STDOUT_FILENO);
 		else
 			write(STDOUT_FILENO, args[i], ft_strlen(args[i]));
@@ -69,8 +89,6 @@ int	ft_echo(t_gc *garbage, char **args)
 
 int	ft_cd_2(t_gc *garbage, char **args)
 {
-	if (!garbage->line)
-		return (0);
 	if (!ft_strncmp(args[0], "cd", 3))
 	{
 		garbage->ret = 0;
