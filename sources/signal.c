@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:19:07 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/15 14:29:53 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/13 16:06:51 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 
 int	signal_init_child(void)
 {
-	if (signal(SIGINT, signal_handler_child))
-		return (1);
-	if (signal(SIGQUIT, signal_handler_child))
+	if (signal(SIGQUIT, SIG_IGN))
 		return (1);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/12 20:15:02 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/13 18:08:23 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,6 +235,8 @@ void	free_parsing(t_arg *cmd);		//p_free.c
 void	print_cmd(t_arg *cmd);
 void	free_pars_tab(char **arr);
 int		ft_error(char *msg, int ret);
+void	free_victime(t_arg *cmd);
+
 
 int		is_printable(char c);		//p_is.c
 int		is_whitespace(char c);

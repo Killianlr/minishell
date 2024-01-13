@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 13:47:05 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/12 16:17:23 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/13 16:09:54 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,46 +16,41 @@ int	g_running = 0;
 
 void	signal_handler_main(int signum)
 {
+	int	i;
+
+	i = 1000000;
 	if (signum == SIGINT)
 	{
 		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
+		while(i)
+			i--;
 		g_running = 1;
 	}
 	else if (signum == SIGQUIT)
 	{
-		write(1, "\b\b  \b\b", 6);
 	}
 }
 
 void	signal_handler_child(int signum)
 {
+	int	i;
+
+	i = 1000000;
 	if (signum == SIGINT)
 	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-		g_running = 1;
+		while(i)
+			i--;
 	}
 	else if (signum == SIGQUIT)
 	{
 	}
 }
 
-int	signal_init_main(int pid_minishell)
+int	signal_init_main()
 {
-	while (!g_running)
-	{
-		if (signal(SIGINT, signal_handler_main))
-			return (1);
-		if (signal(SIGQUIT, signal_handler_main))
-			return (1);
-	}
-	g_running = 0;
-	kill(pid_minishell, SIGTERM);
+	if (!signal(SIGINT, signal_handler_main))
+		return (1);
+	signal(SIGQUIT, SIG_IGN);
 	return (0);
 }
 
@@ -67,6 +62,7 @@ int	main_parent(void)
 
 	while (1)
 	{
+		status = 1;
 		pid_minishell = fork();
 		if (pid_minishell < 0)
 			break ;
@@ -80,11 +76,16 @@ int	main_parent(void)
 			}
 			free_all(garbage);
 		}
-		else
+		while (!g_running)
 		{
-			signal_init_main(pid_minishell);
+			signal_init_main();
+			waitpid(pid_minishell, &status, WNOHANG);
+			if (status > 255 || status == 0)
+				break ;
 		}
-		waitpid(pid_minishell, &status, 0);
+		g_running = 0;
+		kill(pid_minishell, SIGTERM);
+		waitpid(pid_minishell, NULL, 0);
 		if (status > 255 || status == 0)
 			break ;
 	}
@@ -96,7 +97,7 @@ int	main(void)
 	int		pid_main;
 	int		ret;
 
-	
+	g_running = 0;
 	pid_main = fork();
 	if (pid_main < 0)
 		return (1);
