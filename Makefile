@@ -48,6 +48,7 @@ MY_SOURCES = 	minishell.c \
 				builtins_exec.c \
 				utiles_env_2.c \
 				utiles_pipex.c \
+				new_arg.c \
 
 SOURCES_DIR = sources
 SOURCES = $(addprefix $(SOURCES_DIR)/, $(MY_SOURCES))

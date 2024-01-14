@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 14:53:41 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/13 18:54:24 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/14 10:26:18 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,68 +29,7 @@ int	check_sep_exec(char *sep, t_exec *ex)
 	return (5);
 }
 
-int	init_open_sans_reset(t_exec *ex, t_arg *s_cmd, int typeofsep, t_gc *garbage)
-{
-	(void)garbage;
-	if (typeofsep && typeofsep % 2 == 0)
-	{
-		ex->o++;
-		ex->outfile[ex->o] = ft_open(s_cmd->next->line[0], typeofsep);
-		if (ex->outfile[ex->o] == -1)
-		{
-			printf("error access file or open %s ", s_cmd->next->line[0]);
-			return (1);
-		}
-	}
-	if (typeofsep && typeofsep % 2 == 1 && typeofsep != 5)
-	{
-		ex->i++;
-		ex->infile[ex->i] = ft_open(s_cmd->next->line[0], typeofsep);
-		if (ex->infile[ex->i] == -1)
-		{
-			printf("error access file or open %s\n", s_cmd->next->line[0]);
-			return (1);
-		}
-	}
-	return (0);
-}
 
-t_arg	*ft_redir(t_exec *ex, t_arg *s_cmd, t_gc *garbage)
-{
-	t_arg *tmp;
-	t_arg *victime;
-	t_arg *first_victime;
-
-	int		typeofsep;
-	int		typeofsep_next;
-
-	tmp = s_cmd;
-	typeofsep = check_sep_exec(s_cmd->sep, ex);
-	if (!typeofsep)
-		return (tmp);
-	victime = NULL;
-	(void)victime;
-	first_victime = NULL;
-	typeofsep_next = check_sep_exec(s_cmd->next->sep, ex);
-	if (typeofsep != typeofsep_next)
-		return (s_cmd);
-	while (typeofsep == typeofsep_next && !s_cmd->next->line[1])
-	{
-		if (init_open_sans_reset(ex, s_cmd, typeofsep, garbage))
-			return (NULL);
-		s_cmd = s_cmd->next;
-		first_victime = s_cmd;
-		typeofsep = check_sep_exec(s_cmd->sep, ex);
-		if (!typeofsep)
-			break ;
-		typeofsep_next = check_sep_exec(s_cmd->next->sep, ex);		
-	}
-	s_cmd = s_cmd->next;
-	free_victime(first_victime);
-	tmp->next = s_cmd;
-	printf("tmp.line = %s & tmp.NEXT.line = %s\n", tmp->line[0], tmp->next->line[0]);
-	return (tmp);
-}
 
 int	init_t_exec(t_exec *ex, t_arg *s_cmd, t_gc *garbage)
 {
@@ -115,7 +54,8 @@ int	init_t_exec(t_exec *ex, t_arg *s_cmd, t_gc *garbage)
 			return (1);
 		ex->outfile[0] = -1;
 	}
-	s_cmd = ft_redir(ex, s_cmd, garbage);
+	// s_cmd = ft_redir(ex, s_cmd, garbage);
+	// s_cmd = new_arg(ex, s_cmd);
 	return (0);
 }
 

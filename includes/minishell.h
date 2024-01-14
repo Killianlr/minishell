@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/13 18:08:23 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/14 09:35:24 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,16 @@ typedef struct garbage_colector
 	int			go;
 	int			end;
 }					t_gc;
+
+typedef struct t_new_arg
+{
+	t_arg	*tmp;
+	t_arg	*first_to_free;
+	t_arg	*rest_to_free;
+	int		sep_val;
+	int		prev_sep_val;
+}			t_na;
+
 
 typedef struct s_copy_str
 {
@@ -305,5 +315,7 @@ int		check_sep_exec(char *sep, t_exec *ex);
 
 void	print_arg(t_arg *arg);
 char	*new_str(t_pars *pars, int ret_val);
+t_arg	*new_arg(t_exec *ex, t_arg *arg);
+
 
 #endif

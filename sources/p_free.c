@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 16:17:12 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/13 18:08:04 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/14 09:53:23 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@ void	print_arg(t_arg *arg)
 {
 	t_arg	*tmp;
 
+	printf("in print\n");
 	if (!arg)
 		return ;
 	tmp = arg->next;
 	while (tmp)
 	{
-		printf("111\n");
 		if (arg->line)
 		{
 			for (int i = 0; arg->line[i]; i++)
