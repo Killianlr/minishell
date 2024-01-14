@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   setup_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 14:53:41 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/14 14:48:56 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/14 18:44:11 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-#include "../includes/pipex.h"
 
 int	check_sep_exec(char *sep, t_exec *ex)
 {
@@ -29,13 +28,55 @@ int	check_sep_exec(char *sep, t_exec *ex)
 	return (5);
 }
 
+int	count_pipe(t_arg *s_cmd, char *sep)
+{
+	int	i;
+
+	i = 0;
+	while (s_cmd->next)
+	{
+		if (!ft_strncmp(s_cmd->sep, sep, 2))
+			i++;
+		s_cmd = s_cmd->next;
+	}
+	return (i);
+}
+
+int	get_pipes(t_exec *ex)
+{
+	int	i;
+
+	i = 0;
+	if (!ex->nb_pipe)
+		return (0);
+	while (i < ex->nb_pipe)
+	{
+		if (pipe(ex->pipex + 2 * i) < 0)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 int	init_t_exec(t_exec *ex, t_arg *s_cmd, t_gc *garbage)
 {
 	ex->i = -1;
 	ex->o = -1;
 	ex->r = 0;
+	ex->p = 0;
+	ex->idx = -1;
+	ex->pipex = NULL;
+	ex->nb_pipe = count_pipe(s_cmd, "|");
 	ex->infile = NULL;
 	ex->outfile = NULL;
+	if (ex->nb_pipe)
+	{
+		ex->pipex = malloc(sizeof(int) * (2 * ex->nb_pipe));
+		if (!ex->pipex)
+			return (1);
+		if (get_pipes(ex))
+			return (1);
+	}
 	ex->paths = ft_split(find_path(garbage->blts->env), ':');
 	ex->res_pipex = -1;
 	if (count_sep_exec(s_cmd, "<", "<<"))
@@ -90,6 +131,7 @@ void	ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
 
 	typeofsep = 0;
 	check = garbage->go;
+	ex->p = 0;
 	if (!s_cmd)
 		return ;
 	typeofsep = check_sep_exec(s_cmd->sep, ex);
@@ -100,11 +142,22 @@ void	ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
 	}
 	if (typeofsep == 5)
 	{
-		set_pipex(s_cmd, garbage, ex);
-		return ;
+		ex->p = 1;
+		ex->idx++;
+		//set_pipex(s_cmd, garbage, ex);
 	}
+	else if (check_sep_exec(s_cmd->prev_sep, ex) == 5)
+	{
+		ex->p = 1;
+		ex->idx++;
+	}
+	else
+		ex->idx = -1;
 	if (s_cmd->line[0] && check)
+	{
+		// printf("go for exec\n");
 		ft_exec(s_cmd, ex->paths, garbage, ex);
+	}
 	else
 		close_files(ex);
 }

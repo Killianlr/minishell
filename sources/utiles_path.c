@@ -6,12 +6,11 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 13:49:48 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/09 13:49:57 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/14 17:17:42 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-#include "../includes/pipex.h"
 
 static int	find_max_int_tab(char **env)
 {

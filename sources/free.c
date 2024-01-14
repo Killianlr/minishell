@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:21 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/10 11:25:21 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/14 18:50:17 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ void	free_t_exec(t_exec *ex)
 		free(ex->outfile);
 	if (ex->infile)
 		free(ex->infile);
+	if (ex->pipex)
+		free(ex->pipex);
 	unlink(".heredoc_tmp");
 }
 

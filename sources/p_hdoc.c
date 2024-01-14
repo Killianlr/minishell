@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/20 17:35:39 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/14 14:43:39 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/12 15:36:05 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,13 @@ int	get_here_doc_2(char *av, int fd, char *buf)
 		buf = get_next_line(0, 0);
 		if (!buf)
 		{
-			printf("Minishell : hdoc ended by EOF (wanted `%s')\n", av);
+			printf("Minishell: warning: here-document delimited by end-of-file (wanted `%s')\n", av);
 			break ;
 		}
 		if (!ms_strcmp(av, buf, ft_strlen(av)))
 		{
 			free(buf);
+			// free(buf);
 			break ;
 		}
 		write(fd, buf, ft_strlen(buf));

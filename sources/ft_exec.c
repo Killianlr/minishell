@@ -3,29 +3,64 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exec.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 11:38:09 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/14 14:44:35 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/14 18:48:52 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-#include "../includes/pipex.h"
+
+void	close_pipes(t_exec *ex)
+{
+	int	i;
+
+	i = 0;
+	while (i < (2 * ex->nb_pipe))
+	{
+		close(ex->pipex[i]);
+		i++;
+	}
+}
 
 void	set_fd(t_exec *ex)
 {
-	if (ex->infile && ex->infile[ex->i] > 0)
+	printf("ici\n");
+	if (ex->p)
 	{
-		if (ex->r)
+		if (ex->idx == 0)
 		{
-			dup2(ex->infile[ex->i], ex->res_pipex);
-			close(ex->res_pipex);
+			// printf("---------PREMIERE COMMANDE-------\n");
+			if (ex->infile && ex->infile[ex->i] > 0)
+			{
+				dup2(ex->infile[ex->i], STDIN_FILENO);
+			}
+			dup2(ex->pipex[1], STDOUT_FILENO);
+			write(2, "la\n", 4);
+		}
+		else if (ex->idx == ex->nb_pipe)
+		{
+			// printf("---------DERNIERE COMMANDE-------\n");
+			if (ex->outfile && ex->outfile[ex->o] > 0)
+			{
+				dup2(ex->outfile[ex->o], STDOUT_FILENO);
+			}
+			write(2, "la 2\n", 6);
+			dup2(ex->pipex[2 * ex->idx - 2], STDIN_FILENO);
 		}
 		else
 		{
-			dup2(ex->infile[ex->i], STDIN_FILENO);
+			// printf("---------MIDDLE COMMANDE-------\n");
+			dup2(ex->pipex[2 * ex->idx - 2], STDIN_FILENO);
+			dup2(ex->pipex[2 * ex->idx + 1], STDOUT_FILENO);
 		}
+		close_pipes(ex);
+		return ;
+	}
+	if (ex->infile && ex->infile[ex->i] > 0)
+	{
+		dup2(ex->infile[ex->i], STDIN_FILENO);
 	}
 	if (ex->outfile && ex->outfile[ex->o] > 0)
 	{
@@ -38,7 +73,7 @@ void	parent_process(t_gc *garbage, t_arg *s_cmd, t_exec *ex)
 	(void) ex;
 	ft_export(garbage, s_cmd->line, 1);
 	ft_define_var(garbage, s_cmd->line);
-	ft_unset(garbage, s_cmd->line);
+	ft_unset(garbage, s_cmd->line, 1);
 	ft_cd_2(garbage, s_cmd->line);
 	ft_echo_2(garbage, s_cmd->line);
 }
@@ -62,7 +97,7 @@ void	child_process(t_gc *garbage, t_arg *s_cmd, t_exec *ex, char **paths)
 		ft_cmd_not_find(paths, s_cmd->line[0], garbage, ex);
 	}
 	if (ex->infile || ex->outfile)
-		free_t_exec(ex);
+		close_files(ex);
 	execve(cmd_path, s_cmd->line, garbage->blts->env);
 }
 
@@ -96,6 +131,7 @@ void	ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex)
 	int		pid;
 	int		status;
 
+	status = 0;
 	if (ft_is_empty(s_cmd->line[0]))
 	{
 		return ;
@@ -105,7 +141,16 @@ void	ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex)
 		return ;
 	if (pid > 0)
 	{
-		printf("pid exec = %d\n", pid);
+		// printf("commande pour exec = %s, ex->p = %d ex->idx = %d\n", s_cmd->line[0], ex->p, ex->idx);
+		// printf("fin du parent de exec %s, ex->p = %d\n", s_cmd->line[0], ex->p);
+		if (ex->idx == ex->nb_pipe)
+		{
+			// printf("close pipes\n");
+			close_pipes(ex);
+			ex->p = 0;
+		}
+		if (ex->p == 1)
+			return ;
 		waitpid(pid, &status, 0);
 		garbage->ret = status / 256;
 		parent_process(garbage, s_cmd, ex);
@@ -115,5 +160,7 @@ void	ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex)
 		}
 	}
 	else
+	{
 		child_process(garbage, s_cmd, ex, paths);
+	}
 }

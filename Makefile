@@ -35,12 +35,8 @@ MY_SOURCES = 	minishell.c \
 				p_utils_2.c \
 				p_free.c \
 				p_new_str.c \
-				command_pipex.c \
-				free_pipex.c \
 				ft_exec.c \
 				utiles_exec.c \
-				utils_other.c \
-				pipex.c \
 				error.c \
 				setup_exec.c \
 				ft_open.c \
@@ -48,7 +44,6 @@ MY_SOURCES = 	minishell.c \
 				main.c \
 				builtins_exec.c \
 				utiles_env_2.c \
-				utiles_pipex.c \
 				new_arg.c \
 				open_to_free.c \
 

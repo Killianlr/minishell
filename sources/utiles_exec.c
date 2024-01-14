@@ -6,12 +6,11 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 11:38:35 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/09 15:00:44 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/14 17:22:24 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-#include "../includes/pipex.h"
 
 int	ft_lstsize_targ(t_arg *lst)
 {
@@ -87,4 +86,41 @@ void	put_respipex(t_exec *ex)
 	if (ex->infile || ex->outfile)
 		close_files(ex);
 	unlink(".res_pipex");
+}
+
+char	*get_cmd(char **paths, char	**cmd, t_gc *garbage, t_exec *ex)
+{
+	char	*tmp;
+	char	*command;
+
+	if (cmd[0][0] == '/' || (cmd[0][0] == '.' && cmd[0][1] == '/'))
+	{
+		if (access(cmd[0], 0) == 0)
+			execve(cmd[0], cmd, garbage->blts->env);
+	}
+	else if (is_builtins(garbage, cmd) == 2)
+		exit_child(garbage, ex);
+	if (!paths)
+		return (NULL);
+	while (*paths)
+	{
+		tmp = ft_strjoin(*paths, "/");
+		command = ft_strjoin(tmp, cmd[0]);
+		free(tmp);
+		if (access(command, 0) == 0)
+			return (command);
+		free(command);
+		paths++;
+	}
+	return (NULL);
+}
+
+int	ft_strcmp(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	while (s1[i] == s2[i] && s1[i] && s2[i])
+		i++;
+	return (s1[i] - s2[i]);
 }

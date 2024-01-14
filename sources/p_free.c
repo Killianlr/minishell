@@ -3,47 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   p_free.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 16:17:12 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/14 13:59:07 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/14 09:53:23 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-// void	print_arg(t_arg *arg)
-// {
-// 	t_arg	*tmp;
+void	print_arg(t_arg *arg)
+{
+	t_arg	*tmp;
 
-// 	printf("in print\n");
-// 	if (!arg)
-// 		return ;
-// 	tmp = arg->next;
-// 	while (tmp)
-// 	{
-// 		if (arg->line)
-// 		{
-// 			for (int i = 0; arg->line[i]; i++)
-// 				printf("line[i] = %s[%i]\n", arg->line[i], i);			
-// 		}
-// 		printf("sep = %s\n", arg->sep);
-// 		printf("prev sep = %s\n", arg->prev_sep);
-// 		arg = arg->next;
-// 		tmp = arg;
-// 	}
-// 	if (arg)
-// 	{
-// 		if (arg->line)
-// 		{
-// 			for (int i = 0; arg->line[i]; i++)
-// 				printf("line[i] = %s[%i]\n", arg->line[i], i);			
-// 		}
-// 		printf("sep = %s\n", arg->sep);
-// 		printf("prev sep = %s\n", arg->prev_sep);
-// 	}
-// 	printf("=-=-=out of print=-=-=\n");
-// }
+	printf("in print\n");
+	if (!arg)
+		return ;
+	tmp = arg->next;
+	while (tmp)
+	{
+		if (arg->line)
+		{
+			for (int i = 0; arg->line[i]; i++)
+				printf("line[i] = %s[%i]\n", arg->line[i], i);			
+		}
+		printf("sep = %s\n", arg->sep);
+		printf("prev sep = %s\n", arg->prev_sep);
+		arg = arg->next;
+		tmp = arg;
+	}
+	if (arg->line)
+	{
+		for (int i = 0; arg->line[i]; i++)
+			printf("line[i] = %s[%i]\n", arg->line[i], i);			
+	}
+	printf("sep = %s\n", arg->sep);
+	printf("prev sep = %s\n", arg->prev_sep);
+}
 
 void	free_pars_tab(char **arr)
 {

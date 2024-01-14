@@ -3,14 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:43 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/14 15:30:17 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/14 17:56:51 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	ret_value_exit(char *nbr, int i, int ret_value, t_gc *garbage)
+{
+	while (nbr[i])
+	{
+		if (!ft_isdigit(nbr[i]))
+		{
+			printf("minishell: exit: %s: numeric argument required\n", nbr);
+			free_all(garbage);
+			exit(2);
+		}
+		i++;
+	}
+	ret_value = ft_atoi(nbr);
+	if (ret_value > 0)
+	{
+		while (ret_value > 256)
+			ret_value -= 256;
+	}
+	else if (ret_value < 0)
+	{
+		ret_value *= -1;
+		while (ret_value > 256)
+			ret_value -= 256;
+		ret_value = 256 - ret_value;
+	}
+	free_all(garbage);
+	exit(ret_value);
+}
 
 void	ft_exit(t_gc *garbage, char **args)
 {
@@ -47,7 +76,10 @@ int	loop_lst(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
 		ft_init_exec(s_cmd, garbage, ex);
 	else if (!garbage->go)
 		garbage->go = 1;
-	waitpid(-1, NULL, 0);
+	// if (ex->p == 1)
+	// 	return (0);
+	// else
+	// 	waitpid(-1, NULL, 0);
 	return (0);
 }
 
