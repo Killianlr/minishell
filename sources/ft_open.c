@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_open.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 13:57:05 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/13 16:11:16 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/14 11:10:43 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ int	ft_open(char *file, int typeofsep)
 {
 	int	fd;
 
-	printf("file open = %s\n", file);
 	if (typeofsep == 1)
 	{
 		fd = open_infile(file);

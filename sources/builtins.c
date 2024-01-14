@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:06 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/03 14:46:14 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/14 11:01:09 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	ft_define_var(t_gc *garbage, char **args)
 	return (0);
 }
 
-int	ft_unset(t_gc *garbage, char **args)
+int	ft_unset(t_gc *garbage, char **args, int k)
 {
 	if (!garbage->line)
 		return (0);
@@ -47,7 +47,7 @@ int	ft_unset(t_gc *garbage, char **args)
 		garbage->ret = 0;
 		if (!args[1])
 			return (0);
-		if (del_var_unset(garbage, args))
+		if (del_var_unset(garbage, args, k))
 		{
 			garbage->ret = 1;
 			return (1);

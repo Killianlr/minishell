@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 11:56:31 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/21 18:12:58 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/14 11:25:53 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	next(t_p pip, char **av, t_gc *garbage, t_exec *ex)
 		free_child(&pip);
 		exit(1);
 	}
+	printf("exec cmd pipex\n");
 	execve(pip.cmd, pip.args, garbage->blts->env);
 }
 

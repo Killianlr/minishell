@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/14 09:35:24 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/14 11:05:00 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ t_bui	*set_builtins(void);
 int		ft_env(t_gc *garbage, char **args);
 int		ft_pwd(t_gc *garbage, char **args);
 int		ft_export(t_gc *garbage, char **args, int porc);
-int		ft_unset(t_gc *garbage, char **args);
+int		ft_unset(t_gc *garbage, char **args, int k);
 int		ft_cd(t_gc *garbage, char **args);
 int		ft_cd_2(t_gc *garbage, char **args);
 int		ft_echo(t_gc *garbage, char **args);
@@ -225,7 +225,7 @@ int		new_var_w_value(t_bui *blts, char *arg);	//utiles_export.c
 int		new_name_var(t_bui *blts, char *arg);
 int		check_arg_should_be_define(char *arg);
 
-int		del_var_unset(t_gc *garbage, char **args);
+int		del_var_unset(t_gc *garbage, char **args, int k);
 int		go_to_find_var_and_del(t_bui *blts, char *str);
 
 int		cd_set_pwd(t_bui *blts);

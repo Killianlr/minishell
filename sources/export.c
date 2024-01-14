@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:16 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/09 15:03:30 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/14 10:58:31 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ int	add_var_export(t_gc *garbage, char *arg)
 
 int	update_export_next(char c, int j)
 {
+	if (j > 0)
+		return (0);
 	if ((!ft_isalpha(c) && c != '=')
 		|| (!j && c == '='))
 	{
