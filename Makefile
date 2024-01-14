@@ -39,6 +39,7 @@ MY_SOURCES = 	minishell.c \
 				free_pipex.c \
 				ft_exec.c \
 				utiles_exec.c \
+				utils_other.c \
 				pipex.c \
 				error.c \
 				setup_exec.c \
@@ -49,6 +50,7 @@ MY_SOURCES = 	minishell.c \
 				utiles_env_2.c \
 				utiles_pipex.c \
 				new_arg.c \
+				open_to_free.c \
 
 SOURCES_DIR = sources
 SOURCES = $(addprefix $(SOURCES_DIR)/, $(MY_SOURCES))

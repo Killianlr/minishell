@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 13:47:05 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/13 19:06:49 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/14 15:39:11 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	signal_handler_main(int signum)
 	if (signum == SIGINT)
 	{
 		printf("\n");
-		while(i)
+		while (i)
 			i--;
 		g_running = 1;
 	}
@@ -31,27 +31,30 @@ void	signal_handler_main(int signum)
 	}
 }
 
-void	signal_handler_child(int signum)
+int	sub_parent(int pid_minishell, int status)
 {
-	int	i;
-
-	i = 1000000;
-	if (signum == SIGINT)
+	while (!g_running)
 	{
-		while(i)
-			i--;
+		signal_init_main();
+		waitpid(pid_minishell, &status, WNOHANG);
+		if (status > 255 || status == 0)
+			return (status);
 	}
-	else if (signum == SIGQUIT)
-	{
-	}
+	g_running = 0;
+	kill(pid_minishell, SIGTERM);
+	waitpid(pid_minishell, NULL, 0);
+	return (status);
 }
 
-int	signal_init_main()
+void	main_child(t_gc *garbage)
 {
-	if (!signal(SIGINT, signal_handler_main))
-		return (1);
-	signal(SIGQUIT, SIG_IGN);
-	return (0);
+	garbage = in_minishell();
+	if (!garbage)
+	{
+		close_standard_fd();
+		exit(1);
+	}
+	free_all(garbage);
 }
 
 int	main_parent(void)
@@ -60,6 +63,7 @@ int	main_parent(void)
 	int		pid_minishell;
 	int		status;
 
+	garbage = NULL;
 	while (1)
 	{
 		status = 1;
@@ -67,27 +71,13 @@ int	main_parent(void)
 		if (pid_minishell < 0)
 			break ;
 		else if (pid_minishell == 0)
+			main_child(garbage);
+		else
 		{
-			garbage = in_minishell();
-			if (!garbage)
-			{
-				close_standard_fd();
-				exit(1);
-			}
-			free_all(garbage);
-		}
-		while (!g_running)
-		{
-			signal_init_main();
-			waitpid(pid_minishell, &status, WNOHANG);
+			status = sub_parent(pid_minishell, status);
 			if (status > 255 || status == 0)
 				break ;
 		}
-		g_running = 0;
-		kill(pid_minishell, SIGTERM);
-		waitpid(pid_minishell, NULL, 0);
-		if (status > 255 || status == 0)
-			break ;
 	}
 	return (status / 256);
 }

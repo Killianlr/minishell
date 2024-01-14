@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 15:01:29 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/14 11:12:26 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/09 15:59:19 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ void	set_pipex(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
 
 	i = 0;
 	ex->r = 0;
-	printf("SET_PIPEX\n");
 	i = init_pipex(ex, s_cmd, garbage);
 	if (i < 0)
 		return ;

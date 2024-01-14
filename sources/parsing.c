@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:04 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/12 20:57:46 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/14 14:48:29 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,6 @@ t_arg	*main_pars(char *str, t_bui *blts, t_gc *garbage)
 	if (!str)
 		return (NULL);
 	arg = NULL;
-	pars = NULL;
 	pars = malloc(sizeof(t_pars));
 	if (!pars)
 		return (NULL);
@@ -124,6 +123,5 @@ t_arg	*main_pars(char *str, t_bui *blts, t_gc *garbage)
 	arg = post_parsing(arg);
 	free(pars->av);
 	free(pars);
-	// print_arg(arg);
 	return (arg);
 }

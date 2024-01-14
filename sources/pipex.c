@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 13:55:48 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/14 11:23:35 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/09 14:05:16 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ int	pipex(int ac, char **av, t_exec *ex, t_gc *garbage)
 {
 	t_p	pip;
 
-	printf("PIPEX\n");
 	if (ex->infile)
 		pip.infile = ex->infile[ex->i];
 	else
@@ -90,7 +89,6 @@ int	pipex(int ac, char **av, t_exec *ex, t_gc *garbage)
 	close_pipes(&pip);
 	free_main(&pip, ex, av);
 	waitpid(-1, NULL, 0);
-	printf("FIN PIPEX\n");
 	return (0);
 }
 
@@ -118,12 +116,6 @@ int	init_pipex(t_exec *ex, t_arg *s_cmd, t_gc *garbage)
 			s_cmd = s_cmd->next;
 	}
 	cmds_pipex[i] = NULL;
-	int	cmdpipex = 0;
-	while (cmdpipex < nb_cmd)
-	{
-		printf("cmds_pipex[%d] = %s\n", cmdpipex, cmds_pipex[cmdpipex]);
-		cmdpipex++;
-	}
 	pipex(nb_cmd, cmds_pipex, ex, garbage);
 	return (nb_cmd);
 }

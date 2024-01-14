@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/14 11:05:00 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/14 15:32:12 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,20 @@ typedef struct garbage_colector
 typedef struct t_new_arg
 {
 	t_arg	*tmp;
+	t_arg	*ret_next;
 	t_arg	*first_to_free;
 	t_arg	*rest_to_free;
 	int		sep_val;
-	int		prev_sep_val;
+	int		next_sep_val;
 }			t_na;
 
+typedef struct s_new_str
+{
+	int		len;
+	int		i;
+	int		y;
+	int		set;
+}			t_ns;
 
 typedef struct s_copy_str
 {
@@ -175,7 +183,7 @@ t_bui	*set_builtins(void);
 int		ft_env(t_gc *garbage, char **args);
 int		ft_pwd(t_gc *garbage, char **args);
 int		ft_export(t_gc *garbage, char **args, int porc);
-int		ft_unset(t_gc *garbage, char **args, int k);
+int		ft_unset(t_gc *garbage, char **args);
 int		ft_cd(t_gc *garbage, char **args);
 int		ft_cd_2(t_gc *garbage, char **args);
 int		ft_echo(t_gc *garbage, char **args);
@@ -225,7 +233,7 @@ int		new_var_w_value(t_bui *blts, char *arg);	//utiles_export.c
 int		new_name_var(t_bui *blts, char *arg);
 int		check_arg_should_be_define(char *arg);
 
-int		del_var_unset(t_gc *garbage, char **args, int k);
+int		del_var_unset(t_gc *garbage, char **args);
 int		go_to_find_var_and_del(t_bui *blts, char *str);
 
 int		cd_set_pwd(t_bui *blts);
@@ -247,7 +255,6 @@ void	free_pars_tab(char **arr);
 int		ft_error(char *msg, int ret);
 void	free_victime(t_arg *cmd);
 
-
 int		is_printable(char c);		//p_is.c
 int		is_whitespace(char c);
 int		is_sep(char c);
@@ -258,7 +265,6 @@ char	**strduptab(t_pars *pars);		//p_utils.c
 char	*ms_strjoin(char *s1, char *s2, int status);
 int		ms_strjoin_size(char *s1, char *s2, int size);
 int		ms_strcmp(char *s1, char *s2, int n);
-// char	*no_quote(t_pars *pars);
 
 int		env_strncmp(char *s1, char *s2, int n);
 
@@ -315,7 +321,15 @@ int		check_sep_exec(char *sep, t_exec *ex);
 
 void	print_arg(t_arg *arg);
 char	*new_str(t_pars *pars, int ret_val);
-t_arg	*new_arg(t_exec *ex, t_arg *arg);
 
+t_arg	*new_arg(t_exec *ex, t_arg *arg);
+int		set_sep_val(t_na *n_a, t_arg *arg, t_exec *ex);
+t_arg	*open_to_free(t_arg *to_free, t_exec *ex);
+
+void	signal_handler_main(int signum);
+int		signal_init_main(void);
+
+int		loop_echo_write(char **args, int i, t_gc *garbage);
+void	ret_value_exit(char *nbr, int i, int re_value, t_gc *garbage);
 
 #endif

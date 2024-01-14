@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 13:50:08 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/12 12:07:17 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/14 15:26:20 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,22 +22,6 @@ int	ft_echo_2(t_gc *garbage, char **args)
 		return (2);
 	}
 	return (0);
-}
-
-int	loop_echo_write(char **args, int i, t_gc *garbage)
-{
-	while (args[i] && args[i + 1])
-	{
-		if (!ft_strncmp(args[i], "$?", 4))
-			ft_putnbr_fd(garbage->ret, STDOUT_FILENO);
-		else
-		{
-			write(STDOUT_FILENO, args[i], ft_strlen(args[i]));
-			write(STDOUT_FILENO, " ", 1);
-			i++;
-		}
-	}
-	return (i);
 }
 
 int	option_echo(char *tiret_n)

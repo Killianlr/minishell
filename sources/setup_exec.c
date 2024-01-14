@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setup_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 14:53:41 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/14 10:26:18 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/14 14:48:56 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ int	check_sep_exec(char *sep, t_exec *ex)
 		return (4);
 	return (5);
 }
-
-
 
 int	init_t_exec(t_exec *ex, t_arg *s_cmd, t_gc *garbage)
 {
@@ -54,8 +52,7 @@ int	init_t_exec(t_exec *ex, t_arg *s_cmd, t_gc *garbage)
 			return (1);
 		ex->outfile[0] = -1;
 	}
-	// s_cmd = ft_redir(ex, s_cmd, garbage);
-	// s_cmd = new_arg(ex, s_cmd);
+	s_cmd = new_arg(ex, s_cmd);
 	return (0);
 }
 

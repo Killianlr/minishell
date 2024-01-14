@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exec.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 11:38:09 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/14 11:11:06 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/14 14:44:35 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	parent_process(t_gc *garbage, t_arg *s_cmd, t_exec *ex)
 	(void) ex;
 	ft_export(garbage, s_cmd->line, 1);
 	ft_define_var(garbage, s_cmd->line);
-	ft_unset(garbage, s_cmd->line, 1);
+	ft_unset(garbage, s_cmd->line);
 	ft_cd_2(garbage, s_cmd->line);
 	ft_echo_2(garbage, s_cmd->line);
 }
@@ -62,7 +62,7 @@ void	child_process(t_gc *garbage, t_arg *s_cmd, t_exec *ex, char **paths)
 		ft_cmd_not_find(paths, s_cmd->line[0], garbage, ex);
 	}
 	if (ex->infile || ex->outfile)
-		close_files(ex);
+		free_t_exec(ex);
 	execve(cmd_path, s_cmd->line, garbage->blts->env);
 }
 
@@ -96,7 +96,7 @@ void	ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex)
 	int		pid;
 	int		status;
 
-	if (ft_is_empty(s_cmd->line[0]) && !s_cmd->sep)
+	if (ft_is_empty(s_cmd->line[0]))
 	{
 		return ;
 	}
@@ -105,7 +105,7 @@ void	ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex)
 		return ;
 	if (pid > 0)
 	{
-		// printf("pid exec = %d\n", pid);
+		printf("pid exec = %d\n", pid);
 		waitpid(pid, &status, 0);
 		garbage->ret = status / 256;
 		parent_process(garbage, s_cmd, ex);

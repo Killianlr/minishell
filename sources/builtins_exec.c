@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 13:42:15 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/14 11:04:17 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/12 12:05:00 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	is_buitlins_next(t_gc *garbage, char **args)
 	int	i;
 
 	i = 0;
-	i = ft_unset(garbage, args, 0);
+	i = ft_unset(garbage, args);
 	if (i == 1)
 		exit_error(garbage);
 	else if (i == 2)
