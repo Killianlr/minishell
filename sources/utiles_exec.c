@@ -60,34 +60,6 @@ int	count_sep_exec(t_arg *s_cmd, char *sep1, char *sep2)
 	return (i);
 }
 
-void	put_respipex(t_exec *ex)
-{
-	char	*bufrun;
-	char	*bufret;
-	int		res_pipex;
-
-	res_pipex = open(".res_pipex", O_RDONLY);
-	if (!res_pipex)
-		return ;
-	bufrun = get_next_line(res_pipex, 0);
-	bufret = NULL;
-	while (1)
-	{
-		bufret = ft_strjoin_fs2(bufret, bufrun);
-		if (!bufret)
-			return ;
-		bufrun = get_next_line(res_pipex, 0);
-		if (!bufrun)
-			break ;
-	}
-	write(1, bufret, ft_strlen(bufret));
-	free(bufret);
-	close(res_pipex);
-	if (ex->infile || ex->outfile)
-		close_files(ex);
-	unlink(".res_pipex");
-}
-
 char	*get_cmd(char **paths, char	**cmd, t_gc *garbage, t_exec *ex)
 {
 	char	*tmp;

@@ -126,6 +126,7 @@ void	ft_exec(t_arg *s_cmd, char **paths, t_gc *garbage, t_exec *ex)
 	int		status;
 
 	status = 0;
+	printf("s_cmd->line[0] = %s\n", s_cmd->line[0]);
 	if (ft_is_empty(s_cmd->line[0]))
 	{
 		return ;

@@ -168,7 +168,6 @@ typedef struct exec
 	int		*outfile;
 	int		o;
 	char	**paths;
-	int		res_pipex;
 	int		r;
 	int		*pipex;
 	int		p;
