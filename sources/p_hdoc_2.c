@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_hdoc_2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/20 23:28:28 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/12 14:21:11 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/15 14:57:32 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*get_del_hdoc_2(t_pars *pars, t_gdh *data, char *ret)
 			data->quote = handle_quotes(pars, data->i);
 			if (!data->quote)
 				return (NULL);
-			if (!ms_strjoin_size(ret, data->quote, data->size))
+			if (!ms_strj_s(ret, data->quote, data->size))
 				return (NULL);
 			data->y = ft_strlen(ret);
 			data->i = quote_is_closed(pars, data->i);
