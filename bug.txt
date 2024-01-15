@@ -1,2 +1,0 @@
-.res_pipex non supp (peut être un ^C pendant un pipe)
-ls -l > a | wc (rien ne se passe)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:43 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/15 10:46:38 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/15 14:40:29 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ int	loop_lst(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
 		ft_init_exec(s_cmd, garbage, ex);
 	else if (!garbage->go)
 		garbage->go = 1;
+	if (garbage->rl)
+		waitpid(-1, NULL, 0);
 	return (0);
 }
 
@@ -79,6 +81,7 @@ int	loop_in_minishell(t_gc *garbage)
 {
 	garbage->fd_hdoc = 0;
 	garbage->go = 1;
+	garbage->rl = 0;
 	garbage->arg = NULL;
 	garbage->line = ft_prompt();
 	if (!garbage->line)

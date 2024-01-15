@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_new_str.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 20:02:54 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/15 10:51:26 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/15 14:55:52 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ int	size_for_new_str(t_pars *pars, int ret_val)
 			var_env = get_var_env(pars, i, ret_val);
 			size += (int) ft_strlen(var_env) - 1;
 			free(var_env);
-			while (pars->av[i + 1] && (!is_whitespace(pars->av[i + 1]) &&
-					!is_sep(pars->av[i + 1]) && !is_quote(pars->av[i + 1])))
+			while (pars->av[i + 1] && (!is_whitespace(pars->av[i + 1])
+					&& !is_sep(pars->av[i + 1]) && !is_quote(pars->av[i + 1])))
 				i++;
 		}
 		size++;
@@ -47,11 +47,12 @@ char	*new_str_end(t_pars *pars, int ret_val, t_ns *data, char *ret)
 			data->set = 0;
 		if (pars->av[data->i] == '$' && !data->set)
 		{
-			if (!ms_strjoin_size(ret, get_var_env(pars, data->i, ret_val), data->len))
+			if (!ms_strj_s(ret, get_var_env(pars, data->i, ret_val), data->len))
 				return (NULL);
 			data->y = ft_strlen(ret);
 			while (pars->av[data->i] && (!is_whitespace(pars->av[data->i])
-					&& !is_sep(pars->av[data->i]) && !is_quote(pars->av[data->i])))
+					&& !is_sep(pars->av[data->i])
+					&& !is_quote(pars->av[data->i])))
 				data->i++;
 		}
 		else if (pars->av[data->i])
@@ -61,7 +62,6 @@ char	*new_str_end(t_pars *pars, int ret_val, t_ns *data, char *ret)
 	pars->av = ret;
 	return (ret);
 }
-
 
 char	*new_str(t_pars *pars, int ret_val)
 {

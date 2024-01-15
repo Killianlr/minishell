@@ -47,6 +47,8 @@ MY_SOURCES = 	minishell.c \
 				new_arg.c \
 				open_to_free.c \
 				utils_other.c \
+				utiles_fd.c \
+				init_t_exec.c \
 
 SOURCES_DIR = sources
 SOURCES = $(addprefix $(SOURCES_DIR)/, $(MY_SOURCES))

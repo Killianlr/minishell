@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 13:47:05 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/15 10:45:01 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/15 13:56:30 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	sub_child(void)
 	free_all(garbage);
 }
 
-int		sub_parent(int pid_minishell, int status)
+int	sub_parent(int pid_minishell, int status)
 {
 	while (!g_running)
 	{

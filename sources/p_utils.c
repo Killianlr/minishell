@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   p_utils.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:02:50 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/12 20:58:11 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/15 14:53:48 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ms_strjoin_size(char *s1, char *s2, int size)
+int	ms_strj_s(char *s1, char *s2, int size)
 {
 	int		i;
 	int		y;

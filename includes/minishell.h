@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/15 10:57:08 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/15 14:54:03 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ typedef struct garbage_colector
 	int			fd_hdoc;
 	int			go;
 	int			end;
+	int			rl;
 }					t_gc;
 
 typedef struct t_new_arg
@@ -129,7 +130,6 @@ typedef struct s_new_str
 	int		y;
 	int		set;
 }				t_ns;
-
 
 typedef struct s_get_line
 {
@@ -259,7 +259,6 @@ void	free_pars_tab(char **arr);
 int		ft_error(char *msg, int ret);
 void	free_victime(t_arg *cmd);
 
-
 int		is_printable(char c);		//p_is.c
 int		is_whitespace(char c);
 int		is_sep(char c);
@@ -268,7 +267,7 @@ int		is_quote(char c);
 
 char	**strduptab(t_pars *pars);		//p_utils.c
 char	*ms_strjoin(char *s1, char *s2, int status);
-int		ms_strjoin_size(char *s1, char *s2, int size);
+int		ms_strj_s(char *s1, char *s2, int size);
 int		ms_strcmp(char *s1, char *s2, int n);
 // char	*no_quote(t_pars *pars);
 
@@ -338,5 +337,7 @@ void	signal_handler_main(int signum);
 int		loop_echo_write(char **args, int i, t_gc *garbage);
 void	ret_value_exit(char *nbr, int i, int ret_value, t_gc *garbage);
 void	free_t_pars(t_pars *pars);
+
+void	set_fd(t_exec *ex, t_gc *garbage);
 
 #endif

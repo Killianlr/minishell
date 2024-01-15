@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utiles_exec.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 11:38:35 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/15 10:45:53 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/15 14:19:16 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ void	reset_line(char **tabl, t_gc *garbage)
 	char	*save;
 
 	if (!tabl[1])
+	{
 		garbage->go = 0;
+		garbage->rl = 1;
+	}
 	i = 0;
 	save = tabl[0];
 	if (ft_strlen_tab(tabl) <= 1)
