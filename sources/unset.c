@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:19:17 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/14 11:03:46 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/15 10:39:11 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	del_var_unset(t_gc *garbage, char **args, int k)
 		{
 			if (!ft_isalpha(args[i][j]))
 			{
-				msg_unset(k, args[i]);	
+				msg_unset(k, args[i]);
 				e = 1;
 				break ;
 			}

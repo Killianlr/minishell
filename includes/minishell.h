@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/14 18:35:38 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/15 10:57:08 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,15 @@ typedef struct s_handle_quotes
 	int		y;
 	int		i;
 }			t_hq;
+
+typedef struct s_new_str
+{
+	int		len;
+	int		i;
+	int		y;
+	int		set;
+}				t_ns;
+
 
 typedef struct s_get_line
 {
@@ -318,12 +327,17 @@ void	print_arg(t_arg *arg);
 char	*new_str(t_pars *pars, int ret_val);
 t_arg	*new_arg(t_exec *ex, t_arg *arg);
 t_arg	*open_to_free(t_arg *to_free, t_exec *ex);
-int	set_sep_val(t_na *n_a, t_arg *arg, t_exec *ex);
-
+int		set_sep_val(t_na *n_a, t_arg *arg, t_exec *ex);
 
 char	*get_cmd(char **paths, char	**cmd, t_gc *garbage, t_exec *ex);
 char	*find_path(char **envp);
 int		ft_strcmp(char *s1, char *s2);
 void	close_pipes(t_exec *ex);
+int		signal_init_main(void);
+void	signal_handler_child(int signum);
+void	signal_handler_main(int signum);
+int		loop_echo_write(char **args, int i, t_gc *garbage);
+void	ret_value_exit(char *nbr, int i, int ret_value, t_gc *garbage);
+void	free_t_pars(t_pars *pars);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setup_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 14:53:41 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/14 18:44:11 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/15 10:58:11 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,6 @@ void	ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
 	{
 		ex->p = 1;
 		ex->idx++;
-		//set_pipex(s_cmd, garbage, ex);
 	}
 	else if (check_sep_exec(s_cmd->prev_sep, ex) == 5)
 	{
@@ -154,10 +153,7 @@ void	ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
 	else
 		ex->idx = -1;
 	if (s_cmd->line[0] && check)
-	{
-		// printf("go for exec\n");
 		ft_exec(s_cmd, ex->paths, garbage, ex);
-	}
 	else
 		close_files(ex);
 }

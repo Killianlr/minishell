@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:04 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/12 20:57:46 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/15 10:56:34 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,6 @@ t_arg	*main_pars(char *str, t_bui *blts, t_gc *garbage)
 	if (!str)
 		return (NULL);
 	arg = NULL;
-	pars = NULL;
 	pars = malloc(sizeof(t_pars));
 	if (!pars)
 		return (NULL);
@@ -122,8 +121,6 @@ t_arg	*main_pars(char *str, t_bui *blts, t_gc *garbage)
 	arg = parsing(pars, garbage);
 	create_prev_sep(arg);
 	arg = post_parsing(arg);
-	free(pars->av);
-	free(pars);
-	// print_arg(arg);
+	free_t_pars(pars);
 	return (arg);
 }

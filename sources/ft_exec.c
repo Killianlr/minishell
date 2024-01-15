@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exec.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 11:38:09 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/14 18:48:52 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/15 10:42:35 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,32 +26,26 @@ void	close_pipes(t_exec *ex)
 
 void	set_fd(t_exec *ex)
 {
-	printf("ici\n");
 	if (ex->p)
 	{
 		if (ex->idx == 0)
 		{
-			// printf("---------PREMIERE COMMANDE-------\n");
 			if (ex->infile && ex->infile[ex->i] > 0)
 			{
 				dup2(ex->infile[ex->i], STDIN_FILENO);
 			}
 			dup2(ex->pipex[1], STDOUT_FILENO);
-			write(2, "la\n", 4);
 		}
 		else if (ex->idx == ex->nb_pipe)
 		{
-			// printf("---------DERNIERE COMMANDE-------\n");
 			if (ex->outfile && ex->outfile[ex->o] > 0)
 			{
 				dup2(ex->outfile[ex->o], STDOUT_FILENO);
 			}
-			write(2, "la 2\n", 6);
 			dup2(ex->pipex[2 * ex->idx - 2], STDIN_FILENO);
 		}
 		else
 		{
-			// printf("---------MIDDLE COMMANDE-------\n");
 			dup2(ex->pipex[2 * ex->idx - 2], STDIN_FILENO);
 			dup2(ex->pipex[2 * ex->idx + 1], STDOUT_FILENO);
 		}

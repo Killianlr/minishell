@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utiles_exec.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 11:38:35 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/14 17:22:24 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/15 10:45:53 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,14 +113,4 @@ char	*get_cmd(char **paths, char	**cmd, t_gc *garbage, t_exec *ex)
 		paths++;
 	}
 	return (NULL);
-}
-
-int	ft_strcmp(char *s1, char *s2)
-{
-	int	i;
-
-	i = 0;
-	while (s1[i] == s2[i] && s1[i] && s2[i])
-		i++;
-	return (s1[i] - s2[i]);
 }

@@ -3,14 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   utils_other.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 15:25:42 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/14 15:30:10 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/15 10:53:11 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	ft_strcmp(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	while (s1[i] == s2[i] && s1[i] && s2[i])
+		i++;
+	return (s1[i] - s2[i]);
+}
 
 void	ret_value_exit(char *nbr, int i, int ret_value, t_gc *garbage)
 {

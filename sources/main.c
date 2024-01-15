@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 13:47:05 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/13 19:06:49 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/15 10:45:01 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	signal_handler_main(int signum)
 	if (signum == SIGINT)
 	{
 		printf("\n");
-		while(i)
+		while (i)
 			i--;
 		g_running = 1;
 	}
@@ -31,32 +31,37 @@ void	signal_handler_main(int signum)
 	}
 }
 
-void	signal_handler_child(int signum)
+void	sub_child(void)
 {
-	int	i;
+	t_gc	*garbage;
 
-	i = 1000000;
-	if (signum == SIGINT)
+	garbage = NULL;
+	garbage = in_minishell();
+	if (!garbage)
 	{
-		while(i)
-			i--;
+		close_standard_fd();
+		exit(1);
 	}
-	else if (signum == SIGQUIT)
-	{
-	}
+	free_all(garbage);
 }
 
-int	signal_init_main()
+int		sub_parent(int pid_minishell, int status)
 {
-	if (!signal(SIGINT, signal_handler_main))
-		return (1);
-	signal(SIGQUIT, SIG_IGN);
-	return (0);
+	while (!g_running)
+	{
+		signal_init_main();
+		waitpid(pid_minishell, &status, WNOHANG);
+		if (status > 255 || status == 0)
+			return (status);
+	}
+	g_running = 0;
+	kill(pid_minishell, SIGTERM);
+	waitpid(pid_minishell, NULL, 0);
+	return (status);
 }
 
 int	main_parent(void)
 {
-	t_gc	*garbage;
 	int		pid_minishell;
 	int		status;
 
@@ -67,27 +72,13 @@ int	main_parent(void)
 		if (pid_minishell < 0)
 			break ;
 		else if (pid_minishell == 0)
+			sub_child();
+		else
 		{
-			garbage = in_minishell();
-			if (!garbage)
-			{
-				close_standard_fd();
-				exit(1);
-			}
-			free_all(garbage);
-		}
-		while (!g_running)
-		{
-			signal_init_main();
-			waitpid(pid_minishell, &status, WNOHANG);
+			status = sub_parent(pid_minishell, status);
 			if (status > 255 || status == 0)
 				break ;
 		}
-		g_running = 0;
-		kill(pid_minishell, SIGTERM);
-		waitpid(pid_minishell, NULL, 0);
-		if (status > 255 || status == 0)
-			break ;
 	}
 	return (status / 256);
 }
