@@ -23,12 +23,13 @@ void	signal_handler(int signum)
 			rl_replace_line("", 0);
 			rl_redisplay();
 		}
-		else if (g_signal == 1)
+		else if (g_signal)
 			printf("\n");
+		g_signal = 130;
 	}
 	else if (signum == SIGQUIT)
 	{
-		if (g_signal == 1)
+		if (g_signal)
 		{
 			write(1, "Quit (core dumped)\n", 20);
 		}

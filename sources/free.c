@@ -23,7 +23,6 @@ void	free_blts(t_bui *blts)
 
 void	free_all(t_gc *garbage)
 {
-	printf("free_all\n");
 	if (!garbage)
 		return ;
 	// free_parsing(garbage->arg);
@@ -38,12 +37,14 @@ void	free_all(t_gc *garbage)
 
 void	exit_free(t_gc *garbage, int exival)
 {
+	printf("exit_free, exit = %d\n", exival);
 	free_all(garbage);
 	exit(exival);
 }
 
 void	exit_child(t_gc *garbage, int exival)
 {
+	printf("exit_child, exit = %d\n", exival);
 	free_all(garbage);
 	exit(exival);
 }

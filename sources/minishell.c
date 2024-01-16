@@ -61,6 +61,7 @@ int	main(void)
 	}
 	if (signal_init())
 		return (1);
+	garbage->ret = 0;
 	in_minishell(garbage);
 	free_all(garbage);
 	return (0);

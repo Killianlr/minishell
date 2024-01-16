@@ -50,8 +50,6 @@ int	ft_export(t_gc *garbage, char **args, int pid)
 {
 	int	i;
 
-	if (!garbage->line)
-		return (0);
 	i = 0;
 	if (!ft_strncmp(args[0], "export", 7))
 	{
@@ -65,7 +63,7 @@ int	ft_export(t_gc *garbage, char **args, int pid)
 			}
 			return (2);
 		}
-		if (update_export(garbage, args) && pid)
+		if (update_export(garbage, args, pid))
 		{
 			garbage->ret = 1;
 			return (1);

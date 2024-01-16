@@ -63,14 +63,15 @@ int	add_var_export(t_gc *garbage, char *arg)
 	return (0);
 }
 
-int	update_export_next(char c, int j)
+int	update_export_next(char c, int j, int pid)
 {
 	if (j > 0)
 		return (0);
 	if ((!ft_isalpha(c) && c != '=')
 		|| (!j && c == '='))
 	{
-		printf("minishell: export: `%c': not a valid identifier\n", c);
+		if (pid)
+			printf("minishell: export: `%c': not a valid identifier\n", c);
 		return (1);
 	}
 	if (c == '=')
@@ -78,7 +79,7 @@ int	update_export_next(char c, int j)
 	return (0);
 }
 
-int	update_export(t_gc *garbage, char **args)
+int	update_export(t_gc *garbage, char **args, int pid)
 {
 	int	i;
 	int	j;
@@ -89,8 +90,12 @@ int	update_export(t_gc *garbage, char **args)
 		j = 0;
 		while (args[i][j])
 		{
-			if (update_export_next(args[i][j], j))
+			if (update_export_next(args[i][j], j, pid))
+			{
+				if (!pid)
+					exit_free(garbage, 1);
 				break ;
+			}
 			j++;
 		}
 		if (j == (int)ft_strlen(args[i]) || args[i][j] == '=')

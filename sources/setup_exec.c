@@ -30,12 +30,8 @@ void	child_process(t_gc *garbage, char **cmd)
 {
 	char	**paths;
 	char	*cmd_path;
-	int		ret_blts;
 
-	ret_blts = is_builtins(garbage, cmd, 0);
-	if (ret_blts == 1)
-		exit_child(garbage, 1);
-	else if (ret_blts == 2)
+	if (is_builtins(garbage, cmd, 0) == 2)
 		exit_child(garbage, 0);
 	paths = ft_split(find_path(garbage->blts->env), ':');
 	cmd_path = get_cmd(paths, cmd, garbage);
@@ -64,16 +60,18 @@ int	ft_exec(t_gc *garbage, char **cmd)
 	g_signal = 1;
 	is_builtins(garbage, cmd, 1);
 	waitpid(pid, &status, 0);
-	if (WTERMSIG(status) == 2)
-		status = 130;
-	printf("status = %d\n", status);
-	garbage->ret = status;
-	printf("WIFEXITED = %d\n", WIFEXITED(status));
-	printf("WEXITSTATUS = %d\n", WEXITSTATUS(status));
-	printf("WEFSIGNALED = %d\n", WIFSIGNALED(status));
-	printf("WTERMSIG = %d\n", WTERMSIG(status));
-	printf("WCOREDUMP = %d\n", __WCOREDUMP(status));
-	printf("WSTOPSIG = %d\n", WSTOPSIG(status));
+	if (WTERMSIG(status) == 3)
+		garbage->ret = 131;
+	else if (WTERMSIG(status) == 2)
+		garbage->ret = 130;
+	else
+		garbage->ret = WEXITSTATUS(status);
+	// printf("WIFEXITED = %d\n", WIFEXITED(status));
+	// printf("WEXITSTATUS = %d\n", WEXITSTATUS(status));
+	// printf("WEFSIGNALED = %d\n", WIFSIGNALED(status));
+	// printf("WTERMSIG = %d\n", WTERMSIG(status));
+	// printf("WCOREDUMP = %d\n", __WCOREDUMP(status));
+	// printf("WSTOPSIG = %d\n", WSTOPSIG(status));
 	// printf("garbage->ret = %d\n", garbage->ret);
 	return (0);
 }

@@ -77,8 +77,9 @@ int	ft_cd(t_gc *garbage, char **args, int pid)
 		{
 			if (pid)
 				printf("minishell: cd: %s: No such file or directory\n", args[1]);
+			else
+				exit_free(garbage, 1);
 			garbage->ret = 1;
-			printf("ret = %d\n", garbage->ret);
 			return (2);
 		}
 		else

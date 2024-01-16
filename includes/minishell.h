@@ -115,7 +115,7 @@ int		update_var_env(t_bui *blts, char *str);
 /*---------------------------export.c-------------------------*/
 
 int		set_export(t_bui *blts);
-int		update_export(t_gc *garbage, char **args);
+int		update_export(t_gc *garbage, char **args, int pid);
 
 /*---------------------------unset.c-------------------------*/
 

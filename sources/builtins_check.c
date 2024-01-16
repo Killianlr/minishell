@@ -36,6 +36,8 @@ int	is_builtins(t_gc *garbage, char **args, int pid)
 	i = 0;
 	if (!args || !garbage->line)
 		return (0);
+	if (g_signal)
+		garbage->ret = g_signal;
 	i = ft_env(garbage, args, pid);
 	if (i == 1)
 		exit_free(garbage, 1);
