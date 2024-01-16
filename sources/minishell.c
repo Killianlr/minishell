@@ -39,8 +39,6 @@ int	in_minishell(t_gc *garbage)
 			garbage->args = ft_split(garbage->line, ' ');
 		free(garbage->line);
 		setup_exec(garbage, garbage->args);
-		// if (clear_history_rl(garbage->args))
-		// 	break ;
 		free_tab(garbage->args);
 	}
 	return (0);
