@@ -37,14 +37,14 @@ void	free_all(t_gc *garbage)
 
 void	exit_free(t_gc *garbage, int exival)
 {
-	printf("exit_free, exit = %d\n", exival);
+	// printf("exit_free, exit = %d\n", exival);
 	free_all(garbage);
 	exit(exival);
 }
 
 void	exit_child(t_gc *garbage, int exival)
 {
-	printf("exit_child, exit = %d\n", exival);
+	// printf("exit_child, exit = %d\n", exival);
 	free_all(garbage);
 	exit(exival);
 }

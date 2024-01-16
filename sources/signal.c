@@ -16,7 +16,7 @@ void	signal_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-		if (!g_signal)
+		if (!g_signal || g_signal == 130)
 		{
 			printf("\n");
 			rl_on_new_line();
@@ -29,11 +29,11 @@ void	signal_handler(int signum)
 	}
 	else if (signum == SIGQUIT)
 	{
-		if (g_signal)
+		if (g_signal && g_signal != 130)
 		{
 			write(1, "Quit (core dumped)\n", 20);
 		}
-		else if (!g_signal)
+		else
 			write(1, "\b\b  \b\b", 7);
 	}
 }
