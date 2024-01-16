@@ -21,6 +21,8 @@ static int	ft_wordcount(const char *s, char c)
 	count = 0;
 	i = 0;
 	word = 0;
+	if (!s)
+		return (0);
 	while (s[i])
 	{
 		if (s[i] == c)
@@ -91,6 +93,8 @@ char	**ft_split(char const *s, char c)
 {
 	char	**tab;
 
+	if (!s)
+		return (NULL);
 	tab = malloc(sizeof(char *) * (ft_wordcount(s, c) + 1));
 	if (!tab)
 		return (NULL);

@@ -16,14 +16,24 @@ void	signal_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
+		if (!g_signal)
+		{
+			printf("\n");
+			rl_on_new_line();
+			rl_replace_line("", 0);
+			rl_redisplay();
+		}
+		else if (g_signal == 1)
+			printf("\n");
 	}
 	else if (signum == SIGQUIT)
 	{
-		write(1, "\b\b  \b\b", 7);
+		if (g_signal == 1)
+		{
+			write(1, "Quit (core dumped)\n", 20);
+		}
+		else if (!g_signal)
+			write(1, "\b\b  \b\b", 7);
 	}
 }
 

@@ -8,15 +8,21 @@ LIB = $(addprefix $(LIBFT_DIR)/, $(LIBFT))
 
 MY_SOURCES = 	minishell.c \
 				prompt.c \
-				terminal.c \
 				signal.c \
+				free.c \
+				builtins_1.c \
+				builtins_2.c \
+				builtins_check.c \
+				builtins_utiles.c \
+				cd.c \
 				env.c \
 				export.c \
 				unset.c \
-				free.c \
-				cd.c \
-				builtins.c \
-				utiles_builtins.c \
+				utiles_env_1.c \
+				utiles_env_2.c \
+				utiles_export.c \
+				utiles_path.c \
+				setup_exec.c \
 				ft_sort_tab_n_add_dbq.c \
 
 SOURCES_DIR = sources

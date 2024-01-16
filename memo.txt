@@ -1,1 +1,0 @@
-probleme avec OLDPWD, ce met a jour apres un unset dans minishell

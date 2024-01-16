@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/13 11:18:21 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/15 14:25:18 by kle-rest         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
@@ -32,26 +21,36 @@ void	free_blts(t_bui *blts)
 	free(blts->pwd);
 }
 
-void	exit_error(t_gc *garbage)
-{
-	printf("debut free error\n");
-	free_blts(garbage->blts);
-	free(garbage->blts);
-	free(garbage->line);
-	free_tab(garbage->args);
-	free(garbage);
-	printf("fin free error\n");
-	exit(0);
-}
-
 void	free_all(t_gc *garbage)
 {
-	printf("DEBUT DU FREE\n");
+	printf("free_all\n");
 	if (!garbage)
 		return ;
+	// free_parsing(garbage->arg);
+	free_tab(garbage->args); /* FREE PARSING*/
 	free_blts(garbage->blts);
 	free(garbage->blts);
-	free_tab(garbage->args);
+	// if (garbage->fd_hdoc)
+	// 	unlink(".heredoc_tmp");
 	free(garbage);
-	printf("FIN DU PROGRAMME\n");
+	close_standard_fd();
+}
+
+void	exit_free(t_gc *garbage, int exival)
+{
+	free_all(garbage);
+	exit(exival);
+}
+
+void	exit_child(t_gc *garbage, int exival)
+{
+	free_all(garbage);
+	exit(exival);
+}
+
+void	close_standard_fd(void)
+{
+	close(0);
+	close(1);
+	close(2);
 }

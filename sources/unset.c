@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:19:17 by kle-rest          #+#    #+#             */
-/*   Updated: 2023/12/15 14:31:45 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/15 10:39:11 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,14 @@ int	find_var_in_tab_and_del(char **tabl, char *str)
 	{
 		len1 = ft_size_var_env(str);
 		len2 = ft_size_var_env(tabl[i]);
-		if ((len1 - len2) == 0)
+		if ((len1 - len2) == 0 && !ft_strncmp(str, tabl[i], len1))
 		{
-			if (!ft_strncmp(str, tabl[i], len1))
-			{
-				j++;
-				free(tabl[i]);
-			}
+			j++;
+			free(tabl[i]);
 		}
 		if (!tabl[j])
 			break ;
-		tabl[i] = tabl[j];
-		i++;
-		j++;
+		tabl[i++] = tabl[j++];
 	}
 	tabl[i] = 0;
 	return (0);
@@ -62,7 +57,16 @@ int	go_to_find_var_and_del(t_bui *blts, char *str)
 	return (0);
 }
 
-int	del_var_unset(t_gc *garbage, char **args)
+void	msg_unset(int pid, char *str)
+{
+	if (pid)
+	{
+		printf("minishell: unset: `%s'", str);
+		printf(": not a valid identifier\n");
+	}
+}
+
+int	del_var_unset(t_gc *garbage, char **args, int pid)
 {
 	int	i;
 	int	j;
@@ -77,7 +81,7 @@ int	del_var_unset(t_gc *garbage, char **args)
 		{
 			if (!ft_isalpha(args[i][j]))
 			{
-				printf("minishell: unset: `%s': not a valid identifier\n", args[i]);
+				msg_unset(pid, args[i]);
 				e = 1;
 				break ;
 			}

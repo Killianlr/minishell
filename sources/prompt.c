@@ -30,22 +30,32 @@ char	*ft_strndup(char *src, int size)
 	return (dest);
 }
 
-int	clear_string(t_prompt *prpt)
+int	clear_string_next(t_prompt *prpt, int start, int end)
 {
-	int		start;
-	int		end;
 	int		i_start;
 	int		i_end;
 
+	i_start = ft_strlen(prpt->inpt) - start;
+	i_end = ft_strlen(prpt->inpt) - (end + 1);
+	prpt->str = ft_strndup(&prpt->inpt[start], i_start - i_end);
+	if (!prpt->str)
+		return (1);
+	return (0);
+}
+
+int	clear_string(t_prompt *prpt, t_gc *garbage)
+{
+	int		start;
+	int		end;
+
 	start = 0;
 	end = ft_strlen(prpt->inpt) - 1;
-	i_start = 0;
-	i_end = 0;
 	prpt->str = NULL;
 	if (!prpt->inpt)
 	{
 		printf("exit");
 		free(prpt->inpt);
+		free_all(garbage);
 		exit(0);
 	}
 	while (prpt->inpt[start] && (!ft_isprint(prpt->inpt[start])
@@ -56,9 +66,8 @@ int	clear_string(t_prompt *prpt)
 	while (prpt->inpt[end] && (!ft_isprint(prpt->inpt[end])
 			|| prpt->inpt[end] == 32))
 		end--;
-	i_start = ft_strlen(prpt->inpt) - start;
-	i_end = ft_strlen(prpt->inpt) - (end + 1);
-	prpt->str = ft_strndup(&prpt->inpt[start], i_start - i_end);
+	if (clear_string_next(prpt, start, end))
+		return (1);
 	return (0);
 }
 
@@ -90,7 +99,7 @@ char	*pre_prompt(void)
 	return (pre_prompt);
 }
 
-char	*ft_prompt(void)
+char	*ft_prompt(t_gc *garbage)
 {
 	t_prompt	prpt;
 	char		*prompt;
@@ -99,7 +108,7 @@ char	*ft_prompt(void)
 	prompt = pre_prompt();
 	prpt.inpt = readline(prompt);
 	free(prompt);
-	if (clear_string(&prpt))
+	if (clear_string(&prpt, garbage))
 	{
 		free(prpt.inpt);
 		return (NULL);
