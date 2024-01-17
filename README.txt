@@ -1,6 +1,6 @@
 slt kyan
 
-les quotes ainsi que les var_en ($) ne sont pas implémenter
+les quotes ainsi que les var_en ($) et les here_doc ne sont pas implémenter
 sinon je skip bien les redirections dans la line
 et les fichiers sont créer, open et close (sauf les derniers)
 
