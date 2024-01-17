@@ -48,14 +48,54 @@ typedef struct s_builtins
 	int		uoldpwd;
 }				t_bui;
 
+typedef struct t_cmd
+{
+	char **line;
+	int		fd_in;
+	int		fd_out;
+	struct t_cmd	*next;
+}			s_cmd;
+
 typedef struct garbage_colector
 {
 	t_prompt	*prpt;
 	t_bui		*blts;
-	char		**args;
+	s_cmd		*s_cmd;
 	char		*line;
 	int			ret;
+	int			pipe;
 }					t_gc;
+
+
+typedef struct t_pars
+{
+	char	*av;
+	char	**env;
+	int		i;
+}			s_pars;
+
+/*---------------------------parsing.c-------------------------*/
+
+s_cmd	*parsing(char *str);
+
+/*---------------------------p_utiles.c-------------------------*/
+
+int		ft_find_sep_val(char c);
+int		ft_count_pipe(char *str);
+int		is_whitespace(char c);
+int		new_val_i(s_pars *pars, int i);
+int		is_char(char c);
+void	print_cmd(s_cmd *cmd);
+
+/*---------------------------p_open.c-------------------------*/
+
+int		parsing_open(char *file, int typeofsep);
+
+/*---------------------------p_fd.c-------------------------*/
+
+int		set_cmd_fd(s_pars *pars, s_cmd *cmd);
+char	**get_cmd_line(s_pars *pars);
+
 
 /*---------------------------prompt.c-------------------------*/
 
@@ -69,6 +109,7 @@ void	free_blts(t_bui *blts);
 void	exit_free(t_gc *garbage, int exival);
 void	close_standard_fd(void);
 void	exit_child(t_gc *garbage, int exival);
+void	free_cmd(s_cmd *cmd);
 
 /*---------------------------signal.c-------------------------*/
 
@@ -154,7 +195,11 @@ void	ft_swap(char **a, char **b);
 
 /*---------------------------setup_exec.c-------------------------*/
 
-int		setup_exec(t_gc *garbage, char **cmd);
+int		setup_exec(t_gc *garbage, s_cmd *cmd, int nb_cmd);
+
+/*---------------------------utiles_exec.c-------------------------*/
+
+int		ft_lstsize_cmd(s_cmd *lst);
 
 
 #endif

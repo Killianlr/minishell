@@ -30,16 +30,26 @@ int	clear_history_rl(char **str)
 
 int	in_minishell(t_gc *garbage)
 {
+	s_cmd	*cmd;
+	int		nb_cmd;
+
 	while (1)
 	{
 		g_signal = 0;
-		garbage->args = NULL;
+		garbage->pipe = 0;
+		garbage->s_cmd = NULL;
 		garbage->line = ft_prompt(garbage);
 		if ((int)ft_strlen(garbage->line))
-			garbage->args = ft_split(garbage->line, ' ');
+			cmd = parsing(garbage->line);
+		else
+			cmd = NULL;
 		free(garbage->line);
-		setup_exec(garbage, garbage->args);
-		free_tab(garbage->args);
+		nb_cmd = ft_lstsize_cmd(cmd);
+		if (nb_cmd > 1)
+			garbage->pipe = 1;
+		garbage->s_cmd = cmd;
+		setup_exec(garbage, cmd, nb_cmd);
+		free_cmd(garbage->s_cmd);
 	}
 	return (0);
 }

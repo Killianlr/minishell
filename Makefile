@@ -23,7 +23,14 @@ MY_SOURCES = 	minishell.c \
 				utiles_export.c \
 				utiles_path.c \
 				setup_exec.c \
+				utiles_exec.c \
 				ft_sort_tab_n_add_dbq.c \
+				parsing.c \
+				utiles_parsing.c \
+				p_fd.c \
+				p_free.c \
+				p_open.c \
+				p_get_line.c \
 
 SOURCES_DIR = sources
 SOURCES = $(addprefix $(SOURCES_DIR)/, $(MY_SOURCES))
