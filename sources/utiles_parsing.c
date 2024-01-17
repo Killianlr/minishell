@@ -1,4 +1,4 @@
-#include "../includes/parsing.h"
+#include "../includes/minishell.h"
 
 int	is_whitespace(char c)
 {
