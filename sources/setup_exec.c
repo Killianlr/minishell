@@ -5,92 +5,131 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/09 14:53:41 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/15 14:42:36 by kle-rest         ###   ########.fr       */
+/*   Created: 2024/01/18 13:36:56 by kle-rest          #+#    #+#             */
+/*   Updated: 2024/01/18 16:18:36 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	check_sep_exec(char *sep, t_exec *ex)
+char	*get_cmd(char **paths, char	**cmd, t_gc *garbage)
 {
-	(void)ex;
-	if (!sep)
-		return (0);
-	if (!ft_strncmp(sep, "<", 2))
-		return (1);
-	if (!ft_strncmp(sep, ">", 2))
-		return (2);
-	if (!ft_strncmp(sep, "<<", 3))
-		return (3);
-	if (!ft_strncmp(sep, ">>", 3))
-		return (4);
-	return (5);
+	char	*tmp;
+	char	*command;
+
+	if (cmd[0][0] == '/' || (cmd[0][0] == '.' && cmd[0][1] == '/'))
+	{
+		if (access(cmd[0], 0) == 0)
+			execve(cmd[0], cmd, garbage->blts->env);
+	}
+	if (!paths)
+		return (NULL);
+	while (*paths)
+	{
+		tmp = ft_strjoin(*paths, "/");
+		command = ft_strjoin(tmp, cmd[0]);
+		free(tmp);
+		if (access(command, 0) == 0)
+			return (command);
+		free(command);
+		paths++;
+	}
+	return (NULL);
 }
 
-int	init_open(t_exec *ex, t_arg *s_cmd, int typeofsep, t_gc *garbage)
+void	child_process(t_gc *garbage, s_cmd *cmd)
 {
-	if (typeofsep && typeofsep % 2 == 0)
+	char	**paths;
+	char	*cmd_path;
+
+	set_fd(cmd);
+	if (is_builtins(garbage, cmd->line, 0) == 2)
+		exit_child(garbage, 0);
+	paths = ft_split(find_path(garbage->blts->env), ':');
+	cmd_path = get_cmd(paths, cmd->line, garbage);
+	if (!cmd_path)
 	{
-		ex->o++;
-		ex->outfile[ex->o] = ft_open(s_cmd->next->line[0], typeofsep);
-		if (ex->outfile[ex->o] == -1)
-		{
-			printf("error access file or open %s ", s_cmd->next->line[0]);
-			return (1);
-		}
-		reset_line(s_cmd->next->line, garbage);
+		free_tab(paths);
+		write(2, cmd->line[0], ft_strlen(cmd->line[0]));
+		write(2, ": command not found\n", 21);
+		exit_free(garbage, 127);
 	}
-	if (typeofsep && typeofsep % 2 == 1 && typeofsep != 5)
+	execve(cmd_path, cmd->line, garbage->blts->env);
+}
+
+int	ft_exec_pipe(t_gc *garbage, s_cmd *cmd, int *fdd, int nb_cmd)
+{
+	while (cmd)
 	{
-		ex->i++;
-		ex->infile[ex->i] = ft_open(s_cmd->next->line[0], typeofsep);
-		if (ex->infile[ex->i] == -1)
-		{
-			printf("error access file or open %s\n", s_cmd->next->line[0]);
-			return (1);
-		}
-		reset_line(s_cmd->next->line, garbage);
+		*fdd = run_pipe(garbage, cmd, *fdd, nb_cmd);
+		if (cmd->fd_in)
+			close(cmd->fd_in);
+		if (cmd->fd_out)
+			close(cmd->fd_out);
+		cmd = cmd->next;
+		nb_cmd--;
 	}
+	while (wait(NULL) != -1)
+		wait(NULL);
 	return (0);
 }
 
-void	check_for_pipex(int typeofsep, t_exec *ex, t_arg *s_cmd)
+int	ft_exec(t_gc *garbage, s_cmd *cmd)
 {
-	(void)s_cmd;
-	if (typeofsep == 5)
-	{
-		ex->p = 1;
-		ex->idx++;
-	}
-	else if (check_sep_exec(s_cmd->prev_sep, ex) == 5)
-	{
-		ex->p = 1;
-		ex->idx++;
-	}
+	int	pid;
+	int	status;
+	extern int g_signal;
+
+	status = 0;
+	pid = fork();
+	if (pid < 0)
+		return (1);
+	else if (pid == 0)
+		child_process(garbage, cmd);
+	g_signal = 1;
+	is_builtins(garbage, cmd->line, 1);
+	waitpid(pid, &status, 0);
+	if (WTERMSIG(status) == 3)
+		garbage->ret = 131;
+	else if (WTERMSIG(status) == 2)
+		garbage->ret = 130;
 	else
-		ex->idx = -1;
+		garbage->ret = WEXITSTATUS(status);
+	// printf("WIFEXITED = %d\n", WIFEXITED(status));
+	// printf("WEXITSTATUS = %d\n", WEXITSTATUS(status));
+	// printf("WEFSIGNALED = %d\n", WIFSIGNALED(status));
+	// printf("WTERMSIG = %d\n", WTERMSIG(status));
+	// printf("WCOREDUMP = %d\n", __WCOREDUMP(status));
+	// printf("WSTOPSIG = %d\n", WSTOPSIG(status));
+	// printf("garbage->ret = %d\n", garbage->ret);
+	return (0);
 }
 
-void	ft_init_exec(t_arg *s_cmd, t_gc *garbage, t_exec *ex)
+int	setup_exec(t_gc *garbage, s_cmd *cmd, int nb_cmd)
 {
-	int	typeofsep;
-	int	check;
+	int	fdd;
 
-	typeofsep = 0;
-	check = garbage->go;
-	ex->p = 0;
-	if (!s_cmd)
-		return ;
-	typeofsep = check_sep_exec(s_cmd->sep, ex);
-	if (init_open(ex, s_cmd, typeofsep, garbage))
+	fdd = dup(0);
+	if (!garbage->line)
+		return (0);
+	if (!garbage->pipe && !ft_strncmp("exit", cmd->line[0], ft_strlen(cmd->line[0])))
 	{
-		garbage->go = 0;
-		return ;
+		close(fdd);
+		ft_exit(garbage, cmd->line);
 	}
-	check_for_pipex(typeofsep, ex, s_cmd);
-	if (s_cmd->line[0] && check)
-		ft_exec(s_cmd, ex->paths, garbage, ex);
+	if (garbage->pipe)
+		ft_exec_pipe(garbage, cmd, &fdd, nb_cmd);
 	else
-		close_files(ex);
+	{
+		close(fdd);
+		ft_exec(garbage, cmd);
+	}
+	close(fdd);
+	// printf("cmd->fd_in = %d\n", cmd->fd_in);
+	// printf("cmd->fd_out = %d\n", cmd->fd_out);
+	// if (cmd->fd_in)
+	// 	close(cmd->fd_in);
+	// if (cmd->fd_out)
+	// 	close(cmd->fd_out);
+	return (0);
 }

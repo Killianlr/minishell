@@ -21,6 +21,8 @@ static int	ft_wordcount(const char *s, char c)
 	count = 0;
 	i = 0;
 	word = 0;
+	if (!s)
+		return (0);
 	while (s[i])
 	{
 		if (s[i] == c)

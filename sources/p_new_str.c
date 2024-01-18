@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   p_new_str.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 20:02:54 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/15 14:55:52 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/18 20:46:17 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	size_for_new_str(t_pars *pars, int ret_val)
+int	size_for_new_str(s_pars *pars, int ret_val)
 {
 	char	*var_env;
 	int		size;
@@ -37,7 +37,30 @@ int	size_for_new_str(t_pars *pars, int ret_val)
 	return (size);
 }
 
-char	*new_str_end(t_pars *pars, int ret_val, t_ns *data, char *ret)
+// char	*get_quote(s_pars *pars, t_ns *data, char *ret)
+// {
+// 	data->i = 0;
+	
+// 	while (pars->av[data->i])
+// 	{
+// 		if (is_quote(pars->av[data->i]))
+// 		{
+// 			data->quote = handle_quotes(pars, pars->i);
+// 			if (!data->quote)
+// 				return (NULL);
+// 			if (!ms_strj_s(buf, data->quote, data->size))
+// 				return (NULL);
+// 			data->y = ft_strlen(buf);
+// 			if (quote_is_closed(pars, pars->i) > 0)
+// 				pars->i = quote_is_closed(pars, pars->i) + 1;
+// 			else
+// 				return (ft_strdup(""));
+// 			return (buf);
+// 		}
+// 	}
+// }
+
+char	*handle_var_env(s_pars *pars, int ret_val, t_ns *data, char *ret)
 {
 	while (pars->av[data->i])
 	{
@@ -63,7 +86,39 @@ char	*new_str_end(t_pars *pars, int ret_val, t_ns *data, char *ret)
 	return (ret);
 }
 
-char	*new_str(t_pars *pars, int ret_val)
+// char	*quote_new_str(char *str, t_ns *data)
+// {
+// 	char	*quote;
+// 	char	*ret;
+
+// 	data->i = 0;
+// 	data->y = 0;
+// 	data->len = size_for_quote(str);
+// 	ret = ft_calloc(data->len + 1, 1);
+// 	if (!ret)
+// 		return (NULL);
+// 	while (str[data->i])
+// 	{
+// 		if (is_quote(str[data->i]))
+// 		{
+// 			quote = handle_quotes(str, data->i);
+// 			if (!quote)
+// 				return (NULL);
+// 			if (!ms_strj_s(ret, quote, data->len))
+// 				return (NULL);
+// 			data->y = ft_strlen(ret);
+// 			data->i = quote_is_closed(str, data->i) + 1;
+// 		}
+// 		else
+// 			ret[data->y++] = str[data->i++];
+// 	}
+// 	ret[data->y] = 0;
+// 	printf("ret = %s\n", ret);
+// 	free(str);
+// 	return (ret);
+// }
+
+char	*new_str(s_pars *pars, int ret_val)
 {
 	t_ns	*data;
 	char	*ret;
@@ -79,7 +134,9 @@ char	*new_str(t_pars *pars, int ret_val)
 	data->i = 0;
 	data->y = 0;
 	data->set = 0;
-	ret = new_str_end(pars, ret_val, data, ret);
+	data->quote = NULL;
+	ret = handle_var_env(pars, ret_val, data, ret);
+	// ret = quote_new_str(ret, data);
 	free(data);
 	return (ret);
 }

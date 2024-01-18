@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_open.c                                          :+:      :+:    :+:   */
+/*   p_open.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 13:57:05 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/14 11:10:43 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/18 15:48:30 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	open_infile(char *file)
+int	p_open_infile(char *file)
 {
 	int	fd;
 
@@ -26,7 +26,7 @@ int	open_infile(char *file)
 	return (fd);
 }
 
-int	open_outfile_otrunc(char *file)
+int	p_open_outfile_otrunc(char *file)
 {
 	int	fd;
 
@@ -42,7 +42,7 @@ int	open_outfile_otrunc(char *file)
 	return (fd);
 }
 
-int	open_outfile_append(char *file)
+int	p_open_outfile_append(char *file)
 {
 	int	fd;
 
@@ -58,36 +58,31 @@ int	open_outfile_append(char *file)
 	return (fd);
 }
 
-int	ft_open(char *file, int typeofsep)
+int	parsing_open(char *file, int typeofsep, s_cmd *cmd)
 {
 	int	fd;
 
+	fd = 0;
 	if (typeofsep == 1)
 	{
-		fd = open_infile(file);
+		fd = p_open_infile(file);
 		return (fd);
 	}
 	else if (typeofsep == 2)
 	{
-		fd = open_outfile_otrunc(file);
+		fd = p_open_outfile_otrunc(file);
 		return (fd);
 	}
 	else if (typeofsep == 3)
 	{
-		fd = open(".heredoc_tmp", O_RDONLY);
+		fd = get_here_doc(file, fd, cmd);
+		cmd->hdoc = 1;
 		return (fd);
 	}
 	else if (typeofsep == 4)
 	{
-		fd = open_outfile_append(file);
+		fd = p_open_outfile_append(file);
 		return (fd);
 	}
 	return (-1);
-}
-
-void	close_standard_fd(void)
-{
-	close(0);
-	close(1);
-	close(2);
 }

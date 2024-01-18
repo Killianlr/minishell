@@ -1,89 +1,8 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   p_free.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/29 16:17:12 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/15 10:56:21 by flavian          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../includes/minishell.h"
 
-// void	print_arg(t_arg *arg)
-// {
-// 	t_arg	*tmp;
-
-// 	printf("in print\n");
-// 	if (!arg)
-// 		return ;
-// 	tmp = arg->next;
-// 	while (tmp)
-// 	{
-// 		if (arg->line)
-// 		{
-// 			for (int i = 0; arg->line[i]; i++)
-// 				printf("line[i] = %s[%i]\n", arg->line[i], i);			
-// 		}
-// 		printf("sep = %s\n", arg->sep);
-// 		printf("prev sep = %s\n", arg->prev_sep);
-// 		arg = arg->next;
-// 		tmp = arg;
-// 	}
-// 	if (arg->line)
-// 	{
-// 		for (int i = 0; arg->line[i]; i++)
-// 			printf("line[i] = %s[%i]\n", arg->line[i], i);			
-// 	}
-// 	printf("sep = %s\n", arg->sep);
-// 	printf("prev sep = %s\n", arg->prev_sep);
-// }
-
-void	free_pars_tab(char **arr)
+void	print_cmd(s_cmd *cmd)
 {
-	int	i;
-
-	i = 0;
-	if (!arr[i])
-		return ;
-	while (arr[i])
-	{
-		free(arr[i]);
-		i++;
-	}
-	if (arr)
-		free(arr);
-}
-
-int	ft_error(char *msg, int ret)
-{
-	if (msg)
-		ft_printf("%s\n", msg);
-	return (ret);
-}
-
-void	free_t_pars(t_pars *pars)
-{
-	free(pars->av);
-	free(pars);
-}
-
-void	free_victime(t_arg *cmd)
-{
-	if (cmd->line)
-		free_pars_tab(cmd->line);
-	if (cmd->sep)
-		free(cmd->sep);
-	if (cmd->prev_sep)
-		free(cmd->prev_sep);
-	free(cmd);
-}
-
-void	free_parsing(t_arg *cmd)
-{
-	t_arg	*tmp;
+	s_cmd	*tmp;
 
 	if (!cmd)
 		return ;
@@ -91,20 +10,28 @@ void	free_parsing(t_arg *cmd)
 	while (tmp)
 	{
 		if (cmd->line)
-			free_pars_tab(cmd->line);
-		if (cmd->sep)
-			free(cmd->sep);
-		if (cmd->prev_sep)
-			free(cmd->prev_sep);
-		free(cmd);
-		cmd = tmp;
-		tmp = cmd->next;
+		{
+			for (int i = 0; cmd->line[i]; i++)
+				printf("line[i] = %s[%i]\n", cmd->line[i], i);			
+		}
+		printf("fd_in = %d & fd_out = %d & hdoc = %d\n", cmd->fd_in, cmd->fd_out, cmd->hdoc);
+		cmd = cmd->next;
+		tmp = cmd;
 	}
-	if (cmd->line)
-		free_pars_tab(cmd->line);
-	if (cmd->sep)
-		free(cmd->sep);
-	if (cmd->prev_sep)
-		free(cmd->prev_sep);
-	free(cmd);
+	if (cmd)
+	{
+		if (cmd->line)
+		{
+			for (int i = 0; cmd->line[i]; i++)
+				printf("line[i] = %s[%i]\n", cmd->line[i], i);			
+		}
+		printf("fd_in = %d & fd_out = %d & hdoc = %d\n", cmd->fd_in, cmd->fd_out, cmd->hdoc);
+	}
+}
+
+int	ft_error(char *msg, int ret)
+{
+	if (msg)
+		ft_printf("%s\n", msg);
+	return (ret);
 }

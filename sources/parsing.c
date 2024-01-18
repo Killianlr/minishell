@@ -1,126 +1,116 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/16 15:22:04 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/15 10:56:34 by flavian          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../includes/minishell.h"
 
-char	*copy_sep(char *src, int len)
+s_cmd	*define_cmd(s_pars	*pars)
 {
-	int		i;
-	char	*ret;
+	s_cmd	*cmd;
 
-	ret = malloc(sizeof(char) * (len + 1));
-	if (!ret)
+	cmd = malloc(sizeof(s_cmd));
+	if (!cmd)
 		return (NULL);
-	i = -1;
-	while (src[++i])
-		ret[i] = src[i];
-	ret[i] = 0;
-	return (ret);
-}
-
-void	create_prev_sep(t_arg *first)
-{
-	t_arg	*next;
-
-	if (!first)
-		return ;
-	next = first->next;
-	if (!next)
-		return ;
-	while (next)
+	cmd->line = get_cmd_line(pars);
+	cmd->fd_in = 0;
+	cmd->fd_out = 0;
+	cmd->hdoc = 0;
+	cmd->next = NULL;
+	if (!set_cmd_fd(pars, cmd) || !check_fd(cmd))
 	{
-		if (first->sep)
-			next->prev_sep = copy_sep(first->sep, ft_strlen(first->sep));
-		first = next;
-		next = first->next;
-	}
-	if (first->sep)
-			next->prev_sep = copy_sep(first->sep, ft_strlen(first->sep));
-}
-
-t_arg	*create_arg(t_pars *pars, int ret_val)
-{
-	t_arg	*arg;
-
-	arg = malloc(sizeof(t_arg));
-	if (!arg)
-		return (NULL);
-	arg->line = get_line(pars, ret_val);
-	if (!arg->line)
-	{
-		free(arg);
+		printf("BAAD fd\n");
+		free(cmd);
 		return (NULL);
 	}
-	arg->sep = get_sep(pars);
-	if (check_sep(arg->sep) < 0)
-	{
-		free_pars_tab(arg->line);
-		free(arg->sep);
-		free(arg);
-		return (NULL);
-	}
-	arg->prev_sep = NULL;
-	return (arg);
+	return (cmd);
 }
 
-t_arg	*parsing(t_pars *pars, t_gc *garbage)
+s_cmd	*create_cmd(s_pars	*pars)
 {
-	int		sep_count;
-	t_arg	*arg;
-	t_arg	*first;
+	s_cmd	*cmd;
+	s_cmd	*first;
+	int		pipe_count;
 
-	sep_count = count_sep(pars);
-	if (sep_count > 0)
-		garbage->fd_hdoc = scan_av_for_hdoc(pars, garbage->fd_hdoc);
-	arg = create_arg(pars, garbage->ret);
-	if (!arg)
+	// cmd = NULL;
+	// first = NULL;
+	pipe_count = ft_count_pipe(pars->av);
+	cmd = define_cmd(pars);
+	if (!cmd)
 		return (NULL);
-	first = arg;
-	while (sep_count && pars->av[pars->i])
+	first = cmd;
+	while (pipe_count)
 	{
-		arg->next = create_arg(pars, garbage->ret);
-		if (!arg->next)
+		printf("IS PIPE\n");
+		cmd->next = define_cmd(pars);
+		if (!cmd->next)
 			break ;
-		arg = arg->next;
-		sep_count--;
+		cmd = cmd->next;
+		pipe_count--;
 	}
-	arg->next = NULL;
+	cmd->next = NULL;
 	return (first);
 }
 
-t_arg	*main_pars(char *str, t_bui *blts, t_gc *garbage)
+char	*check_sep_count(char *str)
 {
-	t_arg	*arg;
-	t_pars	*pars;
+	int	i;
+	int	sep_val;
+	int	set;
 
-	if (!str)
-		return (NULL);
-	arg = NULL;
-	pars = malloc(sizeof(t_pars));
+	i = 0;
+	sep_val = 0;
+	set = 0;
+	while (str[i])
+	{
+		if (ft_find_sep_val(str[i]) > 0)
+		{
+			if (sep_val && ft_find_sep_val(str[i]) !=  1
+					&& sep_val != ft_find_sep_val(str[i]))
+				return (NULL);
+			if (ft_find_sep_val(str[i]) == 1 && sep_val == 1)
+				return (NULL);
+			set++;
+			if (set > 2)
+				return (NULL);
+			sep_val = ft_find_sep_val(str[i]);
+		}
+		else if (!ft_find_sep_val(str[i]))
+		{
+			set = 0;
+			sep_val = 0;
+		}
+		i++;
+	}
+	return (str);
+}
+
+s_cmd	*parsing(t_gc *garbage)
+{
+	s_pars	*pars;
+	s_cmd	*cmd;
+
+	cmd = NULL;
+	pars = malloc(sizeof(s_pars));
 	if (!pars)
 		return (NULL);
-	pars->av = str;
-	pars->env = blts->env;
-	pars->i = 0;
-	new_str(pars, garbage->ret);
-	if (count_quote(pars) % 2 != 0)
+	if (!check_sep_count(garbage->line))
+		return (NULL);
+	pars->av = garbage->line;
+	if (!pars->av)
 	{
-		free(pars);
-		ft_printf("Error, quote unclosed\n");
+		printf("PARSING ERROR\n");
 		return (NULL);
 	}
-	arg = parsing(pars, garbage);
-	create_prev_sep(arg);
-	arg = post_parsing(arg);
-	free_t_pars(pars);
-	return (arg);
+	pars->env = garbage->blts->env;
+	pars->i = 0;
+	pars->av = new_str(pars, garbage->ret);
+	// printf("new_av = %s\n", pars->av);
+	cmd = create_cmd(pars);
+	if (!cmd)
+	{
+		free(pars);
+		return (NULL);
+	}
+	free(pars->av);
+	free(pars);
+	print_cmd(cmd);
+	if (cmd->hdoc)
+		open(".heredoc_tmp", O_RDONLY);
+	return (cmd);
 }

@@ -3,37 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   p_get_in_env.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 15:35:44 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/09 15:39:24 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/18 15:58:22 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	quote_is_closed(t_pars *pars, int l)
-{
-	int		target;
-	int		i;
-
-	target = 0;
-	i = l;
-	if (count_quote(pars) % 2 != 0)
-		return (ft_error("Error 1, quote unclosed", 0));
-	else
-	{
-		while (pars->av[i])
-		{
-			if (target == 0 && is_quote(pars->av[i]) > 0)
-				target = is_quote(pars->av[i]);
-			else if (target > 0 && target == is_quote(pars->av[i]))
-				return (i);
-			i++;
-		}
-	}
-	return (0);
-}
 
 char	*get_in_env_3(char *ret, t_gie *data)
 {

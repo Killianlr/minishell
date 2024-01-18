@@ -39,7 +39,9 @@ char	*find_path(char **envp)
 	while (r < max && ft_strncmp("PATH", envp[r], 4))
 		r++;
 	if (r == max)
+	{
 		return (NULL);
+	}
 	else
 		return (find_path_2(envp));
 	return (NULL);

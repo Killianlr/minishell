@@ -8,7 +8,6 @@ MY_SOURCES = ft_atoi.c \
 	ft_isascii.c \
 	ft_isdigit.c \
 	ft_isprint.c \
-	ft_is_empty.c \
 	ft_itoa.c \
 	ft_strlen.c \
 	ft_memset.c \

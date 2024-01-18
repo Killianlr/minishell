@@ -3,25 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/09 13:50:08 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/15 10:45:15 by flavian          ###   ########.fr       */
+/*   Created: 2024/01/18 13:30:12 by kle-rest          #+#    #+#             */
+/*   Updated: 2024/01/18 13:32:46 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_echo_2(t_gc *garbage, char **args)
+int	loop_echo_write(char **args, int i, t_gc *garbage, int pid)
 {
-	if (!garbage->line)
-		return (0);
-	if (!ft_strncmp(args[0], "echo", ft_strlen(args[0])))
+	while (args[i] && args[i + 1] && !pid)
 	{
-		garbage->ret = 0;
-		return (2);
+		if (!ft_strncmp(args[i], "$?", 4))
+			ft_putnbr_fd(garbage->ret, STDOUT_FILENO);
+		else
+		{
+			write(STDOUT_FILENO, args[i], ft_strlen(args[i]));
+			write(STDOUT_FILENO, " ", 1);
+			i++;
+		}
 	}
-	return (0);
+	return (i);
 }
 
 int	option_echo(char *tiret_n)
@@ -42,7 +46,7 @@ int	option_echo(char *tiret_n)
 		return (1);
 }
 
-int	ft_echo(t_gc *garbage, char **args)
+int	ft_echo(t_gc *garbage, char **args, int pid)
 {
 	int	e;
 	int	i;
@@ -58,12 +62,12 @@ int	ft_echo(t_gc *garbage, char **args)
 			i++;
 			e = 1;
 		}
-		i = loop_echo_write(args, i, garbage);
-		if (args[i] && !ft_strncmp(args[i], "$?", 4))
+		i = loop_echo_write(args, i, garbage, pid);
+		if (args[i] && !ft_strncmp(args[i], "$?", 4) && !pid)
 			ft_putnbr_fd(garbage->ret, STDOUT_FILENO);
-		else
+		else if (!pid)
 			write(STDOUT_FILENO, args[i], ft_strlen(args[i]));
-		if (!e)
+		if (!e && !pid)
 			write(STDOUT_FILENO, "\n", 1);
 		garbage->ret = 0;
 		return (2);
@@ -71,7 +75,7 @@ int	ft_echo(t_gc *garbage, char **args)
 	return (0);
 }
 
-int	ft_cd_2(t_gc *garbage, char **args)
+int	ft_cd(t_gc *garbage, char **args, int pid)
 {
 	if (!ft_strncmp(args[0], "cd", 3))
 	{
@@ -80,8 +84,11 @@ int	ft_cd_2(t_gc *garbage, char **args)
 			return (2);
 		if (chdir(args[1]))
 		{
+			if (pid)
+				printf("minishell: cd: %s No such file or directory\n", args[1]);
+			else
+				exit_free(garbage, 1);
 			garbage->ret = 1;
-			garbage->go = 0;
 			return (2);
 		}
 		else
@@ -97,30 +104,23 @@ int	ft_cd_2(t_gc *garbage, char **args)
 	return (0);
 }
 
-int	ft_cd(t_gc *garbage, char **args)
+int	ft_pwd(t_gc *garbage, char **args, int pid)
 {
-	if (!garbage->line)
+	char	*pwd;
+
+	if (!garbage->line || pid)
 		return (0);
-	if (!ft_strncmp(args[0], "cd", 3))
+	if (!ft_strncmp(args[0], "pwd", 4))
 	{
 		garbage->ret = 0;
-		if (!args[1])
-			return (2);
-		if (chdir(args[1]))
+		pwd = get_pwd();
+		if (!pwd)
 		{
-			printf("minishell: cd: %s: No such file or directory\n", args[1]);
-			garbage->ret = 1;
-			garbage->go = 0;
-			return (2);
+		garbage->ret = 1;
+			return (1);
 		}
-		else
-		{
-			if (cd_set_pwd(garbage->blts))
-			{
-				garbage->ret = 2;
-				return (1);
-			}
-		}
+		printf("%s\n", pwd);
+		free(pwd);
 		return (2);
 	}
 	return (0);

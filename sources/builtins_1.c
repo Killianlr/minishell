@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins.c                                         :+:      :+:    :+:   */
+/*   builtins_1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/13 11:18:06 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/14 11:01:09 by kle-rest         ###   ########.fr       */
+/*   Created: 2024/01/18 13:35:41 by kle-rest          #+#    #+#             */
+/*   Updated: 2024/01/18 13:35:44 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_define_var(t_gc *garbage, char **args)
+int	ft_define_var(t_gc *garbage, char **args, int pid)
 {
 	int	i;
 	int	val;
@@ -20,7 +20,7 @@ int	ft_define_var(t_gc *garbage, char **args)
 
 	i = 0;
 	e = 0;
-	if (!garbage->line)
+	if (!garbage->line || !pid)
 		return (0);
 	while (args[i] && it_is_an_equal(args[i]))
 	{
@@ -38,7 +38,7 @@ int	ft_define_var(t_gc *garbage, char **args)
 	return (0);
 }
 
-int	ft_unset(t_gc *garbage, char **args, int k)
+int	ft_unset(t_gc *garbage, char **args, int pid)
 {
 	if (!garbage->line)
 		return (0);
@@ -47,7 +47,7 @@ int	ft_unset(t_gc *garbage, char **args, int k)
 		garbage->ret = 0;
 		if (!args[1])
 			return (0);
-		if (del_var_unset(garbage, args, k))
+		if (del_var_unset(garbage, args, pid))
 		{
 			garbage->ret = 1;
 			return (1);
@@ -57,17 +57,15 @@ int	ft_unset(t_gc *garbage, char **args, int k)
 	return (0);
 }
 
-int	ft_export(t_gc *garbage, char **args, int porc)
+int	ft_export(t_gc *garbage, char **args, int pid)
 {
 	int	i;
 
-	if (!garbage->line)
-		return (0);
 	i = 0;
 	if (!ft_strncmp(args[0], "export", 7))
 	{
 		garbage->ret = 0;
-		if (!args[1] && !porc)
+		if (!args[1] && !pid)
 		{
 			while (garbage->blts->exp[i])
 			{
@@ -76,7 +74,7 @@ int	ft_export(t_gc *garbage, char **args, int porc)
 			}
 			return (2);
 		}
-		if (update_export(garbage, args) && porc)
+		if (update_export(garbage, args, pid))
 		{
 			garbage->ret = 1;
 			return (1);
@@ -86,9 +84,9 @@ int	ft_export(t_gc *garbage, char **args, int porc)
 	return (0);
 }
 
-int	ft_env(t_gc *garbage, char **args)
+int	ft_env(t_gc *garbage, char **args, int pid)
 {
-	if (!garbage->line)
+	if (!garbage->line || pid)
 		return (0);
 	if (!ft_strncmp(args[0], "env", 4))
 	{

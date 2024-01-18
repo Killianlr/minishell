@@ -1,6 +1,6 @@
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Werror -Wextra 
+CFLAGS = -Wall -Werror -Wextra
 
 LIBFT = libft.a
 LIBFT_DIR = libft
@@ -9,46 +9,35 @@ LIB = $(addprefix $(LIBFT_DIR)/, $(LIBFT))
 MY_SOURCES = 	minishell.c \
 				prompt.c \
 				signal.c \
+				free.c \
+				builtins_1.c \
+				builtins_2.c \
+				builtins_check.c \
+				builtins_utiles.c \
+				cd.c \
 				env.c \
 				export.c \
-				utiles_export.c \
 				unset.c \
-				free.c \
-				cd.c \
-				builtins.c \
-				builtins_2.c \
-				utiles_builtins.c \
-				utiles_env.c \
+				utiles_env_1.c \
+				utiles_env_2.c \
+				utiles_export.c \
+				utiles_path.c \
+				setup_exec.c \
+				utiles_exec.c \
 				ft_sort_tab_n_add_dbq.c \
 				parsing.c \
-				p_line.c \
-				p_copy_str.c \
-				p_count.c \
+				utiles_parsing.c \
+				p_fd.c \
+				p_free.c \
+				p_open.c \
+				p_get_line.c \
 				p_is.c \
-				p_sep.c \
 				p_hdoc.c \
-				p_hdoc_2.c \
+				p_new_str.c \
+				p_quote.c \
 				p_env.c \
 				p_get_in_env.c \
-				p_quote.c \
-				p_utils.c \
-				p_utils_2.c \
-				p_free.c \
-				p_new_str.c \
-				ft_exec.c \
-				utiles_exec.c \
-				error.c \
-				setup_exec.c \
-				ft_open.c \
-				utiles_path.c \
-				main.c \
-				builtins_exec.c \
-				utiles_env_2.c \
-				new_arg.c \
-				open_to_free.c \
-				utils_other.c \
-				utiles_fd.c \
-				init_t_exec.c \
+				p_size_for_str.c \
 
 SOURCES_DIR = sources
 SOURCES = $(addprefix $(SOURCES_DIR)/, $(MY_SOURCES))

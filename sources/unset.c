@@ -57,16 +57,16 @@ int	go_to_find_var_and_del(t_bui *blts, char *str)
 	return (0);
 }
 
-void	msg_unset(int k, char *str)
+void	msg_unset(int pid, char *str)
 {
-	if (k)
+	if (pid)
 	{
 		printf("minishell: unset: `%s'", str);
 		printf(": not a valid identifier\n");
 	}
 }
 
-int	del_var_unset(t_gc *garbage, char **args, int k)
+int	del_var_unset(t_gc *garbage, char **args, int pid)
 {
 	int	i;
 	int	j;
@@ -81,7 +81,7 @@ int	del_var_unset(t_gc *garbage, char **args, int k)
 		{
 			if (!ft_isalpha(args[i][j]))
 			{
-				msg_unset(k, args[i]);
+				msg_unset(pid, args[i]);
 				e = 1;
 				break ;
 			}

@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:46 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/09 14:57:45 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/18 15:47:25 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	clear_string_next(t_prompt *prpt, int start, int end)
 	return (0);
 }
 
-int	clear_string(t_prompt *prpt)
+int	clear_string(t_prompt *prpt, t_gc *garbage)
 {
 	int		start;
 	int		end;
@@ -55,18 +55,19 @@ int	clear_string(t_prompt *prpt)
 	{
 		printf("exit");
 		free(prpt->inpt);
-		return (1);
+		free_all(garbage);
+		exit(0);
 	}
 	while (prpt->inpt[start] && (!ft_isprint(prpt->inpt[start])
 			|| prpt->inpt[start] == 32) && start <= end)
 		start++;
 	if ((size_t)start >= ft_strlen(prpt->inpt))
-		return (2);
+		return (1);
 	while (prpt->inpt[end] && (!ft_isprint(prpt->inpt[end])
 			|| prpt->inpt[end] == 32))
 		end--;
 	if (clear_string_next(prpt, start, end))
-		return (3);
+		return (1);
 	return (0);
 }
 
@@ -98,29 +99,20 @@ char	*pre_prompt(void)
 	return (pre_prompt);
 }
 
-char	*ft_prompt(void)
+char	*ft_prompt(t_gc *garbage)
 {
 	t_prompt	prpt;
 	char		*prompt;
-	int			i;
 
 	prpt.inpt = NULL;
 	prompt = pre_prompt();
 	prpt.inpt = readline(prompt);
 	free(prompt);
-	i = clear_string(&prpt);
-	if (i == 1)
+	if (clear_string(&prpt, garbage))
 	{
 		free(prpt.inpt);
 		return (NULL);
 	}
-	else if (i == 2)
-	{
-		free(prpt.inpt);
-		return (ft_strdup(" "));
-	}
-	else if (i == 3)
-		return (NULL);
 	add_history(prpt.inpt);
 	free(prpt.inpt);
 	return (prpt.str);
