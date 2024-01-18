@@ -1,5 +1,4 @@
-#include "parsing.h"
-
+#include "../includes/minishell.h"
 
 s_cmd	*define_cmd(s_pars	*pars)
 {
@@ -10,8 +9,10 @@ s_cmd	*define_cmd(s_pars	*pars)
 		return (NULL);
 	cmd->fd_in = 0;
 	cmd->fd_out = 0;
-	if (!set_cmd_fd(pars, cmd))
+	cmd->hdoc = 0;
+	if (!set_cmd_fd(pars, cmd) || !check_fd(cmd))
 	{
+		printf("BAAD fd\n");
 		free(cmd);
 		return (NULL);
 	}
@@ -28,11 +29,13 @@ s_cmd	*create_cmd(s_pars	*pars)
 	cmd = NULL;
 	first = NULL;
 	pipe_count = ft_count_pipe(pars->av);
-	printf("pipe_count = %d\n", pipe_count);
 	cmd = define_cmd(pars);
+	if (!cmd)
+		return (NULL);
 	first = cmd;
 	while (pipe_count)
 	{
+		printf("IS PIPE\n");
 		cmd->next = define_cmd(pars);
 		if (!cmd->next)
 			break ;
@@ -76,7 +79,7 @@ char	*check_sep_count(char *str)
 	return (str);
 }
 
-s_cmd	*parsing(char *str)
+s_cmd	*parsing(t_gc *garbage)
 {
 	s_pars	*pars;
 	s_cmd	*cmd;
@@ -85,15 +88,18 @@ s_cmd	*parsing(char *str)
 	pars = malloc(sizeof(s_pars));
 	if (!pars)
 		return (NULL);
-	pars->av = check_sep_count(str);
-	printf("pars->av = %s\n", pars->av);
+	if (!check_sep_count(garbage->line))
+		return (NULL);
+	pars->av = garbage->line;
 	if (!pars->av)
 	{
 		printf("PARSING ERROR\n");
 		return (NULL);
 	}
-	pars->env = NULL;
+	pars->env = garbage->blts->env;
 	pars->i = 0;
+	pars->av = new_str(pars, garbage->ret);
+	printf("new_av = %s\n", pars->av);
 	cmd = create_cmd(pars);
 	if (!cmd)
 	{
@@ -102,6 +108,7 @@ s_cmd	*parsing(char *str)
 	}
 	free(pars);
 	print_cmd(cmd);
-	free_cmd(cmd);
+	if (cmd->hdoc)
+		open(".heredoc_tmp", O_RDONLY);
 	return (cmd);
 }

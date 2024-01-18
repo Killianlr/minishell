@@ -1,4 +1,11 @@
-#include "parsing.h"
+#include "../includes/minishell.h"
+
+int	check_fd(s_cmd *cmd)
+{
+	if (cmd->fd_in < 0 || cmd->fd_out < 0)
+		return (0);
+	return (1);
+}
 
 int	find_type_of_sep(s_pars *pars, int i)
 {
@@ -78,23 +85,25 @@ int	set_cmd_fd(s_pars *pars, s_cmd *cmd)
 				if (cmd->fd_in)
 				{
 					close(cmd->fd_in);
-					cmd->fd_in = parsing_open(file_name, type_of_sep);
+					cmd->fd_in = parsing_open(file_name, type_of_sep, cmd);
 				}
 				else
-					cmd->fd_in = parsing_open(file_name, type_of_sep);
+					cmd->fd_in = parsing_open(file_name, type_of_sep, cmd);
 			}
 			if (type_of_sep == 2 || type_of_sep == 4)
 			{
 				if (cmd->fd_out)
 				{
 					close(cmd->fd_out);
-					cmd->fd_out = parsing_open(file_name, type_of_sep);
+					cmd->fd_out = parsing_open(file_name, type_of_sep, cmd);
 				}
 				else
-					cmd->fd_out = parsing_open(file_name, type_of_sep);
+					cmd->fd_out = parsing_open(file_name, type_of_sep, cmd);
 			}
 			free(file_name);
 			i = new_val_i(pars, i);
+			if (!pars->av[i])
+				return (1);
 		}
 		i++;
 	}

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   p_open.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 13:57:05 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/16 20:42:24 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/18 15:48:30 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing.h"
+#include "../includes/minishell.h"
 
 int	p_open_infile(char *file)
 {
@@ -58,10 +58,11 @@ int	p_open_outfile_append(char *file)
 	return (fd);
 }
 
-int	parsing_open(char *file, int typeofsep)
+int	parsing_open(char *file, int typeofsep, s_cmd *cmd)
 {
 	int	fd;
 
+	fd = 0;
 	if (typeofsep == 1)
 	{
 		fd = p_open_infile(file);
@@ -74,9 +75,9 @@ int	parsing_open(char *file, int typeofsep)
 	}
 	else if (typeofsep == 3)
 	{
-		printf("here_doc\n");
-		// fd = open(".heredoc_tmp", O_RDONLY);
-		return (0);
+		fd = get_here_doc(file, fd, cmd);
+		cmd->hdoc = 1;
+		return (fd);
 	}
 	else if (typeofsep == 4)
 	{
@@ -84,11 +85,4 @@ int	parsing_open(char *file, int typeofsep)
 		return (fd);
 	}
 	return (-1);
-}
-
-void	close_standard_fd(void)
-{
-	close(0);
-	close(1);
-	close(2);
 }

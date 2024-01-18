@@ -1,4 +1,4 @@
-#include "parsing.h"
+#include "../includes/minishell.h"
 
 int	len_for_malloc_tab(s_pars *pars)
 {
@@ -18,12 +18,12 @@ int	len_for_malloc_tab(s_pars *pars)
 		}
 		else if (set == 0 && ft_find_sep_val(pars->av[i]) > 1)
 			i = new_val_i(pars, i) - 1;
-		else if (set == 1 && is_whitespace(pars->av[i])
+		else if ((set == 1 && is_whitespace(pars->av[i]))
 				|| ft_find_sep_val(pars->av[i]) > 1)
 			set = 0;
 		i++;
 	}
-	printf("len for tab = %d\n", len);
+	//printf("len for tab = %d\n", len);
 	return (len);
 } 
 
@@ -55,11 +55,10 @@ int	len_for_malloc_line(s_pars *pars)
 char	*fill_cmd_line(s_pars *pars)
 {
 	char	*ret;
-	int		len;
 	int		set;
 	int		y;
 
-	printf("in fill cmd line\n");
+	//printf("in fill cmd line\n");
 	ret = malloc(sizeof(char) * (len_for_malloc_line(pars) + 1));
 	if (!ret)
 		return (NULL);
@@ -93,11 +92,11 @@ void	new_val_pars_i(s_pars *pars)
 	while (pars->av[pars->i] && !is_char(pars->av[pars->i]) && ft_find_sep_val(pars->av[pars->i]) != 1)
 	{
 		if (ft_find_sep_val(pars->av[pars->i]) > 1)
+		{
 			pars->i = new_val_i(pars, pars->i);
-		// if (ft_find_sep_val(pars->av[pars->i]) == 1)
-		// 	pars->i++;
-		// while (pars->av[pars->i] && is_whitespace(pars->av[pars->i]))
-		// 	pars->i++;
+			if (!pars->av[pars->i])
+				return ;
+		}
 		pars->i++;
 	}
 }
@@ -108,7 +107,7 @@ char	**get_cmd_line(s_pars *pars)
 	int		r;
 	int		len;
 	
-	printf("pars->av[pars->i] = %c[%d]\n", pars->av[pars->i], pars->i);
+	//printf("pars->av[pars->i] = %c[%d]\n", pars->av[pars->i], pars->i);
 	if (ft_find_sep_val(pars->av[pars->i]) == 1)
 		pars->i++;
 	while (pars->av[pars->i] && is_whitespace(pars->av[pars->i]))
@@ -122,7 +121,7 @@ char	**get_cmd_line(s_pars *pars)
 		&& ft_find_sep_val(pars->av[pars->i]) != 1 && len)
 	{
 		ret[r] = fill_cmd_line(pars);
-		printf("         cmd->line[i] = %s[%d]\n", ret[r], r);
+		//printf("         cmd->line[i] = %s[%d]\n", ret[r], r);
 		r++;
 		len--;
 	}
