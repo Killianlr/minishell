@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2023/12/15 14:36:37 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/18 15:31:15 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../libft/libft.h"
-
-int	g_signal;
 
 typedef struct s_prompt
 {
@@ -114,6 +112,8 @@ void	free_cmd(s_cmd *cmd);
 /*---------------------------signal.c-------------------------*/
 
 int		signal_init(void);
+void	signal_handler(int signum);
+// int		stop_signal(void);
 
 /*---------------------------builtins_check.c-------------------------*/
 
@@ -196,10 +196,13 @@ void	ft_swap(char **a, char **b);
 /*---------------------------setup_exec.c-------------------------*/
 
 int		setup_exec(t_gc *garbage, s_cmd *cmd, int nb_cmd);
+char	*get_cmd(char **paths, char	**cmd, t_gc *garbage);
 
 /*---------------------------utiles_exec.c-------------------------*/
 
 int		ft_lstsize_cmd(s_cmd *lst);
+int		run_pipe(t_gc *garbage, s_cmd *cmd, int fdd, int nb_cmd);
+void	set_fd(s_cmd *cmd);
 
 
 #endif

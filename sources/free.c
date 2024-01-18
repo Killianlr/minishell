@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/18 13:37:05 by kle-rest          #+#    #+#             */
+/*   Updated: 2024/01/18 13:37:20 by kle-rest         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
@@ -25,8 +36,6 @@ void	free_all(t_gc *garbage)
 {
 	if (!garbage)
 		return ;
-	// free_parsing(garbage->arg);
-	//free_tab(garbage->args); /* FREE PARSING*/
 	if (garbage->s_cmd)
 		free_cmd(garbage->s_cmd);
 	free_blts(garbage->blts);
@@ -57,14 +66,12 @@ void	free_cmd(s_cmd *cmd)
 
 void	exit_free(t_gc *garbage, int exival)
 {
-	// printf("exit_free, exit = %d\n", exival);
 	free_all(garbage);
 	exit(exival);
 }
 
 void	exit_child(t_gc *garbage, int exival)
 {
-	// printf("exit_child, exit = %d\n", exival);
 	free_all(garbage);
 	exit(exival);
 }

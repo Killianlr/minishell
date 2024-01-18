@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins_2.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/18 13:30:12 by kle-rest          #+#    #+#             */
+/*   Updated: 2024/01/18 13:32:46 by kle-rest         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
@@ -66,8 +77,6 @@ int	ft_echo(t_gc *garbage, char **args, int pid)
 
 int	ft_cd(t_gc *garbage, char **args, int pid)
 {
-	// if (!garbage->line)
-	// 	return (0);
 	if (!ft_strncmp(args[0], "cd", 3))
 	{
 		garbage->ret = 0;
@@ -76,7 +85,7 @@ int	ft_cd(t_gc *garbage, char **args, int pid)
 		if (chdir(args[1]))
 		{
 			if (pid)
-				printf("minishell: cd: %s: No such file or directory\n", args[1]);
+				printf("minishell: cd: %s No such file or directory\n", args[1]);
 			else
 				exit_free(garbage, 1);
 			garbage->ret = 1;

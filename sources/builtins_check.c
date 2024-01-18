@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins_check.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/18 13:34:41 by kle-rest          #+#    #+#             */
+/*   Updated: 2024/01/18 15:16:07 by kle-rest         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
@@ -32,6 +43,7 @@ int	is_buitlins_next(t_gc *garbage, char **args, int pid)
 int	is_builtins(t_gc *garbage, char **args, int pid)
 {
 	int	i;
+	extern int g_signal;
 
 	i = 0;
 	if (!args || !garbage->line)
@@ -68,18 +80,18 @@ void	ft_exit(t_gc *garbage, char **args)
 		printf("minishell: exit: too many arguments\n");
 		exit_free(garbage, 1);
 	}
-    while (args[1][i])
+	while (args[1][i])
 	{
 		if (args[1][i] == '-')
 			i++;
 		if (!ft_isdigit(args[1][i]))
 		{
 			printf("minishell: exit: %s: numeric argument required\n", args[1]);
-		    exit_free(garbage, 2);
+			exit_free(garbage, 2);
 		}
 		i++;
 	}
-    exit_free(garbage, atoi(args[1]));
+	exit_free(garbage, atoi(args[1]));
 }
 
 int	ft_strcmp(char *s1, char *s2)
