@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:36:56 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/19 16:51:59 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/19 17:10:32 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ int	ft_exec(t_gc *garbage, t_cmd *cmd)
 	extern int	g_signal;
 
 	status = 0;
+	printf("--------------START OF FORK-----------\n");
 	pid = fork();
 	if (pid < 0)
 		return (1);
@@ -97,6 +98,7 @@ int	ft_exec(t_gc *garbage, t_cmd *cmd)
 	// printf("WCOREDUMP = %d\n", __WCOREDUMP(status));
 	// printf("WSTOPSIG = %d\n", WSTOPSIG(status));
 	// printf("garbage->ret = %d\n", garbage->ret);
+	printf("--------------END OF FORK-----------\n");
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:19:12 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/19 16:53:09 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/19 17:02:51 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,10 @@
 void	free_cmd_2(t_cmd *cmd)
 {
 	if (cmd->line)
+	{
+		printf("free cmd->line\n");
 		free_tab(cmd->line);
+	}
 	if (cmd->hdoc)
 		unlink(".heredoc_tmp");
 	free(cmd);
@@ -52,6 +55,7 @@ void	free_cmd(t_cmd *cmd)
 {
 	t_cmd	*tmp;
 
+	printf("IN free cmd\n");
 	if (!cmd)
 		return ;
 	tmp = cmd->next;
