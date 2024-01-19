@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_new_str.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 20:02:54 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/19 15:52:43 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/19 16:34:41 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ char	*new_str(t_pars *pars, int ret_val)
 	t_ns	*data;
 	char	*ret;
 
+	if (!check_sep_count(pars->av))
+		return (NULL);
 	data = malloc(sizeof(t_ns));
 	if (!data)
 		return (NULL);

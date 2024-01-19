@@ -1,21 +1,26 @@
-#include "../includes/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   p_fd.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/19 16:35:36 by fserpe            #+#    #+#             */
+/*   Updated: 2024/01/19 16:37:01 by fserpe           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int	check_fd(t_cmd *cmd)
-{
-	if (cmd->fd_in < 0 || cmd->fd_out < 0)
-		return (0);
-	return (1);
-}
+#include "../includes/minishell.h"
 
 int	find_type_of_sep(t_pars *pars, int i)
 {
 	int	ret;
 	int	set;
-	
+
 	ret = 0;
 	set = 0;
 	while (pars->av[i] && ft_find_sep_val(pars->av[i])
-			&& !is_whitespace(pars->av[i]))
+		&& !is_whitespace(pars->av[i]))
 	{
 		if (!set && ft_find_sep_val(pars->av[i]) == 2)
 			ret = 1;
@@ -28,7 +33,7 @@ int	find_type_of_sep(t_pars *pars, int i)
 		i++;
 		set = ft_find_sep_val(pars->av[i]);
 	}
-	return (ret);	
+	return (ret);
 }
 
 char	*find_file_name_2(t_pars *pars, int i, int y, int len)
@@ -40,10 +45,10 @@ char	*find_file_name_2(t_pars *pars, int i, int y, int len)
 		return (NULL);
 	y = 0;
 	while (pars->av[i] && !is_whitespace(pars->av[i])
-			&& !ft_find_sep_val(pars->av[i]))
+		&& !ft_find_sep_val(pars->av[i]))
 		ret[y++] = pars->av[i++];
 	ret[y] = 0;
-	return (ret);	
+	return (ret);
 }
 
 char	*find_file_name(t_pars *pars, int i)
@@ -61,7 +66,7 @@ char	*find_file_name(t_pars *pars, int i)
 	len = 0;
 	y = i;
 	while (pars->av[y] && !is_whitespace(pars->av[y])
-			&& !ft_find_sep_val(pars->av[y]))
+		&& !ft_find_sep_val(pars->av[y]))
 	{
 		len++;
 		y++;
@@ -96,7 +101,7 @@ void	set_fd_parsing(t_cmd *cmd, char *file_name, int type_of_sep)
 
 int	set_cmd_fd(t_pars *pars, t_cmd *cmd)
 {
-	int	i;
+	int		i;
 	char	*file_name;
 	int		type_of_sep;
 

@@ -3,14 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   p_hdoc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:33:41 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/19 15:50:55 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/19 16:37:01 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	check_fd(t_cmd *cmd)
+{
+	if (cmd->fd_in < 0 || cmd->fd_out < 0)
+		return (0);
+	return (1);
+}
+
+int	end_quote(char *str, int l)
+{
+	int		target;
+	int		i;
+
+	target = 0;
+	i = l;
+	if (count_quote(str) % 2 != 0)
+		return (ft_error("Error 1, quote unclosed", 0));
+	else
+	{
+		while (str[i])
+		{
+			if (target == 0 && is_quote(str[i]) > 0)
+				target = is_quote(str[i]);
+			else if (target > 0 && target == is_quote(str[i]))
+				return (i);
+			i++;
+		}
+	}
+	return (0);
+}
 
 int	get_here_doc_2(char *av, int fd, char *buf)
 {

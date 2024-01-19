@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/19 16:11:51 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/19 16:33:56 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,14 @@ typedef struct s_fill_cmd_line
 	char	*quote;
 }			t_fcl;
 
+typedef struct s_len_for_malloc_line
+{
+	int		i;
+	int		set;
+	char	*quote;
+}			t_lfmf;
+
+
 typedef struct s_size_for_line
 {
 	int		i;
@@ -124,6 +132,7 @@ typedef struct s_size_for_line
 /*---------------------------p_free.c-------------------------*/
 
 int		ft_error(char *msg, int ret);
+t_cmd	*end_of_pars(t_pars *pars, t_cmd *cmd);
 
 /*---------------------------parsing.c-------------------------*/
 
@@ -144,17 +153,19 @@ int		ms_strj_s(char *s1, char *s2, int size);
 
 /*---------------------------p_quote.c-------------------------*/
 
-int		quote_is_closed(char *str, int l);
+int		end_quote(char *str, int l);
 char	*handle_quotes(char *str, int l);
 int		size_for_quote(char *str);
+int		count_quote(char *str);
 
 /*---------------------------p_new_str.c-------------------------*/
 
 char	*new_str(t_pars *pars, int ret_val);
 
-/*---------------------------p_size_for_str.c-------------------------*/
+/*---------------------------p_len_mal.c-------------------------*/
 
-int		size_for_line(t_pars *pars, int ret_val);
+int	len_for_malloc_line(t_pars *pars);
+int	len_for_malloc_tab(t_pars *pars);
 
 /*---------------------------p_hdoc.c-------------------------*/
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_quote.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:06:01 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/18 20:34:18 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/19 16:21:16 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,45 +57,12 @@ int	count_quote(char *str)
 	return (ret);
 }
 
-int	quote_is_closed(char *str, int l)
-{
-	int		target;
-	int		i;
-
-	target = 0;
-	i = l;
-	if (count_quote(str) % 2 != 0)
-		return (ft_error("Error 1, quote unclosed", 0));
-	else
-	{
-		while (str[i])
-		{
-			if (target == 0 && is_quote(str[i]) > 0)
-				target = is_quote(str[i]);
-			else if (target > 0 && target == is_quote(str[i]))
-				return (i);
-			i++;
-		}
-	}
-	return (0);
-}
-
 void	handle_quote_3(char *str, t_hq *data)
 {
 	data->i++;
 	while (str[data->i] && data->i < data->end
 		&& is_quote(str[data->i]) != 2)
 	{
-		// if (is_var_env(str[data->i]))
-		// {
-		// 	data->buf = ms_strjoin(data->buf, get_var_env(str, data->i, 0), 3);
-		// 	if (!data->buf)
-		// 		return ;
-		// 	data->y = ft_strlen(data->buf);
-		// 	data->i = after_var_env(str, data->i);
-		// 	if (data->i < 0)
-		// 		return ;
-		// }
 		if (is_quote(str[data->i]) == 2)
 		{
 			data->buf[data->y] = 0;
@@ -132,13 +99,12 @@ char	*handle_quotes(char *str, int l)
 	data->i = l;
 	while (str[data->i] && !is_quote(str[data->i]))
 		data->i++;
-	data->end = quote_is_closed(str, data->i);
+	data->end = end_quote(str, data->i);
 	if (data->end == 0)
 		return (NULL);
 	data->buf = ft_calloc(data->end - data->i + 1, sizeof(char));
 	if (!data->buf)
 		return (NULL);
-	// data->buf[0] = 0;
 	data->y = 0;
 	handle_quote_2(str, data);
 	if (!data->buf)

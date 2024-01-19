@@ -1,70 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   p_get_line.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/19 16:15:16 by fserpe            #+#    #+#             */
+/*   Updated: 2024/01/19 16:28:03 by fserpe           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
-
-int	len_for_malloc_tab(t_pars *pars)
-{
-	int	len;
-	int	i;
-	int	set;
-
-	len = 0;
-	set = 0;
-	i = pars->i;
-	while (pars->av[i] && ft_find_sep_val(pars->av[i]) != 1)
-	{
-		if (set == 0 && is_char(pars->av[i]))
-		{
-			set = 1;
-			len++;
-		}
-		else if (set == 0 && is_quote(pars->av[i]))
-		{
-			set = 1;
-			len++;
-			i = quote_is_closed(pars->av, i);
-		}
-		else if (set == 0 && ft_find_sep_val(pars->av[i]) > 1)
-			i = new_val_i(pars, i) - 1;
-		else if ((set == 1 && is_whitespace(pars->av[i]))
-				|| ft_find_sep_val(pars->av[i]) > 1)
-			set = 0;
-		i++;
-	}
-	return (len);
-} 
-
-int	len_for_malloc_line(t_pars *pars)
-{
-	int	i;
-	int	len;
-	int	set;
-	char	*quote;
-
-	i = pars->i;
-	len = 0;
-	set = 0;
-	quote = NULL;
-	while (pars->av[i] && ft_find_sep_val(pars->av[i]) != 1)
-	{
-		if (ft_find_sep_val(pars->av[i]) > 1)
-			i = new_val_i(pars, i) - 1;
-		else if (is_quote(pars->av[i]))
-		{
-			quote = handle_quotes(pars->av, i);
-			len += ft_strlen(quote);
-			free(quote);
-			i = quote_is_closed(pars->av, i);
-		}
-		else if (is_char(pars->av[i]))
-		{
-			set = 1;
-			len++;
-		}
-		else if (set == 1 && !is_char(pars->av[i]))
-			return (len);
-		i++;
-	}
-	return (len);
-}
 
 char	*fill_quote(t_pars *pars, t_fcl *data, char *buf)
 {
@@ -80,8 +26,8 @@ char	*fill_quote(t_pars *pars, t_fcl *data, char *buf)
 		return (NULL);
 	}
 	data->y = ft_strlen(buf);
-	if (quote_is_closed(pars->av, pars->i) > 0)
-		pars->i = quote_is_closed(pars->av, pars->i);
+	if (end_quote(pars->av, pars->i) > 0)
+		pars->i = end_quote(pars->av, pars->i);
 	else
 		return (ft_strdup(""));
 	return (buf);
@@ -93,7 +39,7 @@ char	*fill_cmd_line_loop(t_pars *pars, t_fcl *data, char *ret)
 	{
 		if (ft_find_sep_val(pars->av[pars->i]) > 1)
 			pars->i = new_val_i(pars, pars->i) - 1;
-		else if (is_quote(pars->av[pars->i]) && quote_is_closed(pars->av, pars->i))
+		else if (is_quote(pars->av[pars->i]) && end_quote(pars->av, pars->i))
 		{
 			ret = fill_quote(pars, data, ret);
 			if (!ret)
@@ -120,7 +66,6 @@ char	*fill_cmd_line(t_pars *pars)
 {
 	char	*ret;
 	t_fcl	*data;
-	
 
 	data = malloc(sizeof(t_fcl));
 	data->size = len_for_malloc_line(pars);
@@ -140,7 +85,8 @@ char	*fill_cmd_line(t_pars *pars)
 
 void	new_val_pars_i(t_pars *pars)
 {
-	while (pars->av[pars->i] && !is_char(pars->av[pars->i]) && ft_find_sep_val(pars->av[pars->i]) != 1)
+	while (pars->av[pars->i] && !is_char(pars->av[pars->i])
+		&& ft_find_sep_val(pars->av[pars->i]) != 1)
 	{
 		if (ft_find_sep_val(pars->av[pars->i]) > 1)
 		{
@@ -157,7 +103,7 @@ char	**get_cmd_line(t_pars *pars)
 	char	**ret;
 	int		r;
 	int		len;
-	
+
 	if (ft_find_sep_val(pars->av[pars->i]) == 1)
 		pars->i++;
 	while (pars->av[pars->i] && is_whitespace(pars->av[pars->i]))

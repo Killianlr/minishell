@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setup_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:36:56 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/19 16:12:47 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/19 16:51:59 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,9 +104,9 @@ int	setup_exec(t_gc *garbage, t_cmd *cmd, int nb_cmd)
 {
 	int	fdd;
 
-	fdd = dup(0);
-	if (!garbage->line)
+	if (!garbage->line || !cmd)
 		return (0);
+	fdd = dup(0);
 	if (!garbage->pipe
 		&& !ft_strncmp("exit", cmd->line[0], ft_strlen(cmd->line[0])))
 	{

@@ -28,6 +28,7 @@ MY_SOURCES = 	minishell.c \
 				ft_sort_tab_n_add_dbq.c \
 				parsing.c \
 				utiles_parsing.c \
+				utiles_parsing_2.c \
 				p_fd.c \
 				p_free.c \
 				p_open.c \
@@ -38,7 +39,8 @@ MY_SOURCES = 	minishell.c \
 				p_quote.c \
 				p_env.c \
 				p_get_in_env.c \
-				p_size_for_str.c \
+				p_len_mal.c \
+				exit.c \
 
 SOURCES_DIR = sources
 SOURCES = $(addprefix $(SOURCES_DIR)/, $(MY_SOURCES))
