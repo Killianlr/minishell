@@ -7,17 +7,17 @@ s_cmd	*define_cmd(s_pars	*pars)
 	cmd = malloc(sizeof(s_cmd));
 	if (!cmd)
 		return (NULL);
-	cmd->line = get_cmd_line(pars);
 	cmd->fd_in = 0;
 	cmd->fd_out = 0;
 	cmd->hdoc = 0;
 	cmd->next = NULL;
 	if (!set_cmd_fd(pars, cmd) || !check_fd(cmd))
 	{
-		printf("BAAD fd\n");
+		// printf("BAAD fd\n");
 		free(cmd);
 		return (NULL);
 	}
+	cmd->line = get_cmd_line(pars);
 	return (cmd);
 }
 
@@ -36,7 +36,7 @@ s_cmd	*create_cmd(s_pars	*pars)
 	first = cmd;
 	while (pipe_count)
 	{
-		printf("IS PIPE\n");
+		// printf("IS PIPE\n");
 		cmd->next = define_cmd(pars);
 		if (!cmd->next)
 			break ;
@@ -109,7 +109,7 @@ s_cmd	*parsing(t_gc *garbage)
 	}
 	free(pars->av);
 	free(pars);
-	print_cmd(cmd);
+	// print_cmd(cmd);
 	if (cmd->hdoc)
 		open(".heredoc_tmp", O_RDONLY);
 	return (cmd);

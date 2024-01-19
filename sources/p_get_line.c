@@ -18,7 +18,6 @@ int	len_for_malloc_tab(s_pars *pars)
 		}
 		else if (set == 0 && is_quote(pars->av[i]))
 		{
-			// printf("in quote\n");
 			set = 1;
 			len++;
 			i = quote_is_closed(pars->av, i);
@@ -28,10 +27,8 @@ int	len_for_malloc_tab(s_pars *pars)
 		else if ((set == 1 && is_whitespace(pars->av[i]))
 				|| ft_find_sep_val(pars->av[i]) > 1)
 			set = 0;
-		// printf("av[i] = %c[%d] & len = %d & set = %d\n", pars->av[i], i, len, set);
 		i++;
 	}
-	printf("len for tab = %d\n", len);
 	return (len);
 } 
 
@@ -90,20 +87,8 @@ char	*fill_quote(s_pars *pars, s_fcl *data, char *buf)
 	return (buf);
 }
 
-char	*fill_cmd_line(s_pars *pars)
+char	*fill_cmd_line_loop(s_pars *pars, s_fcl *data, char *ret)
 {
-	char	*ret;
-	s_fcl	*data;
-	
-
-	data = malloc(sizeof(s_fcl));
-	data->size = len_for_malloc_line(pars);
-	printf("size of fill line = %d\n", data->size);
-	ret = ft_calloc(data->size + 1, 1);
-	if (!ret)
-		return (NULL);
-	data->y = 0;
-	data->set = 0;
 	while (pars->av[pars->i] && ft_find_sep_val(pars->av[pars->i]) != 1)
 	{
 		if (ft_find_sep_val(pars->av[pars->i]) > 1)
@@ -128,6 +113,23 @@ char	*fill_cmd_line(s_pars *pars)
 		pars->i++;
 	}
 	ret[data->y] = 0;
+	return (ret);
+}
+
+char	*fill_cmd_line(s_pars *pars)
+{
+	char	*ret;
+	s_fcl	*data;
+	
+
+	data = malloc(sizeof(s_fcl));
+	data->size = len_for_malloc_line(pars);
+	ret = ft_calloc(data->size + 1, 1);
+	if (!ret)
+		return (NULL);
+	data->y = 0;
+	data->set = 0;
+	ret = fill_cmd_line_loop(pars, data, ret);
 	if (!ret[0])
 	{
 		free(ret);
@@ -168,7 +170,6 @@ char	**get_cmd_line(s_pars *pars)
 	while (pars->av[pars->i]
 		&& ft_find_sep_val(pars->av[pars->i]) != 1 && len)
 	{
-		printf("in loop get_cmd line\n");
 		ret[r] = fill_cmd_line(pars);
 		r++;
 		len--;

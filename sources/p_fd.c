@@ -31,6 +31,21 @@ int	find_type_of_sep(s_pars *pars, int i)
 	return (ret);	
 }
 
+char	*find_file_name_2(s_pars *pars, int i, int y, int len)
+{
+	char	*ret;
+
+	ret = malloc(sizeof(char) * (len + 1));
+	if (!ret)
+		return (NULL);
+	y = 0;
+	while (pars->av[i] && !is_whitespace(pars->av[i])
+			&& !ft_find_sep_val(pars->av[i]))
+		ret[y++] = pars->av[i++];
+	ret[y] = 0;
+	return (ret);	
+}
+
 char	*find_file_name(s_pars *pars, int i)
 {
 	char	*ret;
@@ -51,15 +66,32 @@ char	*find_file_name(s_pars *pars, int i)
 		len++;
 		y++;
 	}
-	ret = malloc(sizeof(char) * (len + 1));
-	if (!ret)
-		return (NULL);
-	y = 0;
-	while (pars->av[i] && !is_whitespace(pars->av[i])
-			&& !ft_find_sep_val(pars->av[i]))
-		ret[y++] = pars->av[i++];
-	ret[y] = 0;
-	return (ret);	
+	ret = find_file_name_2(pars, i, y, len);
+	return (ret);
+}
+
+void	set_fd_parsing(s_cmd *cmd, char *file_name, int type_of_sep)
+{
+	if (type_of_sep == 1 || type_of_sep == 3)
+	{
+		if (cmd->fd_in)
+		{
+			close(cmd->fd_in);
+			cmd->fd_in = parsing_open(file_name, type_of_sep, cmd);
+		}
+		else
+			cmd->fd_in = parsing_open(file_name, type_of_sep, cmd);
+	}
+	if (type_of_sep == 2 || type_of_sep == 4)
+	{
+		if (cmd->fd_out)
+		{
+			close(cmd->fd_out);
+			cmd->fd_out = parsing_open(file_name, type_of_sep, cmd);
+		}
+		else
+			cmd->fd_out = parsing_open(file_name, type_of_sep, cmd);
+	}
 }
 
 int	set_cmd_fd(s_pars *pars, s_cmd *cmd)
@@ -80,26 +112,7 @@ int	set_cmd_fd(s_pars *pars, s_cmd *cmd)
 			if (!file_name)
 				return (0);
 			type_of_sep = find_type_of_sep(pars, i);
-			if (type_of_sep == 1 || type_of_sep == 3)
-			{
-				if (cmd->fd_in)
-				{
-					close(cmd->fd_in);
-					cmd->fd_in = parsing_open(file_name, type_of_sep, cmd);
-				}
-				else
-					cmd->fd_in = parsing_open(file_name, type_of_sep, cmd);
-			}
-			if (type_of_sep == 2 || type_of_sep == 4)
-			{
-				if (cmd->fd_out)
-				{
-					close(cmd->fd_out);
-					cmd->fd_out = parsing_open(file_name, type_of_sep, cmd);
-				}
-				else
-					cmd->fd_out = parsing_open(file_name, type_of_sep, cmd);
-			}
+			set_fd_parsing(cmd, file_name, type_of_sep);
 			free(file_name);
 			i = new_val_i(pars, i);
 			if (!pars->av[i])
