@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   p_new_str.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 20:02:54 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/19 11:06:08 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/19 15:52:43 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	size_for_new_str(s_pars *pars, int ret_val)
+int	size_for_new_str(t_pars *pars, int ret_val)
 {
 	char	*var_env;
 	int		size;
@@ -37,7 +37,7 @@ int	size_for_new_str(s_pars *pars, int ret_val)
 	return (size);
 }
 
-char	*handle_var_env(s_pars *pars, int ret_val, t_ns *data, char *ret)
+char	*handle_var_env(t_pars *pars, int ret_val, t_ns *data, char *ret)
 {
 	while (pars->av[data->i])
 	{
@@ -63,7 +63,7 @@ char	*handle_var_env(s_pars *pars, int ret_val, t_ns *data, char *ret)
 	return (ret);
 }
 
-char	*new_str(s_pars *pars, int ret_val)
+char	*new_str(t_pars *pars, int ret_val)
 {
 	t_ns	*data;
 	char	*ret;

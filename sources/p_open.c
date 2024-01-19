@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_open.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 13:57:05 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/18 15:48:30 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/19 15:50:47 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	p_open_outfile_append(char *file)
 	return (fd);
 }
 
-int	parsing_open(char *file, int typeofsep, s_cmd *cmd)
+int	parsing_open(char *file, int typeofsep, t_cmd *cmd)
 {
 	int	fd;
 

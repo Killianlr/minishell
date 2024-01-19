@@ -6,13 +6,13 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:59 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/19 15:23:37 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/19 15:58:02 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	set_fd(s_cmd *cmd)
+void	set_fd(t_cmd *cmd)
 {
 	if (cmd->fd_in)
 	{
@@ -37,9 +37,9 @@ void	wait_child_status(t_gc *garbage, int pid, int status)
 		garbage->ret = WEXITSTATUS(status);
 }
 
-int	ft_lstsize_cmd(s_cmd *lst)
+int	ft_lstsize_cmd(t_cmd *lst)
 {
-	s_cmd	*tmp;
+	t_cmd	*tmp;
 	int		size;
 
 	size = 0;

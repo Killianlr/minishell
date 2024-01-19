@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:19:07 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/19 15:24:59 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/19 16:11:28 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	signal_handler(int signum)
 {
 	extern int	g_signal;
-	
+
 	if (signum == SIGINT)
 	{
 		if (!g_signal || g_signal == 130)
@@ -43,6 +43,15 @@ void	signal_handler(int signum)
 int	signal_init(void)
 {
 	if (signal(SIGINT, signal_handler))
+		return (1);
+	if (signal(SIGQUIT, SIG_IGN))
+		return (1);
+	return (0);
+}
+
+int	set_signal(void)
+{
+	if (signal(SIGINT, SIG_IGN))
 		return (1);
 	if (signal(SIGQUIT, signal_handler))
 		return (1);

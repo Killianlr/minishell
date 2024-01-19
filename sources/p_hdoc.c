@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_hdoc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:33:41 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/18 15:48:30 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/19 15:50:55 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	get_here_doc_2(char *av, int fd, char *buf)
 	return (fd);
 }
 
-int	get_here_doc(char *av, int fd, s_cmd *cmd)
+int	get_here_doc(char *av, int fd, t_cmd *cmd)
 {
 	char	*buf;
 

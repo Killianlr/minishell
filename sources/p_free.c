@@ -1,8 +1,8 @@
 #include "../includes/minishell.h"
 
-void	print_cmd(s_cmd *cmd)
+void	print_cmd(t_cmd *cmd)
 {
-	s_cmd	*tmp;
+	t_cmd	*tmp;
 
 	if (!cmd)
 		return ;

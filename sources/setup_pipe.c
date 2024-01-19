@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:35:28 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/19 15:24:33 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/19 15:49:49 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	set_fd_pipe(int fd)
 	close(fd);
 }
 
-void	child_pipe(t_gc *garbage, s_cmd *cmd, int fd[2], int *fdd)
+void	child_pipe(t_gc *garbage, t_cmd *cmd, int fd[2], int *fdd)
 {
 	char	**paths;
 	char	*cmd_path;
@@ -52,7 +52,7 @@ void	fck_norm(int fd[2], int fdd)
 	close(fdd);
 }
 
-int	run_pipe(t_gc *garbage, s_cmd *cmd, int fdd, int nb_cmd)
+int	run_pipe(t_gc *garbage, t_cmd *cmd, int fdd, int nb_cmd)
 {
 	int			fd[2];
 	int			pid_pipe;

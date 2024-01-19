@@ -136,7 +136,7 @@ int	ft_find_sep_val(char c)
 	return (0);
 }
 
-int	new_val_i(s_pars *pars, int i)
+int	new_val_i(t_pars *pars, int i)
 {
 	while (pars->av[i] && (ft_find_sep_val(pars->av[i]) > 1
 			|| is_whitespace(pars->av[i])))

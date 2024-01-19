@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:37:05 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/19 15:27:35 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/19 15:59:42 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ void	free_all(t_gc *garbage)
 	close_standard_fd();
 }
 
-void	free_cmd(s_cmd *cmd)
+void	free_cmd(t_cmd *cmd)
 {
-	s_cmd	*tmp;
+	t_cmd	*tmp;
 
 	if (!cmd)
 		return ;

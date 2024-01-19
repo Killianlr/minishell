@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/19 15:21:50 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/19 16:11:51 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,33 +46,31 @@ typedef struct s_builtins
 	int		uoldpwd;
 }				t_bui;
 
-typedef struct t_cmd
+typedef struct s_cmd
 {
-	char **line;
-	int		fd_in;
-	int		fd_out;
-	int		hdoc;
-	struct t_cmd	*next;
-}			s_cmd;
+	char			**line;
+	int				fd_in;
+	int				fd_out;
+	int				hdoc;
+	struct s_cmd	*next;
+}					t_cmd;
 
 typedef struct garbage_colector
 {
 	t_prompt	*prpt;
 	t_bui		*blts;
-	s_cmd		*s_cmd;
+	t_cmd		*s_cmd;
 	char		*line;
 	int			ret;
 	int			pipe;
 }					t_gc;
 
-
-typedef struct t_pars
+typedef struct s_pars
 {
 	char	*av;
 	char	**env;
 	int		i;
-}			s_pars;
-
+}			t_pars;
 
 typedef struct s_handle_quotes
 {
@@ -113,8 +111,7 @@ typedef struct s_fill_cmd_line
 	int		y;
 	int		size;
 	char	*quote;
-}			s_fcl;
-
+}			t_fcl;
 
 typedef struct s_size_for_line
 {
@@ -126,20 +123,20 @@ typedef struct s_size_for_line
 
 /*---------------------------p_free.c-------------------------*/
 
-int	ft_error(char *msg, int ret);
+int		ft_error(char *msg, int ret);
 
 /*---------------------------parsing.c-------------------------*/
 
-s_cmd	*parsing(t_gc *garbage);
+t_cmd	*parsing(t_gc *garbage);
 char	*check_sep_count(char *str);
 
 /*---------------------------p_utiles.c-------------------------*/
 
 int		ft_find_sep_val(char c);
 int		ft_count_pipe(char *str);
-int		new_val_i(s_pars *pars, int i);
+int		new_val_i(t_pars *pars, int i);
 int		is_char(char c);
-void	print_cmd(s_cmd *cmd);
+void	print_cmd(t_cmd *cmd);
 int		ms_strcmp(char *s1, char *s2, int n);
 int		env_strncmp(char *s1, char *s2, int n);
 char	*ms_strjoin(char *s1, char *s2, int status);
@@ -153,22 +150,20 @@ int		size_for_quote(char *str);
 
 /*---------------------------p_new_str.c-------------------------*/
 
-char	*new_str(s_pars *pars, int ret_val);
+char	*new_str(t_pars *pars, int ret_val);
 
 /*---------------------------p_size_for_str.c-------------------------*/
 
-int	size_for_line(s_pars *pars, int ret_val);
+int		size_for_line(t_pars *pars, int ret_val);
 
 /*---------------------------p_hdoc.c-------------------------*/
 
-char	*get_var_env(s_pars *pars, int i, int ret_val);
-int		get_here_doc(char *av, int fd, s_cmd *cmd);
+char	*get_var_env(t_pars *pars, int i, int ret_val);
+int		get_here_doc(char *av, int fd, t_cmd *cmd);
 
 /*---------------------------p_env.c-------------------------*/
 
-
 char	*is_ret_val(char *str, int ret_val);
-
 
 /*---------------------------p_get_in_env.c-------------------------*/
 
@@ -184,13 +179,13 @@ int		is_whitespace(char c);
 
 /*---------------------------p_open.c-------------------------*/
 
-int	parsing_open(char *file, int typeofsep, s_cmd *cmd);
+int		parsing_open(char *file, int typeofsep, t_cmd *cmd);
 
 /*---------------------------p_fd.c-------------------------*/
 
-int		set_cmd_fd(s_pars *pars, s_cmd *cmd);
-char	**get_cmd_line(s_pars *pars);
-int		check_fd(s_cmd *cmd);
+int		set_cmd_fd(t_pars *pars, t_cmd *cmd);
+char	**get_cmd_line(t_pars *pars);
+int		check_fd(t_cmd *cmd);
 
 /*---------------------------prompt.c-------------------------*/
 
@@ -204,13 +199,13 @@ void	free_blts(t_bui *blts);
 void	exit_free(t_gc *garbage, int exival);
 void	close_standard_fd(void);
 void	exit_child(t_gc *garbage, int exival);
-void	free_cmd(s_cmd *cmd);
+void	free_cmd(t_cmd *cmd);
 
 /*---------------------------signal.c-------------------------*/
 
 int		signal_init(void);
 void	signal_handler(int signum);
-// int		stop_signal(void);
+int		set_signal(void);
 
 /*---------------------------builtins_check.c-------------------------*/
 
@@ -292,17 +287,17 @@ void	ft_swap(char **a, char **b);
 
 /*---------------------------setup_exec.c-------------------------*/
 
-int		setup_exec(t_gc *garbage, s_cmd *cmd, int nb_cmd);
+int		setup_exec(t_gc *garbage, t_cmd *cmd, int nb_cmd);
 char	*get_cmd(char **paths, char	**cmd, t_gc *garbage);
 
 /*---------------------------setup_pipe.c-------------------------*/
 
-int		run_pipe(t_gc *garbage, s_cmd *cmd, int fdd, int nb_cmd);
+int		run_pipe(t_gc *garbage, t_cmd *cmd, int fdd, int nb_cmd);
 
 /*---------------------------utiles_exec.c-------------------------*/
 
-int		ft_lstsize_cmd(s_cmd *lst);
-void	set_fd(s_cmd *cmd);
+int		ft_lstsize_cmd(t_cmd *lst);
+void	set_fd(t_cmd *cmd);
 void	wait_child_status(t_gc *garbage, int pid, int status);
 
 #endif

@@ -1,13 +1,13 @@
 #include "../includes/minishell.h"
 
-int	check_fd(s_cmd *cmd)
+int	check_fd(t_cmd *cmd)
 {
 	if (cmd->fd_in < 0 || cmd->fd_out < 0)
 		return (0);
 	return (1);
 }
 
-int	find_type_of_sep(s_pars *pars, int i)
+int	find_type_of_sep(t_pars *pars, int i)
 {
 	int	ret;
 	int	set;
@@ -31,7 +31,7 @@ int	find_type_of_sep(s_pars *pars, int i)
 	return (ret);	
 }
 
-char	*find_file_name_2(s_pars *pars, int i, int y, int len)
+char	*find_file_name_2(t_pars *pars, int i, int y, int len)
 {
 	char	*ret;
 
@@ -46,7 +46,7 @@ char	*find_file_name_2(s_pars *pars, int i, int y, int len)
 	return (ret);	
 }
 
-char	*find_file_name(s_pars *pars, int i)
+char	*find_file_name(t_pars *pars, int i)
 {
 	char	*ret;
 	int		len;
@@ -70,7 +70,7 @@ char	*find_file_name(s_pars *pars, int i)
 	return (ret);
 }
 
-void	set_fd_parsing(s_cmd *cmd, char *file_name, int type_of_sep)
+void	set_fd_parsing(t_cmd *cmd, char *file_name, int type_of_sep)
 {
 	if (type_of_sep == 1 || type_of_sep == 3)
 	{
@@ -94,7 +94,7 @@ void	set_fd_parsing(s_cmd *cmd, char *file_name, int type_of_sep)
 	}
 }
 
-int	set_cmd_fd(s_pars *pars, s_cmd *cmd)
+int	set_cmd_fd(t_pars *pars, t_cmd *cmd)
 {
 	int	i;
 	char	*file_name;

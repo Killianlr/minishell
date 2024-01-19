@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:36:56 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/19 15:26:33 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/19 16:12:47 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*get_cmd(char **paths, char	**cmd, t_gc *garbage)
 	return (NULL);
 }
 
-void	child_process(t_gc *garbage, s_cmd *cmd)
+void	child_process(t_gc *garbage, t_cmd *cmd)
 {
 	char	**paths;
 	char	*cmd_path;
@@ -57,7 +57,7 @@ void	child_process(t_gc *garbage, s_cmd *cmd)
 	execve(cmd_path, cmd->line, garbage->blts->env);
 }
 
-int	ft_exec_pipe(t_gc *garbage, s_cmd *cmd, int *fdd, int nb_cmd)
+int	ft_exec_pipe(t_gc *garbage, t_cmd *cmd, int *fdd, int nb_cmd)
 {
 	while (cmd)
 	{
@@ -74,7 +74,7 @@ int	ft_exec_pipe(t_gc *garbage, s_cmd *cmd, int *fdd, int nb_cmd)
 	return (0);
 }
 
-int	ft_exec(t_gc *garbage, s_cmd *cmd)
+int	ft_exec(t_gc *garbage, t_cmd *cmd)
 {
 	int			pid;
 	int			status;
@@ -88,6 +88,7 @@ int	ft_exec(t_gc *garbage, s_cmd *cmd)
 		child_process(garbage, cmd);
 	g_signal = 1;
 	is_builtins(garbage, cmd->line, 1);
+	set_signal();
 	wait_child_status(garbage, pid, status);
 	// printf("WIFEXITED = %d\n", WIFEXITED(status));
 	// printf("WEXITSTATUS = %d\n", WEXITSTATUS(status));
@@ -99,7 +100,7 @@ int	ft_exec(t_gc *garbage, s_cmd *cmd)
 	return (0);
 }
 
-int	setup_exec(t_gc *garbage, s_cmd *cmd, int nb_cmd)
+int	setup_exec(t_gc *garbage, t_cmd *cmd, int nb_cmd)
 {
 	int	fdd;
 

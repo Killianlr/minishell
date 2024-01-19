@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   p_env.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 11:49:41 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/18 15:57:12 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/19 16:03:04 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	after_var_env(s_pars *pars, int i)
+int	after_var_env(t_pars *pars, int i)
 {
 	int	y;
 
@@ -42,7 +42,7 @@ char	*is_ret_val(char *str, int ret_val)
 		return (NULL);
 }
 
-char	*get_var_env_bis(s_pars *pars, int start_index, int length, int ret_val)
+char	*get_var_env_bis(t_pars *pars, int start_index, int length, int ret_val)
 {
 	char	*buf;
 	int		j;
@@ -63,7 +63,7 @@ char	*get_var_env_bis(s_pars *pars, int start_index, int length, int ret_val)
 	return (buf);
 }
 
-char	*get_var_env(s_pars *pars, int i, int ret_val)
+char	*get_var_env(t_pars *pars, int i, int ret_val)
 {
 	char	*buf;
 	int		y;

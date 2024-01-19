@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:43 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/19 15:24:04 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/19 16:13:36 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,12 @@ int	clear_history_rl(char **str)
 
 int	in_minishell(t_gc *garbage)
 {
-	s_cmd	*cmd;
+	t_cmd	*cmd;
 	int		nb_cmd;
 
 	while (1)
 	{
+		signal_init();
 		g_signal = 0;
 		garbage->pipe = 0;
 		garbage->s_cmd = NULL;
@@ -69,8 +70,6 @@ int	main(void)
 		free(garbage);
 		return (1);
 	}
-	if (signal_init())
-		return (1);
 	garbage->ret = 0;
 	in_minishell(garbage);
 	free_all(garbage);

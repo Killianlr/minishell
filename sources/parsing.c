@@ -1,10 +1,10 @@
 #include "../includes/minishell.h"
 
-s_cmd	*define_cmd(s_pars	*pars)
+t_cmd	*define_cmd(t_pars	*pars)
 {
-	s_cmd	*cmd;
+	t_cmd	*cmd;
 
-	cmd = malloc(sizeof(s_cmd));
+	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
 	cmd->fd_in = 0;
@@ -21,10 +21,10 @@ s_cmd	*define_cmd(s_pars	*pars)
 	return (cmd);
 }
 
-s_cmd	*create_cmd(s_pars	*pars)
+t_cmd	*create_cmd(t_pars	*pars)
 {
-	s_cmd	*cmd;
-	s_cmd	*first;
+	t_cmd	*cmd;
+	t_cmd	*first;
 	int		pipe_count;
 
 	// cmd = NULL;
@@ -80,13 +80,13 @@ char	*check_sep_count(char *str)
 	return (str);
 }
 
-s_cmd	*parsing(t_gc *garbage)
+t_cmd	*parsing(t_gc *garbage)
 {
-	s_pars	*pars;
-	s_cmd	*cmd;
+	t_pars	*pars;
+	t_cmd	*cmd;
 
 	cmd = NULL;
-	pars = malloc(sizeof(s_pars));
+	pars = malloc(sizeof(t_pars));
 	if (!pars)
 		return (NULL);
 	if (!check_sep_count(garbage->line))

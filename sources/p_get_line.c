@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-int	len_for_malloc_tab(s_pars *pars)
+int	len_for_malloc_tab(t_pars *pars)
 {
 	int	len;
 	int	i;
@@ -32,7 +32,7 @@ int	len_for_malloc_tab(s_pars *pars)
 	return (len);
 } 
 
-int	len_for_malloc_line(s_pars *pars)
+int	len_for_malloc_line(t_pars *pars)
 {
 	int	i;
 	int	len;
@@ -66,7 +66,7 @@ int	len_for_malloc_line(s_pars *pars)
 	return (len);
 }
 
-char	*fill_quote(s_pars *pars, s_fcl *data, char *buf)
+char	*fill_quote(t_pars *pars, t_fcl *data, char *buf)
 {
 	data->quote = handle_quotes(pars->av, pars->i);
 	if (!data->quote)
@@ -87,7 +87,7 @@ char	*fill_quote(s_pars *pars, s_fcl *data, char *buf)
 	return (buf);
 }
 
-char	*fill_cmd_line_loop(s_pars *pars, s_fcl *data, char *ret)
+char	*fill_cmd_line_loop(t_pars *pars, t_fcl *data, char *ret)
 {
 	while (pars->av[pars->i] && ft_find_sep_val(pars->av[pars->i]) != 1)
 	{
@@ -116,13 +116,13 @@ char	*fill_cmd_line_loop(s_pars *pars, s_fcl *data, char *ret)
 	return (ret);
 }
 
-char	*fill_cmd_line(s_pars *pars)
+char	*fill_cmd_line(t_pars *pars)
 {
 	char	*ret;
-	s_fcl	*data;
+	t_fcl	*data;
 	
 
-	data = malloc(sizeof(s_fcl));
+	data = malloc(sizeof(t_fcl));
 	data->size = len_for_malloc_line(pars);
 	ret = ft_calloc(data->size + 1, 1);
 	if (!ret)
@@ -138,7 +138,7 @@ char	*fill_cmd_line(s_pars *pars)
 	return (ret);
 }
 
-void	new_val_pars_i(s_pars *pars)
+void	new_val_pars_i(t_pars *pars)
 {
 	while (pars->av[pars->i] && !is_char(pars->av[pars->i]) && ft_find_sep_val(pars->av[pars->i]) != 1)
 	{
@@ -152,7 +152,7 @@ void	new_val_pars_i(s_pars *pars)
 	}
 }
 
-char	**get_cmd_line(s_pars *pars)
+char	**get_cmd_line(t_pars *pars)
 {
 	char	**ret;
 	int		r;
