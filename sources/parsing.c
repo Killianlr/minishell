@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:19:50 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/19 16:52:59 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/19 18:03:07 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,5 +118,6 @@ t_cmd	*parsing(t_gc *garbage)
 		return (NULL);
 	}
 	cmd = end_of_pars(pars, cmd);
+	// print_cmd(cmd);
 	return (cmd);
 }

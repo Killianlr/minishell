@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:19:07 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/19 16:11:28 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/19 17:23:53 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,6 @@ void	signal_handler(int signum)
 			printf("\n");
 		g_signal = 130;
 	}
-	else if (signum == SIGQUIT)
-	{
-		if (g_signal && g_signal != 130)
-		{
-			write(1, "Quit (core dumped)\n", 20);
-		}
-		else
-			write(1, "\b\b  \b\b", 7);
-	}
 }
 
 int	signal_init(void)
@@ -49,20 +40,22 @@ int	signal_init(void)
 	return (0);
 }
 
-int	set_signal(void)
+void	signal_handler_exec(int signum)
 {
-	if (signal(SIGINT, SIG_IGN))
-		return (1);
-	if (signal(SIGQUIT, signal_handler))
-		return (1);
-	return (0);
-}
+	extern int	g_signal;
 
-// int	stop_signal(void)
-// {
-// 	if (signal(SIGINT, SIG_IGN))
-// 		return (1);
-// 	if (signal(SIGQUIT, NULL))
-// 		return (1);
-// 	return (0);
-// }
+	if (signum == SIGINT)
+	{
+		printf("\n");
+		g_signal = 130;
+	}
+	else if (signum == SIGQUIT)
+	{
+		if (g_signal && g_signal != 130)
+		{
+			write(1, "Quit (core dumped)\n", 20);
+		}
+		else
+			write(1, "\b\b  \b\b", 7);
+	}
+}

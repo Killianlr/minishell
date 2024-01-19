@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/19 17:01:00 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/19 17:24:07 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,7 +215,8 @@ void	free_cmd(t_cmd *cmd);
 
 int		signal_init(void);
 void	signal_handler(int signum);
-int		set_signal(void);
+void	signal_handler_exec(int signum);
+
 
 /*---------------------------builtins_check.c-------------------------*/
 

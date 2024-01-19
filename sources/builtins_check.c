@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_check.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:34:41 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/19 15:23:14 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/19 17:36:30 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ void	ft_exit(t_gc *garbage, char **args)
 		exit_free(garbage, 0);
 	if (args[2])
 	{
+		printf("exit\n");
 		printf("minishell: exit: too many arguments\n");
 		exit_free(garbage, 1);
 	}
@@ -86,6 +87,7 @@ void	ft_exit(t_gc *garbage, char **args)
 			i++;
 		if (!ft_isdigit(args[1][i]))
 		{
+			printf("exit\n");
 			printf("minishell: exit: %s: numeric argument required\n", args[1]);
 			exit_free(garbage, 2);
 		}

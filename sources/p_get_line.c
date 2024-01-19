@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:15:16 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/19 17:18:09 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/19 17:20:07 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ char	*fill_cmd_line(t_pars *pars)
 	char	*ret;
 	t_fcl	*data;
 
-	printf("in fill_cmd_line\n");
 	data = malloc(sizeof(t_fcl));
 	data->size = len_for_malloc_line(pars);
 	ret = ft_calloc(data->size + 1, 1);
@@ -119,7 +118,6 @@ char	**get_cmd_line(t_pars *pars)
 	while (pars->av[pars->i]
 		&& ft_find_sep_val(pars->av[pars->i]) != 1 && len)
 	{
-		printf("in loop fill_cmd\n");
 		ret[r] = fill_cmd_line(pars);
 		r++;
 		len--;
