@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:33:41 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/19 16:37:01 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/19 17:00:34 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ int	get_here_doc(char *av, int fd, t_cmd *cmd)
 		fd = open(".heredoc_tmp", O_CREAT | O_WRONLY | O_TRUNC, 0000644);
 	else
 	{
-		printf("LA\n");
 		unlink(".heredoc_tmp");
 		fd = open(".heredoc_tmp", O_CREAT | O_WRONLY | O_TRUNC, 0000644);
 		return (get_here_doc_2(av, fd, buf));

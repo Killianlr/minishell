@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/19 16:33:56 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/19 17:01:00 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,6 @@ typedef struct s_len_for_malloc_line
 	char	*quote;
 }			t_lfmf;
 
-
 typedef struct s_size_for_line
 {
 	int		i;
@@ -164,8 +163,8 @@ char	*new_str(t_pars *pars, int ret_val);
 
 /*---------------------------p_len_mal.c-------------------------*/
 
-int	len_for_malloc_line(t_pars *pars);
-int	len_for_malloc_tab(t_pars *pars);
+int		len_for_malloc_line(t_pars *pars);
+int		len_for_malloc_tab(t_pars *pars);
 
 /*---------------------------p_hdoc.c-------------------------*/
 
