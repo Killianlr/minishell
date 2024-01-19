@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_new_str.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 20:02:54 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/19 16:34:41 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/19 20:08:03 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,11 @@ char	*new_str(t_pars *pars, int ret_val)
 
 	if (!check_sep_count(pars->av))
 		return (NULL);
+	if (count_quote(pars->av) % 2 != 0)
+	{
+		printf("Error 1, quote unclosed\n");
+		return (NULL);
+	}
 	data = malloc(sizeof(t_ns));
 	if (!data)
 		return (NULL);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:19:50 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/19 18:03:07 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/19 20:30:22 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ t_cmd	*define_cmd(t_pars	*pars)
 {
 	t_cmd	*cmd;
 
+	printf("  IN DEFINE CMD\n");
 	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
@@ -63,10 +64,12 @@ t_cmd	*define_cmd(t_pars	*pars)
 	cmd->next = NULL;
 	if (!set_cmd_fd(pars, cmd) || !check_fd(cmd))
 	{
+		printf("  OUT DEFINE CMD ERROR\n");
 		free(cmd);
 		return (NULL);
 	}
 	cmd->line = get_cmd_line(pars);
+	printf("  OUT DEFINE CMD\n");
 	return (cmd);
 }
 
@@ -76,10 +79,14 @@ t_cmd	*create_cmd(t_pars	*pars)
 	t_cmd	*first;
 	int		pipe_count;
 
+	printf(" IN CREATE CMD\n");
 	pipe_count = ft_count_pipe(pars->av);
 	cmd = define_cmd(pars);
 	if (!cmd)
+	{
+		printf(" OUT CREATE CMD ERROR\n");
 		return (NULL);
+	}
 	first = cmd;
 	while (pipe_count)
 	{
@@ -90,6 +97,7 @@ t_cmd	*create_cmd(t_pars	*pars)
 		pipe_count--;
 	}
 	cmd->next = NULL;
+	printf(" OUT CREATE CMD\n");
 	return (first);
 }
 
@@ -99,6 +107,7 @@ t_cmd	*parsing(t_gc *garbage)
 	t_cmd	*cmd;
 
 	cmd = NULL;
+	printf("IN PARSING\n");
 	pars = malloc(sizeof(t_pars));
 	if (!pars)
 		return (NULL);
@@ -114,10 +123,12 @@ t_cmd	*parsing(t_gc *garbage)
 	cmd = create_cmd(pars);
 	if (!cmd)
 	{
+		printf("OUT PARSING ERROR\n");
 		free(pars);
 		return (NULL);
 	}
 	cmd = end_of_pars(pars, cmd);
-	// print_cmd(cmd);
+	print_cmd(cmd);
+	printf("OUT PARSING\n");
 	return (cmd);
 }

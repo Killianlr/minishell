@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_quote.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:06:01 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/19 16:21:16 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/19 20:27:29 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,14 +101,23 @@ char	*handle_quotes(char *str, int l)
 		data->i++;
 	data->end = end_quote(str, data->i);
 	if (data->end == 0)
+	{
+		free(data);
 		return (NULL);
+	}
 	data->buf = ft_calloc(data->end - data->i + 1, sizeof(char));
 	if (!data->buf)
+	{
+		free(data);
 		return (NULL);
+	}
 	data->y = 0;
 	handle_quote_2(str, data);
 	if (!data->buf)
+	{
+		free(data);
 		return (NULL);
+	}
 	ret = data->buf;
 	free(data);
 	return (ret);

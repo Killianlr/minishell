@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utiles_parsing.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:18:33 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/19 16:19:05 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/19 20:05:02 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,9 @@ int	ft_count_pipe(char *str)
 	count = 0;
 	while (str[i])
 	{
-		if (ft_find_sep_val(str[i]) == 1)
+		if (is_quote(str[i]))
+			i = end_quote(str, i);
+		else if (ft_find_sep_val(str[i]) == 1)
 			count++;
 		i++;
 	}
