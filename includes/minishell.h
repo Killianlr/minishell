@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/18 23:18:16 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/19 15:21:50 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,11 +295,14 @@ void	ft_swap(char **a, char **b);
 int		setup_exec(t_gc *garbage, s_cmd *cmd, int nb_cmd);
 char	*get_cmd(char **paths, char	**cmd, t_gc *garbage);
 
+/*---------------------------setup_pipe.c-------------------------*/
+
+int		run_pipe(t_gc *garbage, s_cmd *cmd, int fdd, int nb_cmd);
+
 /*---------------------------utiles_exec.c-------------------------*/
 
 int		ft_lstsize_cmd(s_cmd *lst);
-int		run_pipe(t_gc *garbage, s_cmd *cmd, int fdd, int nb_cmd);
 void	set_fd(s_cmd *cmd);
-
+void	wait_child_status(t_gc *garbage, int pid, int status);
 
 #endif

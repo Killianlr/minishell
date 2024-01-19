@@ -23,6 +23,7 @@ MY_SOURCES = 	minishell.c \
 				utiles_export.c \
 				utiles_path.c \
 				setup_exec.c \
+				setup_pipe.c \
 				utiles_exec.c \
 				ft_sort_tab_n_add_dbq.c \
 				parsing.c \

@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:34:41 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/18 15:16:07 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/19 15:23:14 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ int	is_buitlins_next(t_gc *garbage, char **args, int pid)
 
 int	is_builtins(t_gc *garbage, char **args, int pid)
 {
-	int	i;
-	extern int g_signal;
+	int			i;
+	extern int	g_signal;
 
 	i = 0;
 	if (!args || !garbage->line)

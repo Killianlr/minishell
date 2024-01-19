@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:37:05 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/19 10:55:49 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/19 15:27:35 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void	free_all(t_gc *garbage)
 {
 	if (!garbage)
 		return ;
-
 	if (garbage->s_cmd)
 		free_cmd(garbage->s_cmd);
 	free_blts(garbage->blts);
@@ -52,7 +51,7 @@ void	free_all(t_gc *garbage)
 
 void	free_cmd(s_cmd *cmd)
 {
-	s_cmd *tmp;
+	s_cmd	*tmp;
 
 	if (!cmd)
 		return ;

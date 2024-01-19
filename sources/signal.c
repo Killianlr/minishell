@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:19:07 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/18 15:35:49 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/19 15:24:59 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	signal_handler(int signum)
 {
-	extern int g_signal;
+	extern int	g_signal;
 	
 	if (signum == SIGINT)
 	{

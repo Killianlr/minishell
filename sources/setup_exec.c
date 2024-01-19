@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:36:56 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/18 16:18:36 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/19 15:26:33 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,9 @@ int	ft_exec_pipe(t_gc *garbage, s_cmd *cmd, int *fdd, int nb_cmd)
 
 int	ft_exec(t_gc *garbage, s_cmd *cmd)
 {
-	int	pid;
-	int	status;
-	extern int g_signal;
+	int			pid;
+	int			status;
+	extern int	g_signal;
 
 	status = 0;
 	pid = fork();
@@ -88,13 +88,7 @@ int	ft_exec(t_gc *garbage, s_cmd *cmd)
 		child_process(garbage, cmd);
 	g_signal = 1;
 	is_builtins(garbage, cmd->line, 1);
-	waitpid(pid, &status, 0);
-	if (WTERMSIG(status) == 3)
-		garbage->ret = 131;
-	else if (WTERMSIG(status) == 2)
-		garbage->ret = 130;
-	else
-		garbage->ret = WEXITSTATUS(status);
+	wait_child_status(garbage, pid, status);
 	// printf("WIFEXITED = %d\n", WIFEXITED(status));
 	// printf("WEXITSTATUS = %d\n", WEXITSTATUS(status));
 	// printf("WEFSIGNALED = %d\n", WIFSIGNALED(status));
@@ -112,7 +106,8 @@ int	setup_exec(t_gc *garbage, s_cmd *cmd, int nb_cmd)
 	fdd = dup(0);
 	if (!garbage->line)
 		return (0);
-	if (!garbage->pipe && !ft_strncmp("exit", cmd->line[0], ft_strlen(cmd->line[0])))
+	if (!garbage->pipe
+		&& !ft_strncmp("exit", cmd->line[0], ft_strlen(cmd->line[0])))
 	{
 		close(fdd);
 		ft_exit(garbage, cmd->line);
