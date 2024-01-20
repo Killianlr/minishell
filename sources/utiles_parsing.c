@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:18:33 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/19 20:05:02 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/20 11:05:54 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,11 @@ int	new_val_i(t_pars *pars, int i)
 		i++;
 	while (pars->av[i] && !is_whitespace(pars->av[i])
 		&& !ft_find_sep_val(pars->av[i]))
+	{
+		if (is_quote(pars->av[i]))
+			i = end_quote(pars->av, i);
 		i++;
+	}
 	return (i);
 }
 

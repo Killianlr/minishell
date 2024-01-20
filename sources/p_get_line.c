@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_get_line.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:15:16 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/19 17:20:07 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/20 11:10:57 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,11 @@ char	**get_cmd_line(t_pars *pars)
 		&& ft_find_sep_val(pars->av[pars->i]) != 1 && len)
 	{
 		ret[r] = fill_cmd_line(pars);
+		if (!ret[r])
+		{
+			free_tab(ret);
+			return (NULL);
+		}
 		r++;
 		len--;
 	}

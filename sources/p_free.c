@@ -6,7 +6,7 @@
 /*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:19:12 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/19 20:30:58 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/20 11:02:03 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,10 @@ t_cmd	*end_of_pars(t_pars *pars, t_cmd *cmd)
 	t_cmd	*tmp;
 	t_cmd	*first;
 
+	free(pars->av);
+	free(pars);
+	if (!cmd)
+		return (NULL);
 	tmp = cmd->next;
 	first = cmd;
 	while (tmp)
@@ -93,8 +97,6 @@ t_cmd	*end_of_pars(t_pars *pars, t_cmd *cmd)
 			cmd->fd_in = open(".heredoc_tmp", O_RDONLY);
 		}
 	}
-	free(pars->av);
-	free(pars);
 	return (first);
 }
 
