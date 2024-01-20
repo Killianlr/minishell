@@ -6,11 +6,59 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:36:56 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/20 12:24:05 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/20 15:04:30 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+char	*rln(char *cmd, char *pwd, DIR *directory, struct dirent *entry)
+{
+	char	*path;
+
+	while ((entry = readdir(directory)))
+	{
+		if (!ft_strncmp(entry->d_name, cmd, ft_strlen(cmd)))
+		{
+			path = ft_strjoin(pwd, cmd);
+			if (!path)
+			{
+				free(pwd);
+				closedir(directory);
+				return (NULL);
+			}
+			if (access(path, 0) == 0)
+			{
+				free(pwd);
+				closedir(directory);
+				return (path);
+			}
+			free(path);
+		}
+	}
+	free(pwd);
+	closedir(directory);
+	return (NULL);
+}
+
+char 	*check_current_dir(char *cmd)
+{
+	DIR		*directory;
+	struct dirent *entry;
+	char	*pwd;
+
+	directory = opendir(".");
+	if (!directory)
+		return (NULL);
+	pwd = ft_strjoin_fs1(get_pwd(), "/");
+	if (!pwd)
+	{
+		closedir(directory);
+		return (NULL);
+	}
+	entry = NULL;
+	return (rln(cmd, pwd, directory, entry));
+}
 
 char	*get_cmd(char **paths, char	**cmd, t_gc *garbage)
 {
@@ -23,18 +71,37 @@ char	*get_cmd(char **paths, char	**cmd, t_gc *garbage)
 			execve(cmd[0], cmd, garbage->blts->env);
 	}
 	if (!paths)
-		return (NULL);
+	{
+		command = check_current_dir(cmd[0]);
+		return (command);
+	}
 	while (*paths)
 	{
 		tmp = ft_strjoin(*paths, "/");
 		command = ft_strjoin(tmp, cmd[0]);
 		free(tmp);
 		if (access(command, 0) == 0)
+		{
 			return (command);
+		}
 		free(command);
 		paths++;
 	}
 	return (NULL);
+}
+
+int	no_slash(char *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd[i])
+	{
+		if (cmd[i] == '/')
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
 void	child_process(t_gc *garbage, t_cmd *cmd)
@@ -54,6 +121,7 @@ void	child_process(t_gc *garbage, t_cmd *cmd)
 		write(2, ": command not found\n", 21);
 		exit_free(garbage, 127);
 	}
+	printf("il exec ??\n");
 	execve(cmd_path, cmd->line, garbage->blts->env);
 }
 
@@ -91,6 +159,7 @@ int	ft_exec(t_gc *garbage, t_cmd *cmd)
 	g_signal = 1;
 	is_builtins(garbage, cmd->line, 1);
 	wait_child_status(garbage, pid, status);
+	signal(SIGQUIT, SIG_IGN);
 	return (0);
 }
 

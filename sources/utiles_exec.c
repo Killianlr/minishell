@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utiles_exec.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:59 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/19 15:58:02 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/20 13:41:39 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,15 @@ void	wait_child_status(t_gc *garbage, int pid, int status)
 {
 	waitpid(pid, &status, 0);
 	if (WTERMSIG(status) == 3)
+	{
+		write(1, "Quit (core dumped)\n", 20);
 		garbage->ret = 131;
+	}
 	else if (WTERMSIG(status) == 2)
+	{
+		printf("\n");
 		garbage->ret = 130;
+	}
 	else
 		garbage->ret = WEXITSTATUS(status);
 }

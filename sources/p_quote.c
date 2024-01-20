@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:06:01 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/20 12:23:52 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/20 13:10:28 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,6 @@ void	handle_quote_2(char *str, t_hq *data)
 	if (!data->buf)
 		return ;
 	data->buf[data->y] = 0;
-}
-
-char	*handle_quotes_error(t_hq *data)
-{
-	free(data);
-	return (NULL);
 }
 
 char	*handle_quotes(char *str, int l)

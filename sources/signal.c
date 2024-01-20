@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:19:07 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/20 12:13:44 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/20 13:44:09 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,9 @@ void	signal_handler_exec(int signum)
 
 	if (signum == SIGINT)
 	{
-		printf("\n");
 		g_signal = 130;
 	}
 	else if (signum == SIGQUIT)
 	{
-		if (g_signal && g_signal != 130)
-		{
-			write(1, "Quit (core dumped)\n", 20);
-		}
-		else
-			write(1, "\b\b  \b\b", 7);
 	}
 }

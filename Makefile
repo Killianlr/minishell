@@ -40,6 +40,8 @@ MY_SOURCES = 	minishell.c \
 				p_env.c \
 				p_get_in_env.c \
 				p_len_mal.c \
+				p_file_name.c \
+				p_error.c \
 				exit.c \
 
 SOURCES_DIR = sources

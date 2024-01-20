@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:43 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/19 17:13:43 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/20 13:35:44 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int	g_signal = 0;
 
 int	clear_history_rl(char **str)
 {
-	printf("clear or exit\n");
 	if (!str)
 		return (0);
 	if (!ft_strncmp("clear", str[0], ft_strlen(str[0])))
@@ -37,11 +36,13 @@ int	in_minishell(t_gc *garbage)
 
 	while (1)
 	{
-		signal_init();
 		g_signal = 0;
+		signal_init();
 		garbage->pipe = 0;
 		garbage->s_cmd = NULL;
 		garbage->line = ft_prompt(garbage);
+		if (g_signal)
+			garbage->ret = g_signal;
 		if ((int)ft_strlen(garbage->line))
 			cmd = parsing(garbage);
 		else

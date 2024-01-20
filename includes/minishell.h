@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/19 17:24:07 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/20 13:10:28 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,13 @@ typedef struct s_len_for_malloc_line
 	char	*quote;
 }			t_lfmf;
 
+typedef struct s_find_file_name
+{
+	char	*quote;
+	int		len;
+	int		y;
+}			t_ffn;
+
 typedef struct s_size_for_line
 {
 	int		i;
@@ -149,6 +156,13 @@ int		ms_strcmp(char *s1, char *s2, int n);
 int		env_strncmp(char *s1, char *s2, int n);
 char	*ms_strjoin(char *s1, char *s2, int status);
 int		ms_strj_s(char *s1, char *s2, int size);
+
+/*---------------------------p_error.c-------------------------*/
+
+
+char	*handle_quotes_error(t_hq *data);
+char	**get_cmd_line_error(char **ret);
+
 
 /*---------------------------p_quote.c-------------------------*/
 
@@ -196,6 +210,10 @@ int		parsing_open(char *file, int typeofsep, t_cmd *cmd);
 int		set_cmd_fd(t_pars *pars, t_cmd *cmd);
 char	**get_cmd_line(t_pars *pars);
 int		check_fd(t_cmd *cmd);
+
+/*---------------------------p_file_name.c-------------------------*/
+
+char	*find_file_name(t_pars *pars, int i);
 
 /*---------------------------prompt.c-------------------------*/
 
