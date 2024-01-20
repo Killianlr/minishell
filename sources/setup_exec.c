@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:36:56 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/19 17:24:23 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/20 12:24:05 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,13 +91,6 @@ int	ft_exec(t_gc *garbage, t_cmd *cmd)
 	g_signal = 1;
 	is_builtins(garbage, cmd->line, 1);
 	wait_child_status(garbage, pid, status);
-	// printf("WIFEXITED = %d\n", WIFEXITED(status));
-	// printf("WEXITSTATUS = %d\n", WEXITSTATUS(status));
-	// printf("WEFSIGNALED = %d\n", WIFSIGNALED(status));
-	// printf("WTERMSIG = %d\n", WTERMSIG(status));
-	// printf("WCOREDUMP = %d\n", __WCOREDUMP(status));
-	// printf("WSTOPSIG = %d\n", WSTOPSIG(status));
-	// printf("garbage->ret = %d\n", garbage->ret);
 	return (0);
 }
 
@@ -122,11 +115,5 @@ int	setup_exec(t_gc *garbage, t_cmd *cmd, int nb_cmd)
 		ft_exec(garbage, cmd);
 	}
 	close(fdd);
-	// printf("cmd->fd_in = %d\n", cmd->fd_in);
-	// printf("cmd->fd_out = %d\n", cmd->fd_out);
-	// if (cmd->fd_in)
-	// 	close(cmd->fd_in);
-	// if (cmd->fd_out)
-	// 	close(cmd->fd_out);
 	return (0);
 }

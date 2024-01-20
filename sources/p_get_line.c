@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_get_line.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:15:16 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/20 11:10:57 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/20 12:18:05 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,15 +100,20 @@ void	new_val_pars_i(t_pars *pars)
 	}
 }
 
+char	**get_cmd_line_error(char **ret)
+{
+	free(ret);
+	return (NULL);
+}
+
 char	**get_cmd_line(t_pars *pars)
 {
 	char	**ret;
 	int		r;
 	int		len;
 
-	if (ft_find_sep_val(pars->av[pars->i]) == 1)
-		pars->i++;
-	while (pars->av[pars->i] && is_whitespace(pars->av[pars->i]))
+	while (pars->av[pars->i] && (ft_find_sep_val(pars->av[pars->i]) == 1
+			|| is_whitespace(pars->av[pars->i])))
 		pars->i++;
 	len = len_for_malloc_tab(pars);
 	ret = malloc(sizeof(char *) * (len + 1));
@@ -120,10 +125,7 @@ char	**get_cmd_line(t_pars *pars)
 	{
 		ret[r] = fill_cmd_line(pars);
 		if (!ret[r])
-		{
-			free_tab(ret);
-			return (NULL);
-		}
+			return (get_cmd_line_error(ret));
 		r++;
 		len--;
 	}

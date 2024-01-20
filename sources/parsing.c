@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:19:50 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/20 11:24:31 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/20 12:21:57 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,13 @@ t_cmd	*define_cmd(t_pars	*pars)
 	cmd->fd_out = 0;
 	cmd->hdoc = 0;
 	cmd->next = NULL;
+	if (!set_cmd_fd(pars, cmd) || !check_fd(cmd))
+	{
+		free(cmd);
+		return (NULL);
+	}
 	cmd->line = get_cmd_line(pars);
-	if (!set_cmd_fd(pars, cmd) || !check_fd(cmd) || !cmd->line)
+	if (!cmd->line)
 	{
 		free(cmd);
 		return (NULL);
@@ -108,9 +113,9 @@ t_cmd	*parsing(t_gc *garbage)
 	pars->av = new_str(pars, garbage->ret);
 	if (!pars->av)
 	{
+		free(pars);
 		return (NULL);
 	}
 	cmd = create_cmd(pars);
-	// print_cmd(cmd);
 	return (end_of_pars(pars, cmd));
 }

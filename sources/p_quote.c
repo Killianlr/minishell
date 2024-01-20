@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_quote.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 18:06:01 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/19 20:27:29 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/20 12:23:52 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,12 @@ void	handle_quote_2(char *str, t_hq *data)
 	data->buf[data->y] = 0;
 }
 
+char	*handle_quotes_error(t_hq *data)
+{
+	free(data);
+	return (NULL);
+}
+
 char	*handle_quotes(char *str, int l)
 {
 	t_hq	*data;
@@ -101,23 +107,14 @@ char	*handle_quotes(char *str, int l)
 		data->i++;
 	data->end = end_quote(str, data->i);
 	if (data->end == 0)
-	{
-		free(data);
-		return (NULL);
-	}
+		return (handle_quotes_error(data));
 	data->buf = ft_calloc(data->end - data->i + 1, sizeof(char));
 	if (!data->buf)
-	{
-		free(data);
-		return (NULL);
-	}
+		return (handle_quotes_error(data));
 	data->y = 0;
 	handle_quote_2(str, data);
 	if (!data->buf)
-	{
-		free(data);
-		return (NULL);
-	}
+		return (handle_quotes_error(data));
 	ret = data->buf;
 	free(data);
 	return (ret);

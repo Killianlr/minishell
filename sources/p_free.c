@@ -3,45 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   p_free.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:19:12 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/20 11:02:03 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/20 12:13:31 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	print_cmd(t_cmd *cmd)
-{
-	t_cmd	*tmp;
+// void	print_cmd(t_cmd *cmd)
+// {
+// 	t_cmd	*tmp;
 
-	if (!cmd)
-		return ;
-	tmp = cmd->next;
-	while (tmp)
-	{
-		if (cmd->line)
-		{
-			for (int i = 0; cmd->line[i]; i++)
-				printf("line[i] = %s[%i]\n", cmd->line[i], i);			
-		}
-		printf("fd_in = %d & fd_out = %d\n", cmd->fd_in, cmd->fd_out);
-		cmd = cmd->next;
-		tmp = cmd;
-	}
-	if (cmd)
-	{
-		printf("line[0] = %s\n", cmd->line[0]);
-		if (cmd->line)
-		{
-			for (int i = 0; cmd->line[i]; i++)
-				printf("line[i] = %s[%i]\n", cmd->line[i], i);
-			printf("fd_in = %d & fd_out = %d\n", cmd->fd_in, cmd->fd_out);
-			
-		}
-	}
-}
+// 	if (!cmd)
+// 		return ;
+// 	tmp = cmd->next;
+// 	while (tmp)
+// 	{
+// 		if (cmd->line)
+// 		{
+// 			for (int i = 0; cmd->line[i]; i++)
+// 				printf("line[i] = %s[%i]\n", cmd->line[i], i);			
+// 		}
+// 		printf("fd_in = %d & fd_out = %d\n", cmd->fd_in, cmd->fd_out);
+// 		cmd = cmd->next;
+// 		tmp = cmd;
+// 	}
+// 	if (cmd)
+// 	{
+// 		printf("line[0] = %s\n", cmd->line[0]);
+// 		if (cmd->line)
+// 		{
+// 			for (int i = 0; cmd->line[i]; i++)
+// 				printf("line[i] = %s[%i]\n", cmd->line[i], i);
+// 			printf("fd_in = %d & fd_out = %d\n", cmd->fd_in, cmd->fd_out);		
+// 		}
+// 	}
+// }
 
 void	free_cmd_2(t_cmd *cmd)
 {

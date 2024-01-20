@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_fd.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:35:36 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/19 20:22:54 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/20 12:25:22 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char	*find_file_name_2(t_pars *pars, int i, int y, int len, char *quote)
 			y = ft_strlen(ret);
 			i = end_quote(pars->av, i) + 1;
 			if (!pars->av[i])
-				break;
+				break ;
 		}
 		ret[y++] = pars->av[i++];
 	}
@@ -94,8 +94,7 @@ char	*find_file_name(t_pars *pars, int i)
 		len++;
 		y++;
 	}
-	ret = find_file_name_2(pars, i, y, len, quote);
-	return (ret);
+	return (find_file_name_2(pars, i, y, len, quote));
 }
 
 void	set_fd_parsing(t_cmd *cmd, char *file_name, int type_of_sep)
