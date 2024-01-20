@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:19:12 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/20 13:14:22 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/20 19:01:57 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,9 @@ void	free_cmd_2(t_cmd *cmd)
 	if (cmd->hdoc)
 		unlink(".heredoc_tmp");
 	if (cmd->fd_in > 0)
-			close(cmd->fd_in);
+	{
+		close(cmd->fd_in);
+	}
 	if (cmd->fd_out > 0)
 		close(cmd->fd_out);
 	free(cmd);

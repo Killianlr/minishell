@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:59 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/20 13:41:39 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/20 18:07:16 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void	set_fd(t_cmd *cmd)
 
 void	wait_child_status(t_gc *garbage, int pid, int status)
 {
+	extern int	g_signal;
+
 	waitpid(pid, &status, 0);
 	if (WTERMSIG(status) == 3)
 	{
@@ -40,7 +42,10 @@ void	wait_child_status(t_gc *garbage, int pid, int status)
 		garbage->ret = 130;
 	}
 	else
+	{
 		garbage->ret = WEXITSTATUS(status);
+		g_signal = garbage->ret;
+	}
 }
 
 int	ft_lstsize_cmd(t_cmd *lst)
@@ -61,4 +66,39 @@ int	ft_lstsize_cmd(t_cmd *lst)
 	if (lst)
 		size++;
 	return (size);
+}
+
+void	rln2(char *pwd, DIR *directory)
+{
+	free(pwd);
+	closedir(directory);
+}
+
+char	*rln(char *cmd, char *pwd, DIR *directory, struct dirent *entry)
+{
+	char	*path;
+
+	while (1)
+	{
+		entry = readdir(directory);
+		if (!entry)
+			break ;
+		if (!ft_strncmp(entry->d_name, cmd, ft_strlen(cmd)))
+		{
+			path = ft_strjoin(pwd, cmd);
+			if (!path)
+			{
+				rln2(pwd, directory);
+				return (NULL);
+			}
+			if (access(path, 0) == 0)
+			{
+				rln2(pwd, directory);
+				return (path);
+			}
+			free(path);
+		}
+	}
+	rln2(pwd, directory);
+	return (NULL);
 }

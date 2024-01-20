@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:19:50 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/20 12:21:57 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/20 18:54:01 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ t_cmd	*create_cmd(t_pars	*pars)
 	int		pipe_count;
 
 	pipe_count = ft_count_pipe(pars->av);
+	if (pipe_count < 0)
+		return (NULL);
 	cmd = define_cmd(pars);
 	if (!cmd)
 		return (NULL);
@@ -100,8 +102,9 @@ t_cmd	*create_cmd(t_pars	*pars)
 
 t_cmd	*parsing(t_gc *garbage)
 {
-	t_pars	*pars;
-	t_cmd	*cmd;
+	t_pars		*pars;
+	t_cmd		*cmd;
+	extern int	g_signal;
 
 	cmd = NULL;
 	pars = malloc(sizeof(t_pars));
@@ -117,5 +120,7 @@ t_cmd	*parsing(t_gc *garbage)
 		return (NULL);
 	}
 	cmd = create_cmd(pars);
+	if (g_signal)
+		garbage->ret = g_signal;
 	return (end_of_pars(pars, cmd));
 }

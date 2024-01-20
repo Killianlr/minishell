@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:35:36 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/20 13:08:01 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/20 17:50:27 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,18 @@ void	set_fd_parsing(t_cmd *cmd, char *file_name, int type_of_sep)
 	{
 		if (cmd->fd_in)
 		{
+			if (cmd->hdoc)
+			{
+				unlink(".heredoc_tmp");
+				cmd->hdoc = 0;
+			}
 			close(cmd->fd_in);
 			cmd->fd_in = parsing_open(file_name, type_of_sep, cmd);
 		}
 		else
 			cmd->fd_in = parsing_open(file_name, type_of_sep, cmd);
 	}
-	if (type_of_sep == 2 || type_of_sep == 4)
+	else if (type_of_sep == 2 || type_of_sep == 4)
 	{
 		if (cmd->fd_out)
 		{

@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:43 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/20 13:35:44 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/20 18:00:36 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	in_minishell(t_gc *garbage)
 
 	while (1)
 	{
-		g_signal = 0;
+		// g_signal = 0;
 		signal_init();
 		garbage->pipe = 0;
 		garbage->s_cmd = NULL;

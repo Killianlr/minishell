@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:15:16 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/20 13:10:28 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/20 18:32:05 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ char	*fill_cmd_line(t_pars *pars)
 	data->y = 0;
 	data->set = 0;
 	ret = fill_cmd_line_loop(pars, data, ret);
-	if (!ret[0])
+	if (!ret || !ret[0])
 	{
 		free(data);
 		free(ret);
@@ -119,7 +119,7 @@ char	**get_cmd_line(t_pars *pars)
 	{
 		ret[r] = fill_cmd_line(pars);
 		if (!ret[r])
-			return (get_cmd_line_error(ret));
+			break ;
 		r++;
 		len--;
 	}

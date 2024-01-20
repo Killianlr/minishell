@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:37:05 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/19 17:18:42 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/20 15:34:12 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	free_all(t_gc *garbage)
 {
 	if (!garbage)
 		return ;
+	get_next_line(0, 1);
 	if (garbage->s_cmd)
 		free_cmd(garbage->s_cmd);
 	free_blts(garbage->blts);

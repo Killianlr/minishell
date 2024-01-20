@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:33:41 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/20 13:16:44 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/20 17:41:04 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,18 +42,31 @@ int	end_quote(char *str, int l)
 	return (0);
 }
 
+int	error_hdoc(int fd, char *av)
+{
+	printf("Minishell: warning: here-document delimited ");
+	printf("by end-of-file (wanted `%s')\n", av);
+	close(fd);
+	return (fd);
+}
+
 int	get_here_doc_2(char *av, int fd, char *buf)
 {
+	extern int	g_signal;
+
 	while (1)
 	{
 		write(1, "> ", 3);
 		buf = get_next_line(0, 0);
-		if (!buf)
+		if (g_signal == 130)
 		{
-			printf("Minishell: warning: here-document delimited ");
-			printf("by end-of-file (wanted `%s')\n", av);
-			break ;
+			if (buf)
+				free(buf);
+			close(fd);
+			return (-1);
 		}
+		if (!buf)
+			return (error_hdoc(fd, av));
 		if (!ms_strcmp(av, buf, ft_strlen(av)))
 		{
 			free(buf);
@@ -62,7 +75,6 @@ int	get_here_doc_2(char *av, int fd, char *buf)
 		write(fd, buf, ft_strlen(buf));
 		free(buf);
 	}
-	get_next_line(0, 1);
 	close(fd);
 	return (fd);
 }

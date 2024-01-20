@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:46 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/18 15:47:25 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/20 15:33:36 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	clear_string(t_prompt *prpt, t_gc *garbage)
 	prpt->str = NULL;
 	if (!prpt->inpt)
 	{
-		printf("exit");
+		printf("exit\n");
 		free(prpt->inpt);
 		free_all(garbage);
 		exit(0);

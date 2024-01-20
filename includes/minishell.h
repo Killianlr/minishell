@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/20 13:10:28 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/20 17:53:09 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,10 +159,8 @@ int		ms_strj_s(char *s1, char *s2, int size);
 
 /*---------------------------p_error.c-------------------------*/
 
-
 char	*handle_quotes_error(t_hq *data);
 char	**get_cmd_line_error(char **ret);
-
 
 /*---------------------------p_quote.c-------------------------*/
 
@@ -235,7 +233,6 @@ int		signal_init(void);
 void	signal_handler(int signum);
 void	signal_handler_exec(int signum);
 
-
 /*---------------------------builtins_check.c-------------------------*/
 
 int		is_builtins(t_gc *garbage, char **args, int pid);
@@ -307,6 +304,8 @@ int		new_var_w_value(t_bui *blts, char *arg);
 /*---------------------------utiles_path.c-------------------------*/
 
 char	*find_path(char **envp);
+void	relativ_of_absolut(t_gc *garbage, char **cmd);
+char	*check_current_dir(char *cmd);
 
 /*---------------------------ft_sort_tab_n_add_dbq.c-------------------------*/
 
@@ -328,5 +327,6 @@ int		run_pipe(t_gc *garbage, t_cmd *cmd, int fdd, int nb_cmd);
 int		ft_lstsize_cmd(t_cmd *lst);
 void	set_fd(t_cmd *cmd);
 void	wait_child_status(t_gc *garbage, int pid, int status);
+char	*rln(char *cmd, char *pwd, DIR *directory, struct dirent *entry);
 
 #endif

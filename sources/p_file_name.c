@@ -6,13 +6,13 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 13:07:04 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/20 13:08:01 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/20 18:59:37 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	len_for_file_name(t_pars *pars, t_ffn *data)
+int	len_for_file_name(t_pars *pars, t_ffn *data)
 {
 	while (pars->av[data->y] && !is_whitespace(pars->av[data->y])
 		&& !ft_find_sep_val(pars->av[data->y]))
@@ -27,6 +27,7 @@ void	len_for_file_name(t_pars *pars, t_ffn *data)
 		data->len++;
 		data->y++;
 	}
+	return (data->len);
 }
 
 char	*find_file_name_2(t_pars *pars, int i, t_ffn *data, char *ret)
@@ -65,7 +66,10 @@ char	*find_file_name(t_pars *pars, int i)
 			|| is_whitespace(pars->av[i])))
 		i++;
 	if (!pars->av[i])
+	{
+		free(data);
 		return (0);
+	}
 	data->len = 0;
 	data->y = i;
 	len_for_file_name(pars, data);

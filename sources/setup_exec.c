@@ -6,70 +6,18 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:36:56 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/20 15:04:30 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/20 18:53:34 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-char	*rln(char *cmd, char *pwd, DIR *directory, struct dirent *entry)
-{
-	char	*path;
-
-	while ((entry = readdir(directory)))
-	{
-		if (!ft_strncmp(entry->d_name, cmd, ft_strlen(cmd)))
-		{
-			path = ft_strjoin(pwd, cmd);
-			if (!path)
-			{
-				free(pwd);
-				closedir(directory);
-				return (NULL);
-			}
-			if (access(path, 0) == 0)
-			{
-				free(pwd);
-				closedir(directory);
-				return (path);
-			}
-			free(path);
-		}
-	}
-	free(pwd);
-	closedir(directory);
-	return (NULL);
-}
-
-char 	*check_current_dir(char *cmd)
-{
-	DIR		*directory;
-	struct dirent *entry;
-	char	*pwd;
-
-	directory = opendir(".");
-	if (!directory)
-		return (NULL);
-	pwd = ft_strjoin_fs1(get_pwd(), "/");
-	if (!pwd)
-	{
-		closedir(directory);
-		return (NULL);
-	}
-	entry = NULL;
-	return (rln(cmd, pwd, directory, entry));
-}
 
 char	*get_cmd(char **paths, char	**cmd, t_gc *garbage)
 {
 	char	*tmp;
 	char	*command;
 
-	if (cmd[0][0] == '/' || (cmd[0][0] == '.' && cmd[0][1] == '/'))
-	{
-		if (access(cmd[0], 0) == 0)
-			execve(cmd[0], cmd, garbage->blts->env);
-	}
+	relativ_of_absolut(garbage, cmd);
 	if (!paths)
 	{
 		command = check_current_dir(cmd[0]);
@@ -90,20 +38,6 @@ char	*get_cmd(char **paths, char	**cmd, t_gc *garbage)
 	return (NULL);
 }
 
-int	no_slash(char *cmd)
-{
-	int	i;
-
-	i = 0;
-	while (cmd[i])
-	{
-		if (cmd[i] == '/')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
 void	child_process(t_gc *garbage, t_cmd *cmd)
 {
 	char	**paths;
@@ -121,7 +55,6 @@ void	child_process(t_gc *garbage, t_cmd *cmd)
 		write(2, ": command not found\n", 21);
 		exit_free(garbage, 127);
 	}
-	printf("il exec ??\n");
 	execve(cmd_path, cmd->line, garbage->blts->env);
 }
 
@@ -156,7 +89,7 @@ int	ft_exec(t_gc *garbage, t_cmd *cmd)
 		return (1);
 	else if (pid == 0)
 		child_process(garbage, cmd);
-	g_signal = 1;
+	// g_signal = 1;
 	is_builtins(garbage, cmd->line, 1);
 	wait_child_status(garbage, pid, status);
 	signal(SIGQUIT, SIG_IGN);
@@ -167,7 +100,7 @@ int	setup_exec(t_gc *garbage, t_cmd *cmd, int nb_cmd)
 {
 	int	fdd;
 
-	if (!garbage->line || !cmd)
+	if (!garbage->line || !cmd || !cmd->line[0])
 		return (0);
 	fdd = dup(0);
 	if (!garbage->pipe

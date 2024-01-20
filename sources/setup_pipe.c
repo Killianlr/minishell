@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setup_pipe.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:35:28 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/19 15:49:49 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/20 18:50:56 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	child_pipe(t_gc *garbage, t_cmd *cmd, int fd[2], int *fdd)
 	cmd_path = get_cmd(paths, cmd->line, garbage);
 	if (!cmd_path)
 	{
+		close(fd[1]);
 		free_tab(paths);
 		write(2, cmd->line[0], ft_strlen(cmd->line[0]));
 		write(2, ": command not found\n", 21);

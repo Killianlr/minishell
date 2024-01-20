@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_new_str.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 20:02:54 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/19 20:08:03 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/20 18:17:05 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,24 +37,35 @@ int	size_for_new_str(t_pars *pars, int ret_val)
 	return (size);
 }
 
+int	handle_var_env_2(t_pars *pars, int ret_val, t_ns *data, char *ret)
+{
+	if (!ms_strj_s(ret, get_var_env(pars, data->i, ret_val), data->len))
+		return (0);
+	data->y = ft_strlen(ret);
+	while (pars->av[data->i] && (!is_whitespace(pars->av[data->i])
+			&& !is_sep(pars->av[data->i])
+			&& !is_quote(pars->av[data->i])))
+		data->i++;
+	return (1);
+}
+
 char	*handle_var_env(t_pars *pars, int ret_val, t_ns *data, char *ret)
 {
 	while (pars->av[data->i])
 	{
-		if (pars->av[data->i] == 39 && data->set == 0)
+		if (pars->av[data->i] == 34 && data->set == 0)
+			data->set = -1;
+		else if (pars->av[data->i] == 34 && data->set == -1)
+			data->set = 0;
+		else if (pars->av[data->i] == 39 && data->set == 0)
 			data->set = 1;
 		else if (pars->av[data->i] == 39 && data->set == 1)
 			data->set = 0;
-		if (pars->av[data->i] == '$' && !data->set)
+		if (pars->av[data->i] == '$' && data->set != 1)
 		{
-			if (!ms_strj_s(ret, get_var_env(pars, data->i, ret_val), data->len))
+			if (!handle_var_env_2(pars, ret_val, data, ret))
 				return (NULL);
-			data->y = ft_strlen(ret);
-			while (pars->av[data->i] && (!is_whitespace(pars->av[data->i])
-					&& !is_sep(pars->av[data->i])
-					&& !is_quote(pars->av[data->i])))
-				data->i++;
-		}
+		}			
 		else if (pars->av[data->i])
 			ret[data->y++] = pars->av[data->i++];
 	}
