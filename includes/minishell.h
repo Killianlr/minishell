@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/20 17:53:09 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/21 13:37:43 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,7 +243,7 @@ int		ft_strcmp(char *s1, char *s2);
 
 t_bui	*set_builtins(void);
 int		ft_define_var(t_gc *garbage, char **args, int pid);
-int		ft_unset(t_gc *garbage, char **args, int pid);
+int		ft_unset(t_gc *garbage, char **args);
 int		ft_export(t_gc *garbage, char **args, int pid);
 int		ft_env(t_gc *garbage, char **args, int pid);
 
@@ -278,7 +278,7 @@ int		update_export(t_gc *garbage, char **args, int pid);
 
 /*---------------------------unset.c-------------------------*/
 
-int		del_var_unset(t_gc *garbage, char **args, int k);
+int		del_var_unset(t_gc *garbage, char **args);
 int		go_to_find_var_and_del(t_bui *blts, char *str);
 
 /*---------------------------utiles_env_1.c-------------------------*/

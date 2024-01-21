@@ -6,50 +6,23 @@ LIBFT = libft.a
 LIBFT_DIR = libft
 LIB = $(addprefix $(LIBFT_DIR)/, $(LIBFT))
 
-MY_SOURCES = 	minishell.c \
-				prompt.c \
-				signal.c \
-				free.c \
-				builtins_1.c \
-				builtins_2.c \
-				builtins_check.c \
-				builtins_utiles.c \
-				cd.c \
-				env.c \
-				export.c \
-				unset.c \
-				utiles_env_1.c \
-				utiles_env_2.c \
-				utiles_export.c \
-				utiles_path.c \
-				setup_exec.c \
-				setup_pipe.c \
-				utiles_exec.c \
-				ft_sort_tab_n_add_dbq.c \
-				parsing.c \
-				utiles_parsing.c \
-				utiles_parsing_2.c \
-				p_fd.c \
-				p_free.c \
-				p_open.c \
-				p_get_line.c \
-				p_is.c \
-				p_hdoc.c \
-				p_new_str.c \
-				p_quote.c \
-				p_env.c \
-				p_get_in_env.c \
-				p_len_mal.c \
-				p_file_name.c \
-				p_error.c \
-				exit.c \
+BUILTINS = builtins_1 builtins_2 builtins_check env cd exit unset export
 
-SOURCES_DIR = sources
-SOURCES = $(addprefix $(SOURCES_DIR)/, $(MY_SOURCES))
+EXEC = setup_exec setup_pipe
 
-MY_OBJECTS = $(MY_SOURCES:.c=.o)
-OBJECTS_DIR = object
-OBJECTS = $(addprefix $(OBJECTS_DIR)/, $(MY_OBJECTS))
+MAIN = minishell
+
+PARSING = p_env p_error p_fd p_file_name p_free p_get_in_env p_get_line p_hdoc p_is p_len_mal p_new_str p_open p_quote parsing
+
+TOOLS = free ft_sort_tab_n_add_dbq prompt signal utiles_env_1 utiles_env_2 utiles_exec utiles_export utiles_parsing utiles_parsing_2 utiles_path builtins_utiles
+
+MY_SOURCES = $(addsuffix .c, $(addprefix sources/builtins/, $(BUILTINS))) \
+	  $(addsuffix .c, $(addprefix sources/exec/, $(EXEC))) \
+	  $(addsuffix .c, $(addprefix sources/main/, $(MAIN))) \
+	  $(addsuffix .c, $(addprefix sources/parsing/, $(PARSING))) \
+	  $(addsuffix .c, $(addprefix sources/tools/, $(TOOLS))) \
+
+OBJECTS = $(MY_SOURCES:c=o)
 
 all: $(NAME)
 
@@ -57,12 +30,8 @@ $(NAME) : $(OBJECTS)
 	make -C $(LIBFT_DIR)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJECTS) $(LIB) -lreadline
 
-$(OBJECTS_DIR)/%.o: $(SOURCES_DIR)/%.c
-	@mkdir -p $(OBJECTS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
 clean:
-	rm -rf $(OBJECTS_DIR)
+	rm -rf $(OBJECTS)
 	make clean -C $(LIBFT_DIR)
 
 fclean: clean
