@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utiles_export.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 14:20:01 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/09 15:03:35 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/21 12:06:58 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	new_name_var(t_bui *blts, char *arg)
 {
 	char	*var_name;
 
+	printf("arg = %s\n", arg);
 	var_name = ft_strdup(arg);
 	if (replace_old_exp(blts, var_name))
 		return (1);

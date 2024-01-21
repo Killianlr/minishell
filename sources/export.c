@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:16 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/14 10:58:31 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/21 12:54:01 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,7 @@ int	add_var_export(t_gc *garbage, char *arg)
 
 int	update_export_next(char c, int j, int pid)
 {
-	if (j > 0)
-		return (0);
+	
 	if ((!ft_isalpha(c) && c != '=')
 		|| (!j && c == '='))
 	{
@@ -90,6 +89,7 @@ int	update_export(t_gc *garbage, char **args, int pid)
 		j = 0;
 		while (args[i][j])
 		{
+			printf("args[i][j] = %c\n", args[i][j]);
 			if (update_export_next(args[i][j], j, pid))
 			{
 				if (!pid)
