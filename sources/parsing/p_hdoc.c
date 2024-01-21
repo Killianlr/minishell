@@ -3,19 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   p_hdoc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:33:41 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/21 13:52:29 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/21 14:47:18 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	check_fd(t_cmd *cmd)
+int	check_fd(t_cmd *cmd, t_gc *garbage)
 {
 	if (cmd->fd_in < 0 || cmd->fd_out < 0)
+	{
+		garbage->ret = 1;
 		return (0);
+	}
 	return (1);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_fd.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:35:36 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/21 13:52:07 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/21 16:01:22 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,16 +70,31 @@ int	set_cmd_fd(t_pars *pars, t_cmd *cmd)
 	int		i;
 	char	*file_name;
 	int		type_of_sep;
+	int		quote;
+	int		set;
 
 	i = pars->i;
 	if (ft_find_sep_val(pars->av[i]) == 1)
 		i++;
 	type_of_sep = 0;
+	set = 0;
+	quote = 0;
 	while (pars->av[i] && ft_find_sep_val(pars->av[i]) != 1)
 	{
-		if (ft_find_sep_val(pars->av[i]) > 1)
+		if (is_quote(pars->av[i]) && set == 0)
+		{
+			quote = is_quote(pars->av[i]);
+			set = 1;
+		}
+		else if (is_quote(pars->av[i]) == quote && set == 1)
+		{
+			quote = 0;
+			set = 0;
+		}
+		else if (ft_find_sep_val(pars->av[i]) > 1 && set == 0)
 		{
 			file_name = find_file_name(pars, i);
+			printf("file_name = %s\n", file_name);
 			if (!file_name)
 				return (0);
 			type_of_sep = find_type_of_sep(pars, i);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:19:07 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/21 13:53:37 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/21 15:21:02 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void	signal_handler_exec(int signum)
 
 	if (signum == SIGINT)
 	{
-		g_signal = 130;
 	}
 	else if (signum == SIGQUIT)
 	{

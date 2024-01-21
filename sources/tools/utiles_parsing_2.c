@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utiles_parsing_2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:18:10 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/21 13:53:54 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/21 14:32:10 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,10 @@ int	ms_strj_s(char *s1, char *s2, int size)
 	int		i;
 	int		y;
 
-	if (size < 0 || !s1 || !s2)
+	if (size < 0 || !s1)
 		return (0);
+	if (!s2)
+		return (1);
 	i = 0;
 	while (s1[i])
 		i++;

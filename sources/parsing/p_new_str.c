@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_new_str.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 20:02:54 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/21 13:52:42 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/21 16:06:36 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,38 @@ int	size_for_new_str(t_pars *pars, int ret_val)
 {
 	char	*var_env;
 	int		size;
+	int		set;
 	int		i;
 
 	size = 0;
 	i = 0;
+	set = 0;
 	while (pars->av[i])
 	{
-		if (pars->av[i] == '$')
+		if (is_quote(pars->av[i]) == 1 && set == 0)
+			set = 1;
+		else if (is_quote(pars->av[i]) == 1 && set == 1)
+			set = 0;
+		else if (is_quote(pars->av[i]) == 2 && set == 0)
+			set = -1;
+		else if (is_quote(pars->av[i]) == 2 && set == -1)
+			set = 0;
+		if (pars->av[i] == '$' && set != 1)
 		{
 			var_env = get_var_env(pars, i, ret_val);
-			size += (int) ft_strlen(var_env) - 1;
-			free(var_env);
-			while (pars->av[i + 1] && (!is_whitespace(pars->av[i + 1])
-					&& !is_sep(pars->av[i + 1]) && !is_quote(pars->av[i + 1])))
+			if (var_env)
+			{
+				size += (int) ft_strlen(var_env) - 1;
+				free(var_env);
+				while (pars->av[i + 1] && (!is_whitespace(pars->av[i + 1])
+						&& !is_sep(pars->av[i + 1]) && !is_quote(pars->av[i + 1])))
+					i++;
+			}
+			else
+			{
+				size++;
 				i++;
+			}
 		}
 		size++;
 		i++;

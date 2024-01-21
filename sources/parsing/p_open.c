@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_open.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 13:57:05 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/21 13:52:46 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/21 14:50:54 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	p_open_infile(char *file)
 
 	if (access(file, F_OK) == -1)
 	{
-		printf("minishell: %s: Permission denied\n", file);
+		printf("minishell: %s: No such file or directory\n", file);
 		return (-1);
 	}
 	if (access(file, R_OK) == -1)

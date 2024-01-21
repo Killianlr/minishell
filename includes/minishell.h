@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/21 13:37:43 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/21 14:49:08 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,7 +207,7 @@ int		parsing_open(char *file, int typeofsep, t_cmd *cmd);
 
 int		set_cmd_fd(t_pars *pars, t_cmd *cmd);
 char	**get_cmd_line(t_pars *pars);
-int		check_fd(t_cmd *cmd);
+int		check_fd(t_cmd *cmd, t_gc *garbage);
 
 /*---------------------------p_file_name.c-------------------------*/
 
