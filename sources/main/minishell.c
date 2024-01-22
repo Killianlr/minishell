@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:43 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/22 14:22:46 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/22 20:00:59 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ int	in_minishell(t_gc *garbage)
 		if (nb_cmd > 1)
 			garbage->pipe = 1;
 		garbage->s_cmd = cmd;
-		setup_exec(garbage, cmd, nb_cmd);
+		if (cmd)
+			setup_exec(garbage, cmd, nb_cmd);
 		free_cmd(garbage->s_cmd);
 	}
 	return (0);

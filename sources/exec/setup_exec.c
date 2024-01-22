@@ -6,11 +6,20 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:36:56 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/22 17:57:37 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/22 20:07:37 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+void	ret_exit_dir(char *command, char **paths, char **cmd, t_gc *garbage)
+{
+	free(command);
+	free_tab(paths);
+	write(2, cmd[0], ft_strlen(cmd[0]));
+	write(2, " is a directory\n", 16);
+	exit_free(garbage, 126);
+}
 
 char	*get_cmd(char **paths, char	**cmd, t_gc *garbage)
 {
@@ -22,13 +31,7 @@ char	*get_cmd(char **paths, char	**cmd, t_gc *garbage)
 	{
 		command = check_current_dir(cmd[0]);
 		if (isdirectory(command))
-		{
-			free(command);
-			free_tab(paths);
-			write(2, cmd[0], ft_strlen(cmd[0]));
-			write(2, " is a directory\n", 16);
-			exit_free(garbage, 126);
-		}
+			ret_exit_dir(command, paths, cmd, garbage);
 		return (command);
 	}
 	while (*paths)
