@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:19:50 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/22 12:18:13 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/22 17:48:25 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ t_cmd	*define_cmd(t_pars	*pars, t_gc *garbage)
 	{
 		// free(cmd);
 		cmd->line = NULL;
+		while (pars->av[pars->i] && ft_find_sep_val(pars->av[pars->i]) != 1)
+			pars->i++;
 		return (cmd);
 	}
 	cmd->line = get_cmd_line(pars);
@@ -93,6 +95,7 @@ t_cmd	*create_cmd(t_pars	*pars, t_gc *garbage)
 	first = cmd;
 	while (pipe_count)
 	{
+		printf("here\n");
 		cmd->next = define_cmd(pars, garbage);
 		if (!cmd->next)
 			break ;
