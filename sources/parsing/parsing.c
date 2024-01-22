@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:19:50 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/22 19:17:59 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/22 23:03:55 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,16 @@ char	*check_sep_count(char *str)
 	return (check_sep_count_2(str, i, sep_val, set));
 }
 
+t_cmd	*error_define_cmd(t_pars	*pars, t_cmd *cmd)
+{
+	cmd->line = NULL;
+	if (pars->av[pars->i] && ft_find_sep_val(pars->av[pars->i]) == 1)
+		pars->i++;
+	while (pars->av[pars->i] && ft_find_sep_val(pars->av[pars->i]) != 1)
+		pars->i++;
+	return (cmd);
+}
+
 t_cmd	*define_cmd(t_pars	*pars, t_gc *garbage)
 {
 	t_cmd	*cmd;
@@ -63,16 +73,8 @@ t_cmd	*define_cmd(t_pars	*pars, t_gc *garbage)
 	cmd->fd_out = 0;
 	cmd->hdoc = 0;
 	cmd->next = NULL;
-	if (!set_cmd_fd(pars, cmd) || !check_fd(cmd, garbage))
-	{
-		garbage->ret = 2;
-		cmd->line = NULL;
-		if (pars->av[pars->i] && ft_find_sep_val(pars->av[pars->i]) == 1)
-			pars->i++;
-		while (pars->av[pars->i] && ft_find_sep_val(pars->av[pars->i]) != 1)
-			pars->i++;
-		return (cmd);
-	}
+	if (!set_cmd_fd(pars, cmd, garbage) || !check_fd(cmd, garbage))
+		return (error_define_cmd(pars, cmd));
 	cmd->line = get_cmd_line(pars);
 	if (!cmd->line)
 	{
@@ -90,7 +92,10 @@ t_cmd	*create_cmd(t_pars	*pars, t_gc *garbage)
 
 	pipe_count = ft_count_pipe(pars->av);
 	if (pipe_count < 0)
+	{
+		garbage->ret = 2;
 		return (NULL);
+	}
 	cmd = define_cmd(pars, garbage);
 	if (!cmd)
 		return (NULL);
@@ -113,6 +118,7 @@ t_cmd	*parsing(t_gc *garbage)
 	t_cmd		*cmd;
 
 	cmd = NULL;
+	(void) cmd;
 	pars = malloc(sizeof(t_pars));
 	if (!pars)
 		return (NULL);

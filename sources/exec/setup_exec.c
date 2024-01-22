@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setup_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:36:56 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/22 20:07:37 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/22 23:06:59 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ int	ft_exec_pipe(t_gc *garbage, t_cmd *cmd, int *fdd, int nb_cmd)
 {
 	int	status;
 
+	(void) status;
 	status = 0;
 	signal(SIGQUIT, signal_handler_exec);
 	signal(SIGINT, signal_handler_exec);
@@ -98,6 +99,7 @@ int	ft_exec(t_gc *garbage, t_cmd *cmd)
 	int			pid;
 	int			status;
 
+	(void) status;
 	status = 0;
 	signal(SIGQUIT, signal_handler_exec);
 	signal(SIGINT, signal_handler_exec);

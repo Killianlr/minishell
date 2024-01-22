@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/22 19:29:37 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/22 23:10:49 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,22 @@ typedef struct s_size_for_line
 	int		count;
 }			t_sfl;
 
+typedef struct	s_set_cmd_fd
+{
+	int		i;
+	char	*file_name;
+	int		type_of_sep;
+	int		quote;
+	int		set;
+}			t_scf;
+
+typedef struct	s_size_for_new_str
+{
+	char	*var_env;
+	int		set;
+	int		i;
+}				t_sfns;
+
 /*---------------------------p_free.c-------------------------*/
 
 int		ft_error(char *msg, int ret);
@@ -151,7 +167,6 @@ int		ft_find_sep_val(char c);
 int		ft_count_pipe(char *str);
 int		new_val_i(t_pars *pars, int i);
 int		is_char(char c);
-void	print_cmd(t_cmd *cmd);
 int		ms_strcmp(char *s1, char *s2, int n);
 int		env_strncmp(char *s1, char *s2, int n);
 char	*ms_strjoin(char *s1, char *s2, int status);
@@ -163,7 +178,7 @@ char	*strjoin_env(char *s1, char *s2, int size);
 
 char	*handle_quotes_error(t_hq *data);
 char	**get_cmd_line_error(char **ret);
-int		error_file_sep(char *str, int i);
+int		error_file_sep(char *str, int i, t_gc *garbage);
 
 /*---------------------------p_quote.c-------------------------*/
 
@@ -193,6 +208,7 @@ char	*is_ret_val(char *str, int ret_val);
 /*---------------------------p_get_in_env.c-------------------------*/
 
 char	*get_in_env(char **env, char *str, int ret_val);
+char	*end_get_in_env(t_gie *data, char *ret, int set, char *str);
 
 /*---------------------------p_is.c-------------------------*/
 
@@ -208,7 +224,7 @@ int		parsing_open(char *file, int typeofsep, t_cmd *cmd);
 
 /*---------------------------p_fd.c-------------------------*/
 
-int		set_cmd_fd(t_pars *pars, t_cmd *cmd);
+int		set_cmd_fd(t_pars *pars, t_cmd *cmd, t_gc *garbage);
 char	**get_cmd_line(t_pars *pars);
 int		check_fd(t_cmd *cmd, t_gc *garbage);
 

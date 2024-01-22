@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_open.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 13:57:05 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/21 14:50:54 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/22 23:01:52 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,12 @@ int	p_open_outfile_otrunc(char *file)
 	int	fd;
 
 	if (access(file, F_OK) == -1)
-		return (open(file, O_CREAT | O_RDWR, 0000644));
+	{
+		fd = open(file, O_CREAT | O_RDWR, 0000644);
+		if (fd < 0)
+			printf("echec open file : %s\n", file);
+		return (fd);
+	}
 	else if (access(file, R_OK) == -1)
 	{
 		printf("minishell: %s: Permission denied\n", file);
@@ -59,7 +64,12 @@ int	p_open_outfile_append(char *file)
 	int	fd;
 
 	if (access(file, F_OK) == -1)
-		return (open(file, O_APPEND | O_CREAT | O_RDWR, 0000644));
+	{
+		fd = open(file, O_APPEND | O_CREAT | O_RDWR, 0000644);
+		if (fd < 0)
+			printf("echec open file : %s\n", file);
+		return (fd);
+	}
 	else if (access(file, R_OK) == -1)
 	{
 		printf("minishell: %s: Permission denied\n", file);

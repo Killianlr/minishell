@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 15:35:44 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/22 18:27:48 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/22 20:38:14 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,23 +95,5 @@ char	*get_in_env(char **env, char *str, int ret_val)
 	data->i = 0;
 	data->buf = NULL;
 	ret = get_in_env_2(env, str, data, ret);
-	if (!ret)
-	{
-		free(data);
-		if (str[0])
-		{
-			free(str);
-			return (NULL);
-		}
-		else
-			return (ms_strjoin("$", str, 2));
-	}
-	else if (ret && set)
-	{
-
-		free(data);
-		ret = strjoin_env(ret, str, (ft_strlen(ret) + ft_strlen(str)));
-		return (ret);
-	}
-	return (ret);
+	return (end_get_in_env(data, ret, set, str));
 }

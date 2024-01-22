@@ -3,55 +3,75 @@
 /*                                                        :::      ::::::::   */
 /*   p_new_str.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 20:02:54 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/21 16:06:36 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/22 23:00:43 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	size_for_new_str(t_pars *pars, int ret_val)
+int	set_quote_new_str(t_pars *pars, int i, int set)
 {
-	char	*var_env;
-	int		size;
-	int		set;
-	int		i;
+	if (is_quote(pars->av[i]) == 1 && set == 0)
+		set = 1;
+	else if (is_quote(pars->av[i]) == 1 && set == 1)
+		set = 0;
+	else if (is_quote(pars->av[i]) == 2 && set == 0)
+		set = -1;
+	else if (is_quote(pars->av[i]) == 2 && set == -1)
+		set = 0;
+	return (set);
+}
 
-	size = 0;
-	i = 0;
-	set = 0;
-	while (pars->av[i])
+void	loop_in_loop_ns(t_pars *pars, t_sfns *data)
+{
+	while (pars->av[data->i + 1] && (!is_whitespace(pars->av[data->i + 1])
+			&& !is_sep(pars->av[data->i + 1])
+			&& !is_quote(pars->av[data->i + 1])))
+		data->i++;
+}
+
+int	loop_size_for_new_str(t_pars *pars, t_sfns *data, int ret_val, int size)
+{
+	while (pars->av[data->i])
 	{
-		if (is_quote(pars->av[i]) == 1 && set == 0)
-			set = 1;
-		else if (is_quote(pars->av[i]) == 1 && set == 1)
-			set = 0;
-		else if (is_quote(pars->av[i]) == 2 && set == 0)
-			set = -1;
-		else if (is_quote(pars->av[i]) == 2 && set == -1)
-			set = 0;
-		if (pars->av[i] == '$' && set != 1)
+		if (pars->av[data->i] == '$' && data->set != 1)
 		{
-			var_env = get_var_env(pars, i, ret_val);
-			if (var_env)
+			data->set = set_quote_new_str(pars, data->i, data->set);
+			data->var_env = get_var_env(pars, data->i, ret_val);
+			if (data->var_env)
 			{
-				size += (int) ft_strlen(var_env) - 1;
-				free(var_env);
-				while (pars->av[i + 1] && (!is_whitespace(pars->av[i + 1])
-						&& !is_sep(pars->av[i + 1]) && !is_quote(pars->av[i + 1])))
-					i++;
+				size += (int) ft_strlen(data->var_env) - 1;
+				free(data->var_env);
+				loop_in_loop_ns(pars, data);
 			}
 			else
 			{
 				size++;
-				i++;
+				data->i++;
 			}
 		}
 		size++;
-		i++;
+		data->i++;
 	}
+	return (size);
+}
+
+int	size_for_new_str(t_pars *pars, int ret_val)
+{
+	t_sfns	*data;
+	int		size;
+
+	data = malloc(sizeof(t_sfns));
+	if (!data)
+		return (0);
+	size = 0;
+	data->i = 0;
+	data->set = 0;
+	size = loop_size_for_new_str(pars, data, ret_val, size);
+	free(data);
 	return (size);
 }
 
@@ -97,13 +117,13 @@ char	*new_str(t_pars *pars, int ret_val)
 	t_ns	*data;
 	char	*ret;
 
-	if (!check_sep_count(pars->av))
-		return (NULL);
-	if (count_quote(pars->av) % 2 != 0)
+	if (count_quote(pars->av) % 2 == 1)
 	{
-		printf("Error 1, quote unclosed\n");
+		printf("Error, quote unclosed\n");
 		return (NULL);
 	}
+	if (!check_sep_count(pars->av))
+		return (NULL);
 	data = malloc(sizeof(t_ns));
 	if (!data)
 		return (NULL);
@@ -111,7 +131,6 @@ char	*new_str(t_pars *pars, int ret_val)
 	ret = ft_calloc(data->len, 1);
 	if (!ret)
 		return (NULL);
-	ret[0] = 0;
 	data->i = 0;
 	data->y = 0;
 	data->set = 0;

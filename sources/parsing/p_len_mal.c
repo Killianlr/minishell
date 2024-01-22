@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_len_mal.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:26:45 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/21 13:52:37 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/22 20:46:23 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int	len_for_malloc_tab_2(t_pars *pars, int len, int i, int set)
 			set = 1;
 			len++;
 			i = end_quote(pars->av, i);
+			if (!i)
+				return (0);
 		}
 		else if (set == 0 && ft_find_sep_val(pars->av[i]) > 1)
 			i = new_val_i(pars, i) - 1;

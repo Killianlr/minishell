@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_hdoc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 14:33:41 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/21 14:47:18 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/22 22:50:13 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	end_quote(char *str, int l)
 	target = 0;
 	i = l;
 	if (count_quote(str) % 2 != 0)
-		return (ft_error("Error 1, quote unclosed", 0));
+		return (0);
 	else
 	{
 		while (str[i])
