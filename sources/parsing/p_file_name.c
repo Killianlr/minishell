@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_file_name.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 13:07:04 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/21 18:53:19 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/22 18:17:21 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,5 +81,6 @@ char	*find_file_name(t_pars *pars, int i)
 	data->y = 0;
 	ret = find_file_name_2(pars, i, data, ret);
 	free(data);
+	printf("ret = %s\n", ret);
 	return (ret);
 }
