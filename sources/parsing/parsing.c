@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:19:50 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/22 18:15:12 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/22 19:17:59 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ t_cmd	*define_cmd(t_pars	*pars, t_gc *garbage)
 	cmd->next = NULL;
 	if (!set_cmd_fd(pars, cmd) || !check_fd(cmd, garbage))
 	{
-		// free(cmd);
+		garbage->ret = 2;
 		cmd->line = NULL;
 		if (pars->av[pars->i] && ft_find_sep_val(pars->av[pars->i]) == 1)
 			pars->i++;
@@ -119,7 +119,6 @@ t_cmd	*parsing(t_gc *garbage)
 	pars->av = garbage->line;
 	pars->env = garbage->blts->env;
 	pars->i = 0;
-	// printf("before new str\n");
 	pars->av = new_str(pars, garbage->ret);
 	if (!pars->av)
 	{
@@ -127,7 +126,6 @@ t_cmd	*parsing(t_gc *garbage)
 		free(pars);
 		return (NULL);
 	}
-	// printf("after new str\n");
 	cmd = create_cmd(pars, garbage);
 	return (end_of_pars(pars, cmd));
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utiles_parsing.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:18:33 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/21 13:54:01 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/22 19:14:48 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,10 @@ int	ft_count_pipe(char *str)
 		else if (ft_find_sep_val(str[i]) == 1)
 		{
 			if (!str[i + 1])
+			{
+				printf("minishell: expected char after `|'\n");
 				return (-1);
+			}
 			count++;
 		}
 		i++;

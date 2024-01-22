@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:19:12 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/21 14:26:55 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/22 19:20:34 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,7 @@ t_cmd	*end_of_pars(t_pars *pars, t_cmd *cmd)
 	free(pars->av);
 	free(pars);
 	if (!cmd)
-	{
-
 		return (NULL);
-	}
 	tmp = cmd->next;
 	first = cmd;
 	while (tmp)

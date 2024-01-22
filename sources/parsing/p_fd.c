@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_fd.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:35:36 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/21 18:53:25 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/22 19:17:59 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,10 +93,12 @@ int	set_cmd_fd(t_pars *pars, t_cmd *cmd)
 		}
 		else if (ft_find_sep_val(pars->av[i]) > 1 && set == 0)
 		{
+			type_of_sep = find_type_of_sep(pars, i);
 			file_name = find_file_name(pars, i);
 			if (!file_name)
-				return (0);
-			type_of_sep = find_type_of_sep(pars, i);
+			{
+				return (error_file_sep(pars->av, i));
+			}
 			set_fd_parsing(cmd, file_name, type_of_sep);
 			free(file_name);
 			i = new_val_i(pars, i);

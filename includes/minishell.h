@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/22 13:21:44 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/22 19:06:30 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@ char	*strjoin_env(char *s1, char *s2, int size);
 
 char	*handle_quotes_error(t_hq *data);
 char	**get_cmd_line_error(char **ret);
+int		error_file_sep(char *str, int i);
 
 /*---------------------------p_quote.c-------------------------*/
 
