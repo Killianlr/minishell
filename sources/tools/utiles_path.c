@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 13:49:48 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/21 13:54:05 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/22 13:22:44 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,16 @@ char	*check_current_dir(char *cmd)
 	return (rln(cmd, pwd, directory, entry));
 }
 
-void	relativ_of_absolut(t_gc *garbage, char **cmd)
+int		isdirectory(char *path)
+{
+	struct stat path_stat;
+
+    if (stat(path, &path_stat) < 0)
+		return (0);
+    return (S_ISDIR(path_stat.st_mode));
+}
+
+void	relativ_of_absolut(t_gc *garbage, char **cmd, char **paths)
 {
 	int	i;
 
@@ -75,12 +84,26 @@ void	relativ_of_absolut(t_gc *garbage, char **cmd)
 		&& cmd[0][i + 2] == '/')
 		i += 3;
 	if (i)
-	{
+	{	
+		if (isdirectory(cmd[0]))
+		{
+			free_tab(paths);
+			write(2, cmd[0], ft_strlen(cmd[0]));
+			write(2, " is a directory\n", 16);
+			exit_free(garbage, 126);
+		}
 		if (access(cmd[0], 0) == 0)
 			execve(cmd[0], cmd, garbage->blts->env);
 	}
 	else if (cmd[0][i] == '/' || (cmd[0][i] == '.' && cmd[0][i + 1] == '/'))
 	{
+		if (isdirectory(cmd[0]))
+		{
+			free_tab(paths);
+			write(2, cmd[0], ft_strlen(cmd[0]));
+			write(2, " is a directory\n", 16);
+			exit_free(garbage, 126);
+		}
 		if (access(cmd[0], 0) == 0)
 			execve(cmd[0], cmd, garbage->blts->env);
 	}

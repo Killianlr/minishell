@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setup_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:36:56 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/21 18:55:18 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/22 14:18:37 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,21 @@
 
 char	*get_cmd(char **paths, char	**cmd, t_gc *garbage)
 {
-	char	*tmp;
-	char	*command;
+	char		*tmp;
+	char		*command;
 
-	relativ_of_absolut(garbage, cmd);
+	relativ_of_absolut(garbage, cmd, paths);
 	if (!paths)
 	{
 		command = check_current_dir(cmd[0]);
+		if (isdirectory(command))
+		{
+			free(command);
+			free_tab(paths);
+			write(2, cmd[0], ft_strlen(cmd[0]));
+			write(2, " is a directory\n", 16);
+			exit_free(garbage, 126);
+		}
 		return (command);
 	}
 	while (*paths)
@@ -29,9 +37,7 @@ char	*get_cmd(char **paths, char	**cmd, t_gc *garbage)
 		command = ft_strjoin(tmp, cmd[0]);
 		free(tmp);
 		if (access(command, 0) == 0)
-		{
 			return (command);
-		}
 		free(command);
 		paths++;
 	}
@@ -40,8 +46,8 @@ char	*get_cmd(char **paths, char	**cmd, t_gc *garbage)
 
 void	child_process(t_gc *garbage, t_cmd *cmd)
 {
-	char	**paths;
-	char	*cmd_path;
+	char		**paths;
+	char		*cmd_path;
 
 	set_fd(cmd);
 	if (is_builtins(garbage, cmd->line, 0) == 2)
@@ -67,15 +73,17 @@ int	ft_exec_pipe(t_gc *garbage, t_cmd *cmd, int *fdd, int nb_cmd)
 	signal(SIGINT, signal_handler_exec);
 	while (cmd)
 	{
-		*fdd = run_pipe(garbage, cmd, *fdd, nb_cmd);
-		if (cmd->fd_in)
-			close(cmd->fd_in);
-		if (cmd->fd_out)
-			close(cmd->fd_out);
+		if (cmd->line)
+		{
+			*fdd = run_pipe(garbage, cmd, *fdd, nb_cmd);
+			if (cmd->fd_in)
+				close(cmd->fd_in);
+			if (cmd->fd_out)
+				close(cmd->fd_out);
+		}
 		cmd = cmd->next;
 		nb_cmd--;
 	}
-	wait_child_status(garbage, -1, status);
 	while (wait(NULL) != -1)
 		wait(NULL);
 	signal(SIGQUIT, SIG_IGN);
@@ -104,12 +112,12 @@ int	ft_exec(t_gc *garbage, t_cmd *cmd)
 int	setup_exec(t_gc *garbage, t_cmd *cmd, int nb_cmd)
 {
 	int	fdd;
-
-	if (!garbage->line || !cmd)
+	
+	if (!garbage->line || (!cmd->line && nb_cmd == 1) || !cmd->line[0])
 		return (0);
 	fdd = dup(0);
 	if (!garbage->pipe
-		&& !ft_strncmp("exit", cmd->line[0], ft_strlen(cmd->line[0])))
+		&& cmd->line && !ft_strncmp("exit", cmd->line[0], ft_strlen(cmd->line[0])))
 	{
 		close(fdd);
 		ft_exit(garbage, cmd->line);

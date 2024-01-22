@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/21 18:38:48 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/22 13:21:44 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -306,8 +306,9 @@ int		new_var_w_value(t_bui *blts, char *arg);
 /*---------------------------utiles_path.c-------------------------*/
 
 char	*find_path(char **envp);
-void	relativ_of_absolut(t_gc *garbage, char **cmd);
+void	relativ_of_absolut(t_gc *garbage, char **cmd, char **paths);
 char	*check_current_dir(char *cmd);
+int		isdirectory(char *path);
 
 /*---------------------------ft_sort_tab_n_add_dbq.c-------------------------*/
 

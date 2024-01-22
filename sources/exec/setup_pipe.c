@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setup_pipe.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:35:28 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/21 18:27:38 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/22 12:17:28 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,6 @@ int	run_pipe(t_gc *garbage, t_cmd *cmd, int fdd, int nb_cmd)
 	int			fd[2];
 	int			pid_pipe;
 	int			status;
-	extern int	g_signal;
-	(void)nb_cmd;
 
 	fd[0] = -1;
 	fd[1] = -1;
@@ -74,7 +72,6 @@ int	run_pipe(t_gc *garbage, t_cmd *cmd, int fdd, int nb_cmd)
 	}
 	else if (!pid_pipe)
 		child_pipe(garbage, cmd, fd, &fdd);
-	g_signal = 1;
 	if (nb_cmd == 1)
 		wait_child_status(garbage, pid_pipe, status);
 	close(fdd);
