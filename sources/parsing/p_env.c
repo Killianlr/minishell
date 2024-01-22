@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 11:49:41 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/21 15:40:10 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/22 18:27:48 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,7 @@ char	*is_ret_val(char *str, int ret_val)
 	if (str[0] == '?')
 	{
 		ret = ft_itoa(ret_val);
-		if (str[1])
-			return (ret);
-		else
-		{
-			free(str);
-			return (ret);
-		}
+		return (ret);
 	}
 	else
 		return (NULL);
@@ -63,7 +57,7 @@ char	*get_var_env_bis(t_pars *pars, int start_index, int length, int ret_val)
 	{
 		buf[y++] = pars->av[j++];
 	}
-	buf[y] = '\0';
+	buf[y] = 0;
 	buf = get_in_env(pars->env, buf, ret_val);
 	return (buf);
 }

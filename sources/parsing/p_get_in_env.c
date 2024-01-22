@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_get_in_env.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 15:35:44 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/21 18:40:30 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/22 18:27:48 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,12 @@ char	*get_in_env(char **env, char *str, int ret_val)
 
 	set = 0;
 	ret = is_ret_val(str, ret_val);
-	if (ret && !str[1])
+	if (ret && ft_strlen(str) == 1)
+	{
+		free(str);
 		return (ret);
-	else
+	}
+	else if (ret && str[1])
 	{
 		str = incr_str(str);
 		set = 1;
@@ -105,6 +108,7 @@ char	*get_in_env(char **env, char *str, int ret_val)
 	}
 	else if (ret && set)
 	{
+
 		free(data);
 		ret = strjoin_env(ret, str, (ft_strlen(ret) + ft_strlen(str)));
 		return (ret);
