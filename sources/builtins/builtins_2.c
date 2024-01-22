@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:30:12 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/21 13:51:06 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/22 18:55:39 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,15 @@ int	ft_cd(t_gc *garbage, char **args, int pid)
 		garbage->ret = 0;
 		if (!args[1])
 			return (2);
+		if (args[2])
+		{
+			if (pid)
+				printf("minishell: cd: too many arguments\n");
+			else
+				exit_free(garbage, 1);
+			garbage->ret = 1;
+			return (2);
+		}
 		if (chdir(args[1]))
 		{
 			if (pid)
