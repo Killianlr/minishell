@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:34:41 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/21 13:51:11 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/22 19:31:19 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	ft_exit(t_gc *garbage, char **args)
 	}
 	while (args[1][i])
 	{
-		if (args[1][i] == '-')
+		if (args[1][i] == '-' || args[1][i] == '+')
 			i++;
 		if (!ft_isdigit(args[1][i]))
 		{
@@ -93,7 +93,7 @@ void	ft_exit(t_gc *garbage, char **args)
 		}
 		i++;
 	}
-	exit_free(garbage, atoi(args[1]));
+	exit_free(garbage, ft_atoi(args[1]));
 }
 
 int	ft_strcmp(char *s1, char *s2)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/22 19:06:30 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/22 19:29:37 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,6 +295,7 @@ char	*remove_quote(char *str);
 char	**create_env(char **existing_env);
 int		add_var_env(t_bui *blts, char *arg);
 int		it_is_an_equal(char *str);
+int		is_metac(char c);
 
 /*---------------------------utiles_export.c-------------------------*/
 

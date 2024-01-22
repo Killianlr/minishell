@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:35:28 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/22 12:17:28 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/22 19:44:28 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ void	child_pipe(t_gc *garbage, t_cmd *cmd, int fd[2], int *fdd)
 		set_fd_pipe(fd[1]);
 	set_fd(cmd);
 	if (is_builtins(garbage, cmd->line, 0) == 2)
+	{
+		close(fd[1]);
 		exit_child(garbage, 0);
+	}	
 	paths = ft_split(find_path(garbage->blts->env), ':');
 	cmd_path = get_cmd(paths, cmd->line, garbage);
 	if (!cmd_path)
