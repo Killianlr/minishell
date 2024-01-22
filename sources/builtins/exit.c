@@ -1,29 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/09 13:46:48 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/22 14:05:36 by kle-rest         ###   ########.fr       */
+/*   Created: 2024/01/19 16:53:41 by fserpe            #+#    #+#             */
+/*   Updated: 2024/01/21 13:51:23 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../includes/minishell.h"
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+void	exit_free(t_gc *garbage, int exival)
 {
-	size_t	i;
+	free_all(garbage);
+	exit(exival);
+}
 
-	i = 0;
-	if (n == 0)
-		return (1);
-	if (!s1)
-		return (1);
-	while (s1[i] == s2[i] && i < n - 1 && s1[i] && s2[i])
-	{
-		++i;
-	}
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+void	exit_child(t_gc *garbage, int exival)
+{
+	free_all(garbage);
+	exit(exival);
 }
