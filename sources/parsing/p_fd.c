@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_fd.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:35:36 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/22 22:56:20 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/23 12:14:49 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,6 @@ int	find_type_of_sep(t_pars *pars, int i)
 		set = ft_find_sep_val(pars->av[i]);
 	}
 	return (ret);
-}
-
-void	unlink_hdoc(t_cmd *cmd)
-{
-	unlink(".heredoc_tmp");
-	cmd->hdoc = 0;
 }
 
 void	set_fd_parsing(t_cmd *cmd, char *file_name, int type_of_sep)

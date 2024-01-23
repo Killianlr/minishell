@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:37:05 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/21 13:53:24 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/23 12:52:07 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ void	free_tab(char **tableau)
 			i++;
 		}
 	}
-	free(tableau);
+	if (tableau)
+		free(tableau);
 }
 
 void	free_blts(t_bui *blts)
@@ -55,4 +56,17 @@ void	close_standard_fd(void)
 	close(0);
 	close(1);
 	close(2);
+}
+
+void	ms_strjoin_free(char *s1, char *s2, int status)
+{
+	if (status == 1)
+		free(s1);
+	else if (status == 2)
+		free(s2);
+	else if (status == 3)
+	{
+		free(s1);
+		free(s2);
+	}
 }

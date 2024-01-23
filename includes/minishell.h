@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:34 by flavian           #+#    #+#             */
-/*   Updated: 2024/01/22 23:10:49 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/23 12:24:35 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ typedef struct s_size_for_line
 	int		count;
 }			t_sfl;
 
-typedef struct	s_set_cmd_fd
+typedef struct s_set_cmd_fd
 {
 	int		i;
 	char	*file_name;
@@ -144,7 +144,7 @@ typedef struct	s_set_cmd_fd
 	int		set;
 }			t_scf;
 
-typedef struct	s_size_for_new_str
+typedef struct s_size_for_new_str
 {
 	char	*var_env;
 	int		set;
@@ -155,11 +155,12 @@ typedef struct	s_size_for_new_str
 
 int		ft_error(char *msg, int ret);
 t_cmd	*end_of_pars(t_pars *pars, t_cmd *cmd);
+void	free_cmd(t_cmd *cmd);
 
 /*---------------------------parsing.c-------------------------*/
 
 t_cmd	*parsing(t_gc *garbage);
-char	*check_sep_count(char *str);
+char	*check_sep_count_2(char *str, int i, int sep_val, int set);
 
 /*---------------------------p_utiles.c-------------------------*/
 
@@ -173,6 +174,11 @@ char	*ms_strjoin(char *s1, char *s2, int status);
 int		ms_strj_s(char *s1, char *s2, int size);
 char	*strjoin_env(char *s1, char *s2, int size);
 
+/*---------------------------utiles_parsing_3.c-------------------------*/
+
+int		loop_size_4_new_str(t_pars *pars, t_sfns *data, int ret_val, int size);
+char	*check_sep_count(char *str);
+void	unlink_hdoc(t_cmd *cmd);
 
 /*---------------------------p_error.c-------------------------*/
 
@@ -190,6 +196,7 @@ int		count_quote(char *str);
 /*---------------------------p_new_str.c-------------------------*/
 
 char	*new_str(t_pars *pars, int ret_val);
+int		set_quote_new_str(t_pars *pars, int i, int set);
 
 /*---------------------------p_len_mal.c-------------------------*/
 
@@ -241,10 +248,8 @@ char	*ft_prompt(t_gc *garbage);
 void	free_all(t_gc *garbage);
 void	free_tab(char **tableau);
 void	free_blts(t_bui *blts);
-void	exit_free(t_gc *garbage, int exival);
 void	close_standard_fd(void);
-void	exit_child(t_gc *garbage, int exival);
-void	free_cmd(t_cmd *cmd);
+void	ms_strjoin_free(char *s1, char *s2, int status);
 
 /*---------------------------signal.c-------------------------*/
 
@@ -284,6 +289,11 @@ int		check_var_exist(char **tableau, char *arg);
 /*---------------------------cd.c-------------------------*/
 
 int		cd_set_pwd(t_bui *blts);
+
+/*---------------------------exit.c-------------------------*/
+
+void	exit_free(t_gc *garbage, int exival);
+void	exit_child(t_gc *garbage, int exival);
 
 /*---------------------------env.c-------------------------*/
 
@@ -325,8 +335,6 @@ int		new_var_w_value(t_bui *blts, char *arg);
 
 char	*find_path(char **envp);
 void	relativ_of_absolut(t_gc *garbage, char **cmd, char **paths);
-char	*check_current_dir(char *cmd);
-int		isdirectory(char *path);
 
 /*---------------------------ft_sort_tab_n_add_dbq.c-------------------------*/
 
@@ -349,5 +357,12 @@ int		ft_lstsize_cmd(t_cmd *lst);
 void	set_fd(t_cmd *cmd);
 void	wait_child_status(t_gc *garbage, int pid, int status);
 char	*rln(char *cmd, char *pwd, DIR *directory, struct dirent *entry);
+
+/*---------------------------utiles_exec.c-------------------------*/
+
+void	ret_exit_dir(char *command, char **paths, char **cmd, t_gc *garbage);
+void	exit_is_dir(char **paths, char **cmd, t_gc *garbage);
+char	*check_current_dir(char *cmd);
+int		isdirectory(char *path);
 
 #endif

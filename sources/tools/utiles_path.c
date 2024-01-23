@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 13:49:48 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/22 20:12:47 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/23 12:30:05 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,47 +47,13 @@ char	*find_path(char **envp)
 	return (NULL);
 }
 
-char	*check_current_dir(char *cmd)
-{
-	DIR				*directory;
-	struct dirent	*entry;
-	char			*pwd;
-
-	directory = opendir(".");
-	if (!directory)
-		return (NULL);
-	pwd = ft_strjoin_fs1(get_pwd(), "/");
-	if (!pwd)
-	{
-		closedir(directory);
-		return (NULL);
-	}
-	entry = NULL;
-	return (rln(cmd, pwd, directory, entry));
-}
-
-int		isdirectory(char *path)
-{
-	struct stat path_stat;
-
-    if (stat(path, &path_stat) < 0)
-		return (0);
-    return (S_ISDIR(path_stat.st_mode));
-}
-
-void	exit_is_dir(char **paths, char **cmd, t_gc *garbage)
-{
-	free_tab(paths);
-	write(2, cmd[0], ft_strlen(cmd[0]));
-	write(2, " is a directory\n", 16);
-	exit_free(garbage, 126);
-}
-
 void	relativ_of_absolut(t_gc *garbage, char **cmd, char **paths)
 {
 	int	i;
 
 	i = 0;
+	if (!cmd[0])
+		printf("ah\n");
 	while (cmd[0][i] && cmd[0][i] == '.' && cmd[0][i + 1] == '.'
 		&& cmd[0][i + 2] == '/')
 		i += 3;

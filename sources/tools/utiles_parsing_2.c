@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utiles_parsing_2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:18:10 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/21 18:39:29 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/23 12:12:05 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,19 +59,6 @@ int	ms_strj_s(char *s1, char *s2, int size)
 	s1[i + y] = 0;
 	free(s2);
 	return (1);
-}
-
-void	ms_strjoin_free(char *s1, char *s2, int status)
-{
-	if (status == 1)
-		free(s1);
-	else if (status == 2)
-		free(s2);
-	else if (status == 3)
-	{
-		free(s1);
-		free(s2);
-	}
 }
 
 char	*ms_strjoin_2(char *s1, char *s2)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:19:50 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/22 23:03:55 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/23 12:14:30 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,6 @@ char	*check_sep_count_2(char *str, int i, int sep_val, int set)
 		i++;
 	}
 	return (str);
-}
-
-char	*check_sep_count(char *str)
-{
-	int	i;
-	int	sep_val;
-	int	set;
-
-	i = 0;
-	sep_val = 0;
-	set = 0;
-	return (check_sep_count_2(str, i, sep_val, set));
 }
 
 t_cmd	*error_define_cmd(t_pars	*pars, t_cmd *cmd)

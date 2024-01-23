@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:30:12 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/22 20:05:01 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/23 12:02:55 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,28 +115,6 @@ int	ft_cd(t_gc *garbage, char **args, int pid)
 				return (1);
 			}
 		}
-		return (2);
-	}
-	return (0);
-}
-
-int	ft_pwd(t_gc *garbage, char **args, int pid)
-{
-	char	*pwd;
-
-	if (!garbage->line || pid)
-		return (0);
-	if (!ft_strncmp(args[0], "pwd", 4))
-	{
-		garbage->ret = 0;
-		pwd = get_pwd();
-		if (!pwd)
-		{
-		garbage->ret = 1;
-			return (1);
-		}
-		printf("%s\n", pwd);
-		free(pwd);
 		return (2);
 	}
 	return (0);

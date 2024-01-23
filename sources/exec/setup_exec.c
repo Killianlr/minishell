@@ -3,23 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   setup_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:36:56 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/22 23:06:59 by flavian          ###   ########.fr       */
+/*   Updated: 2024/01/23 12:57:22 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-void	ret_exit_dir(char *command, char **paths, char **cmd, t_gc *garbage)
-{
-	free(command);
-	free_tab(paths);
-	write(2, cmd[0], ft_strlen(cmd[0]));
-	write(2, " is a directory\n", 16);
-	exit_free(garbage, 126);
-}
 
 char	*get_cmd(char **paths, char	**cmd, t_gc *garbage)
 {
@@ -69,21 +60,20 @@ void	child_process(t_gc *garbage, t_cmd *cmd)
 
 int	ft_exec_pipe(t_gc *garbage, t_cmd *cmd, int *fdd, int nb_cmd)
 {
-	int	status;
-
-	(void) status;
-	status = 0;
 	signal(SIGQUIT, signal_handler_exec);
 	signal(SIGINT, signal_handler_exec);
 	while (cmd)
 	{
 		if (cmd->line)
 		{
-			*fdd = run_pipe(garbage, cmd, *fdd, nb_cmd);
-			if (cmd->fd_in)
-				close(cmd->fd_in);
-			if (cmd->fd_out)
-				close(cmd->fd_out);
+			if (cmd->line[0])
+			{
+				*fdd = run_pipe(garbage, cmd, *fdd, nb_cmd);
+				if (cmd->fd_in)
+					close(cmd->fd_in);
+				if (cmd->fd_out)
+					close(cmd->fd_out);
+			}
 		}
 		cmd = cmd->next;
 		nb_cmd--;
@@ -117,9 +107,14 @@ int	ft_exec(t_gc *garbage, t_cmd *cmd)
 int	setup_exec(t_gc *garbage, t_cmd *cmd, int nb_cmd)
 {
 	int	fdd;
-	
-	if (!garbage->line || (!cmd->line && nb_cmd == 1))
+
+	if (!garbage->line || (!cmd->line && !garbage->pipe))
 		return (0);
+	if (!garbage->pipe)
+	{
+		if (!cmd->line[0])
+			return (0);
+	}
 	fdd = dup(0);
 	if (!garbage->pipe
 		&& !ft_strncmp("exit", cmd->line[0], ft_strlen(cmd->line[0])))
