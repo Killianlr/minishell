@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:30:12 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/21 13:51:06 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/23 12:02:55 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,29 @@ int	ft_echo(t_gc *garbage, char **args, int pid)
 	return (0);
 }
 
+int	ft_cd_next(t_gc *garbage, char **args, int pid)
+{
+	if (args[2])
+	{
+		if (pid)
+			printf("minishell: cd: too many arguments\n");
+		else
+			exit_free(garbage, 1);
+		garbage->ret = 1;
+		return (2);
+	}
+	if (chdir(args[1]))
+	{
+		if (pid)
+			printf("minishell: cd: %s No such file or directory\n", args[1]);
+		else
+			exit_free(garbage, 1);
+		garbage->ret = 1;
+		return (2);
+	}
+	return (0);
+}
+
 int	ft_cd(t_gc *garbage, char **args, int pid)
 {
 	if (!ft_strncmp(args[0], "cd", 3))
@@ -82,15 +105,8 @@ int	ft_cd(t_gc *garbage, char **args, int pid)
 		garbage->ret = 0;
 		if (!args[1])
 			return (2);
-		if (chdir(args[1]))
-		{
-			if (pid)
-				printf("minishell: cd: %s No such file or directory\n", args[1]);
-			else
-				exit_free(garbage, 1);
-			garbage->ret = 1;
+		if (ft_cd_next(garbage, args, pid))
 			return (2);
-		}
 		else
 		{
 			if (cd_set_pwd(garbage->blts))
@@ -99,28 +115,6 @@ int	ft_cd(t_gc *garbage, char **args, int pid)
 				return (1);
 			}
 		}
-		return (2);
-	}
-	return (0);
-}
-
-int	ft_pwd(t_gc *garbage, char **args, int pid)
-{
-	char	*pwd;
-
-	if (!garbage->line || pid)
-		return (0);
-	if (!ft_strncmp(args[0], "pwd", 4))
-	{
-		garbage->ret = 0;
-		pwd = get_pwd();
-		if (!pwd)
-		{
-		garbage->ret = 1;
-			return (1);
-		}
-		printf("%s\n", pwd);
-		free(pwd);
 		return (2);
 	}
 	return (0);

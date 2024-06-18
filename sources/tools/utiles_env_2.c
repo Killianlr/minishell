@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 13:53:55 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/21 13:53:43 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/22 18:44:50 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,27 @@ int	clear_or_exit(char **str)
 		return (1);
 	else
 		return (0);
+}
+
+int	is_metac(char c)
+{
+	if (c == '-')
+		return (1);
+	if (c == '*')
+		return (1);
+	if (c == '+')
+		return (1);
+	if (c == '.')
+		return (1);
+	if (c == '&')
+		return (1);
+	if (c == '$')
+		return (1);
+	if (c == '#')
+		return (1);
+	if (c == '@')
+		return (1);
+	if (c == '!')
+		return (1);
+	return (0);
 }

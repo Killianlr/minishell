@@ -6,7 +6,7 @@
 /*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 15:35:44 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/21 15:50:41 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/22 20:38:14 by fserpe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,26 @@ char	*get_in_env_2(char **env, char *str, t_gie *data, char *ret)
 	return (ret);
 }
 
+char	*incr_str(char *str)
+{
+	char	*ret;
+	int		i;
+	int		y;
+
+	if (!str)
+		return (NULL);
+	ret = malloc(sizeof(char) * ft_strlen(str));
+	if (!ret)
+		return (NULL);
+	i = 1;
+	y = 0;
+	while (str[i])
+		ret[y++] = str[i++];
+	ret[y] = 0;
+	free(str);
+	return (ret);
+}
+
 char	*get_in_env(char **env, char *str, int ret_val)
 {
 	t_gie	*data;
@@ -59,37 +79,21 @@ char	*get_in_env(char **env, char *str, int ret_val)
 
 	set = 0;
 	ret = is_ret_val(str, ret_val);
-	if (ret && !str[1])
-		return (ret);
-	else
+	if (ret && ft_strlen(str) == 1)
 	{
-		str++;
+		free(str);
+		return (ret);
+	}
+	else if (ret && str[1])
+	{
+		str = incr_str(str);
 		set = 1;
 	}
-	printf("str in get_in_env = %s\n", str);
 	data = malloc(sizeof(t_gie));
 	if (!data)
 		return (NULL);
 	data->i = 0;
 	data->buf = NULL;
 	ret = get_in_env_2(env, str, data, ret);
-	if (!ret)
-	{
-		free(data);
-		if (str[0])
-		{
-			free(str);
-			return (NULL);
-		}
-		else
-			return (ms_strjoin("$", str, 2));
-	}
-	else if (ret && set)
-	{
-		printf("%s\n", ret);
-		// printf("len = %lu\n", ft_strlen(ret) + ft_strlen(str));
-		ft_strjoin_fs2(ret, str);
-		return (ret);
-	}
-	return (ret);
+	return (end_get_in_env(data, ret, set, str));
 }

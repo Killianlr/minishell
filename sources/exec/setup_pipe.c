@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setup_pipe.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:35:28 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/21 15:08:38 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/22 20:13:15 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,15 @@ void	set_fd_pipe(int fd)
 	close(1);
 	dup(fd);
 	close(fd);
+}
+
+void	exit_cmd_not_found(int fd, char **paths, t_cmd *cmd, t_gc *garbage)
+{
+	close(fd);
+	free_tab(paths);
+	write(2, cmd->line[0], ft_strlen(cmd->line[0]));
+	write(2, ": command not found\n", 21);
+	exit_free(garbage, 127);
 }
 
 void	child_pipe(t_gc *garbage, t_cmd *cmd, int fd[2], int *fdd)
@@ -32,17 +41,14 @@ void	child_pipe(t_gc *garbage, t_cmd *cmd, int fd[2], int *fdd)
 		set_fd_pipe(fd[1]);
 	set_fd(cmd);
 	if (is_builtins(garbage, cmd->line, 0) == 2)
+	{
+		close(fd[1]);
 		exit_child(garbage, 0);
+	}	
 	paths = ft_split(find_path(garbage->blts->env), ':');
 	cmd_path = get_cmd(paths, cmd->line, garbage);
 	if (!cmd_path)
-	{
-		close(fd[1]);
-		free_tab(paths);
-		write(2, cmd->line[0], ft_strlen(cmd->line[0]));
-		write(2, ": command not found\n", 21);
-		exit_free(garbage, 127);
-	}
+		exit_cmd_not_found(fd[1], paths, cmd, garbage);
 	execve(cmd_path, cmd->line, garbage->blts->env);
 }
 
@@ -58,8 +64,6 @@ int	run_pipe(t_gc *garbage, t_cmd *cmd, int fdd, int nb_cmd)
 	int			fd[2];
 	int			pid_pipe;
 	int			status;
-	extern int	g_signal;
-	(void)nb_cmd;
 
 	fd[0] = -1;
 	fd[1] = -1;
@@ -74,9 +78,8 @@ int	run_pipe(t_gc *garbage, t_cmd *cmd, int fdd, int nb_cmd)
 	}
 	else if (!pid_pipe)
 		child_pipe(garbage, cmd, fd, &fdd);
-	// g_signal = 1;
-	// if (nb_cmd == 1)
-	// 	wait_child_status(garbage, pid_pipe, status);
+	if (nb_cmd == 1)
+		wait_child_status(garbage, pid_pipe, status);
 	close(fdd);
 	close(fd[1]);
 	return (fd[0]);

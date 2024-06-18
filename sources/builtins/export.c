@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:18:16 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/21 13:51:29 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/22 18:46:02 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,18 +63,22 @@ int	add_var_export(t_gc *garbage, char *arg)
 	return (0);
 }
 
-int	update_export_next(char c, int j, int pid)
+int	update_export_next(char c, int j, int pid, t_gc *garbage)
 {
 	if (j == 0 && !ft_isalpha(c))
 	{
 		if (pid)
 			printf("minishell: export: `%c': not a valid identifier\n", c);
+		else
+			exit_free(garbage, 1);
 		return (1);
 	}
-	if (j > 0 && c == ' ')
+	if (j > 0 && is_metac(c))
 	{
 		if (pid)
 			printf("minishell: export: `%c': not a valid identifier\n", c);
+		else
+			exit_free(garbage, 1);
 		return (1);
 	}
 	if (c == '=')
@@ -93,14 +97,14 @@ int	update_export(t_gc *garbage, char **args, int pid)
 		j = 0;
 		while (args[i][j])
 		{
-			if (update_export_next(args[i][j], j, pid))
+			if (update_export_next(args[i][j], j, pid, garbage))
 			{
-				if (!pid)
-					exit_free(garbage, 1);
 				break ;
 			}
 			j++;
 		}
+		if (args[i][0] == '=')
+			return (0);
 		if (j == (int)ft_strlen(args[i]) || args[i][j] == '=')
 		{
 			if (add_var_export(garbage, args[i]))

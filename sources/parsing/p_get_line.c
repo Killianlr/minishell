@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_get_line.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flavian <flavian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:15:16 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/21 13:52:26 by kle-rest         ###   ########.fr       */
+/*   Updated: 2024/01/22 22:59:22 by flavian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,7 @@ char	*fill_cmd_line_loop(t_pars *pars, t_fcl *data, char *ret)
 		else if (is_char(pars->av[pars->i]))
 		{
 			data->set = 1;
-			ret[data->y] = pars->av[pars->i];
-			data->y++;
+			ret[data->y++] = pars->av[pars->i];
 		}
 		else if (data->set == 1 && !is_char(pars->av[pars->i]))
 			break ;

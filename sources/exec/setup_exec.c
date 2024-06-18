@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setup_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 13:36:56 by kle-rest          #+#    #+#             */
-/*   Updated: 2024/01/21 15:21:02 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/23 12:57:22 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,15 @@
 
 char	*get_cmd(char **paths, char	**cmd, t_gc *garbage)
 {
-	char	*tmp;
-	char	*command;
+	char		*tmp;
+	char		*command;
 
-	relativ_of_absolut(garbage, cmd);
+	relativ_of_absolut(garbage, cmd, paths);
 	if (!paths)
 	{
 		command = check_current_dir(cmd[0]);
+		if (isdirectory(command))
+			ret_exit_dir(command, paths, cmd, garbage);
 		return (command);
 	}
 	while (*paths)
@@ -29,9 +31,7 @@ char	*get_cmd(char **paths, char	**cmd, t_gc *garbage)
 		command = ft_strjoin(tmp, cmd[0]);
 		free(tmp);
 		if (access(command, 0) == 0)
-		{
 			return (command);
-		}
 		free(command);
 		paths++;
 	}
@@ -40,8 +40,8 @@ char	*get_cmd(char **paths, char	**cmd, t_gc *garbage)
 
 void	child_process(t_gc *garbage, t_cmd *cmd)
 {
-	char	**paths;
-	char	*cmd_path;
+	char		**paths;
+	char		*cmd_path;
 
 	set_fd(cmd);
 	if (is_builtins(garbage, cmd->line, 0) == 2)
@@ -60,22 +60,24 @@ void	child_process(t_gc *garbage, t_cmd *cmd)
 
 int	ft_exec_pipe(t_gc *garbage, t_cmd *cmd, int *fdd, int nb_cmd)
 {
-	int	status;
-
-	status = 0;
 	signal(SIGQUIT, signal_handler_exec);
 	signal(SIGINT, signal_handler_exec);
 	while (cmd)
 	{
-		*fdd = run_pipe(garbage, cmd, *fdd, nb_cmd);
-		if (cmd->fd_in)
-			close(cmd->fd_in);
-		if (cmd->fd_out)
-			close(cmd->fd_out);
+		if (cmd->line)
+		{
+			if (cmd->line[0])
+			{
+				*fdd = run_pipe(garbage, cmd, *fdd, nb_cmd);
+				if (cmd->fd_in)
+					close(cmd->fd_in);
+				if (cmd->fd_out)
+					close(cmd->fd_out);
+			}
+		}
 		cmd = cmd->next;
 		nb_cmd--;
 	}
-	wait_child_status(garbage, -1, status);
 	while (wait(NULL) != -1)
 		wait(NULL);
 	signal(SIGQUIT, SIG_IGN);
@@ -86,8 +88,8 @@ int	ft_exec(t_gc *garbage, t_cmd *cmd)
 {
 	int			pid;
 	int			status;
-	extern int	g_signal;
 
+	(void) status;
 	status = 0;
 	signal(SIGQUIT, signal_handler_exec);
 	signal(SIGINT, signal_handler_exec);
@@ -106,8 +108,13 @@ int	setup_exec(t_gc *garbage, t_cmd *cmd, int nb_cmd)
 {
 	int	fdd;
 
-	if (!garbage->line || !cmd || !cmd->line[0])
+	if (!garbage->line || (!cmd->line && !garbage->pipe))
 		return (0);
+	if (!garbage->pipe)
+	{
+		if (!cmd->line[0])
+			return (0);
+	}
 	fdd = dup(0);
 	if (!garbage->pipe
 		&& !ft_strncmp("exit", cmd->line[0], ft_strlen(cmd->line[0])))

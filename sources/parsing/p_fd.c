@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_fd.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fserpe <fserpe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:35:36 by fserpe            #+#    #+#             */
-/*   Updated: 2024/01/21 16:01:22 by fserpe           ###   ########.fr       */
+/*   Updated: 2024/01/23 12:14:49 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,7 @@ void	set_fd_parsing(t_cmd *cmd, char *file_name, int type_of_sep)
 		if (cmd->fd_in)
 		{
 			if (cmd->hdoc)
-			{
-				unlink(".heredoc_tmp");
-				cmd->hdoc = 0;
-			}
+				unlink_hdoc(cmd);
 			close(cmd->fd_in);
 			cmd->fd_in = parsing_open(file_name, type_of_sep, cmd);
 		}
@@ -65,46 +62,63 @@ void	set_fd_parsing(t_cmd *cmd, char *file_name, int type_of_sep)
 	}
 }
 
-int	set_cmd_fd(t_pars *pars, t_cmd *cmd)
+int	is_redir_fd(t_pars *pars, t_cmd *cmd, t_gc *garbage, t_scf *data)
 {
-	int		i;
-	char	*file_name;
-	int		type_of_sep;
-	int		quote;
-	int		set;
+	(void) cmd;
+	data->type_of_sep = find_type_of_sep(pars, data->i);
+	data->file_name = find_file_name(pars, data->i);
+	if (!data->file_name)
+		return (error_file_sep(pars->av, data->i, garbage));
+	set_fd_parsing(cmd, data->file_name, data->type_of_sep);
+	free(data->file_name);
+	data->i = new_val_i(pars, data->i);
+	return (1);
+}
 
-	i = pars->i;
-	if (ft_find_sep_val(pars->av[i]) == 1)
-		i++;
-	type_of_sep = 0;
-	set = 0;
-	quote = 0;
-	while (pars->av[i] && ft_find_sep_val(pars->av[i]) != 1)
+int	loop_set_cmd_fd(t_pars *pars, t_cmd *cmd, t_gc *garbage, t_scf *data)
+{
+	while (pars->av[data->i] && ft_find_sep_val(pars->av[data->i]) != 1)
 	{
-		if (is_quote(pars->av[i]) && set == 0)
+		if (is_quote(pars->av[data->i]) && data->set == 0)
 		{
-			quote = is_quote(pars->av[i]);
-			set = 1;
+			data->quote = is_quote(pars->av[data->i]);
+			data->set = 1;
 		}
-		else if (is_quote(pars->av[i]) == quote && set == 1)
+		else if (is_quote(pars->av[data->i]) == data->quote && data->set == 1)
 		{
-			quote = 0;
-			set = 0;
+			data->quote = 0;
+			data->set = 0;
 		}
-		else if (ft_find_sep_val(pars->av[i]) > 1 && set == 0)
+		else if (ft_find_sep_val(pars->av[data->i]) > 1 && data->set == 0)
 		{
-			file_name = find_file_name(pars, i);
-			printf("file_name = %s\n", file_name);
-			if (!file_name)
+			if (!is_redir_fd(pars, cmd, garbage, data))
 				return (0);
-			type_of_sep = find_type_of_sep(pars, i);
-			set_fd_parsing(cmd, file_name, type_of_sep);
-			free(file_name);
-			i = new_val_i(pars, i);
-			if (!pars->av[i])
+			if (!pars->av[data->i])
 				return (1);
 		}
-		i++;
+		data->i++;
 	}
+	return (1);
+}
+
+int	set_cmd_fd(t_pars *pars, t_cmd *cmd, t_gc *garbage)
+{
+	t_scf	*data;
+
+	data = malloc(sizeof(t_scf));
+	if (!data)
+		return (-1);
+	data->i = pars->i;
+	if (ft_find_sep_val(pars->av[data->i]) == 1)
+		data->i++;
+	data->type_of_sep = 0;
+	data->set = 0;
+	data->quote = 0;
+	if (!loop_set_cmd_fd(pars, cmd, garbage, data))
+	{
+		free(data);
+		return (0);
+	}
+	free(data);
 	return (1);
 }
